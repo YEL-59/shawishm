@@ -1,8 +1,10 @@
-
-
 import { createBrowserRouter, Navigate } from "react-router-dom";
 import Layout from "../layout/Layout";
 import Home from "../page/home/Home";
+import Setting from "../page/setting/Setting";
+import Logout from "../page/logout/Logout";
+import Patient from "../page/patient/Patient";
+
 
 const router = createBrowserRouter([
   {
@@ -10,15 +12,26 @@ const router = createBrowserRouter([
     element: <Layout />,
     children: [
       {
-        index: true, // Renders AboutUs at the root "/"
-        element: < Home />,
+        index: true,
+        element: <Home />,
       },
-    
+      {
+        path: "patients",
+        element: <Patient/>,
+      },
+      {
+        path: "settings",
+        element: <Setting />,
+      },
+      {
+        path: "logout",
+        element: <Logout />,
+      },
     ],
   },
   {
     path: "*",
-    element: <Navigate to="/home" replace />,
+    element: <Navigate to="/" replace />,
   },
 ]);
 

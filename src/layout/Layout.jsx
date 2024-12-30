@@ -1,25 +1,21 @@
-
-
-
-
-import { Outlet } from "react-router-dom"
-import Navbar from "../components/navbar/Navbar"
-
-
-
+import { Outlet } from "react-router-dom";
+import Navbar from "../components/navbar/Navbar";
+import Sidebar from "../components/sidebar/Sidebar";
+import "../App.css"
 
 const Layout = () => {
-  return (
-    <>
-   
-    <Navbar />
-      <main className="content">
-        <Outlet /> 
-      </main>
-  
-    
-    </>
-  )
-}
+    return (
+        <div className="flex h-screen">
+            <Sidebar />
+            <div className="flex flex-col flex-1">
+                <Navbar />
+                <main className="flex-1 p-4 bg-gray-100 overflow-auto scrollbar-thin scrollbar-thumb-green-500 scrollbar-track-gray-200">
+                    <Outlet />
+                </main>
 
-export default Layout
+            </div>
+        </div>
+    );
+};
+
+export default Layout;
