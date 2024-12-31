@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useVisibility } from '../../contexts/VisibilityContext';
+import { Link } from 'react-router-dom';
 
 
 const Navbar = () => {
@@ -158,7 +159,9 @@ const Navbar = () => {
 
           </div>
 
-          {/* Profile */}
+        
+
+          <Link to={'/profile'}>  {/* Profile */}
           <div className="relative">
             <div className="flex items-center justify-center">
               <img className="rounded-full w-9 h-9" src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/avatars/karen-nelson.png" alt="profile" />
@@ -167,7 +170,7 @@ const Navbar = () => {
                 <div className="text-xs text-gray-500">View profile</div>
               </div>
             </div>
-          </div>
+          </div></Link>
         </div>
       </div>
 

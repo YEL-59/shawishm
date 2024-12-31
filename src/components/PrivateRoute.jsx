@@ -10,7 +10,7 @@ const PrivateRoute = ({ children }) => {
     const token = localStorage.getItem('authToken');
     
     if (token) {
-      // Optionally verify the token with the backend (e.g., check if it's still valid)
+      // Optionally verify the token with the backend (e.g., check if it's still valid) 
       fetch(`${process.env.REACT_APP_API_URL}/verify-token`, {
         method: 'POST',
         headers: {

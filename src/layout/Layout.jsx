@@ -11,7 +11,7 @@ const Layout = () => {
       <VisibilityProvider>
         <div className="flex h-screen">
           <Sidebar />
-          <div className="flex flex-col flex-1">
+          <div className="flex flex-col flex-1"> 
             <Navbar />
             <main className="flex-1 p-4 bg-gray-100 overflow-auto scrollbar-thin scrollbar-thumb-green-500 scrollbar-track-gray-200"> 
               <Outlet />

@@ -7,6 +7,7 @@ import Logout from "../page/logout/Logout";
 import Patient from "../page/patient/Patient";
 import Login from "../page/login/Login";
 import PrivateRoute from "../components/PrivateRoute";
+import Profile from "../page/profile/Profile";
 
 
 const router = createBrowserRouter([
@@ -33,6 +34,11 @@ const router = createBrowserRouter([
 
 
         ),
+       
+      },
+      {
+        path: "/profile",
+        element: <Profile />, 
       },
 
     ],

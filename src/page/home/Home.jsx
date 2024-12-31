@@ -12,7 +12,7 @@ ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
 
 const Home = () => {
 
-    const { isVisible, response, toggleVisibility } = useVisibility();
+    const { isVisible, response, toggleVisibility } = useVisibility(); 
 
 
     return (
