@@ -27,20 +27,31 @@ const Profile = () => {
   };
 
   return (
-    <div className="profile-container max-w-4xl mx-auto p-6 bg-white shadow-lg rounded-lg">
-      <h1 className="text-2xl font-bold mb-4">Profile</h1>
+    <div className="profile-container max-w-full h-full  mx-auto p-16 bg-white shadow-lg rounded-lg">
+  
 
       {/* Profile Picture */}
-      <div className="profile-image-container mb-6 flex justify-center">
+      <div className="profile-image-container mb-6 flex flex-col gap-2 py-5 items-center justify-center">
         <img
           src={profileImage || 'https://via.placeholder.com/150'}
           alt="Profile"
           className="w-32 h-32 rounded-full object-cover"
         />
+        <h1 className="text-2xl font-bold mb-2">Profile Nmee</h1> 
+        <label
+          htmlFor="profileImageInput"
+          className="flex items-center gap-2 mt-2 px-4 py-2  text-primary text-sm rounded-md cursor-pointer "
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="15" viewBox="0 0 24 24" fill="none">
+            <path d="M12 3.99985H6C4.89543 3.99985 4 4.89528 4 5.99985V17.9998C4 19.1044 4.89543 19.9998 6 19.9998H18C19.1046 19.9998 20 19.1044 20 17.9998V11.9998M18.4142 8.41405L19.5 7.32829C20.281 6.54724 20.281 5.28092 19.5 4.49988C18.7189 3.71883 17.4526 3.71883 16.6715 4.49989L15.5858 5.58563M18.4142 8.41405L12.3779 14.4504C12.0987 14.7296 11.7431 14.9199 11.356 14.9974L8.41422 15.5857L9.00257 12.644C9.08001 12.2568 9.27032 11.9012 9.54951 11.622L15.5858 5.58563M18.4142 8.41405L15.5858 5.58563" stroke="#333333" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+          </svg>
+          Edit Information
+        </label>
         <input
           type="file"
+          id="profileImageInput"
           onChange={handleImageChange}
-          className="ml-4 cursor-pointer"
+          className="hidden"
         />
       </div>
 
@@ -59,7 +70,7 @@ const Profile = () => {
             id="name"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="w-full px-4 py-2 border rounded-md"
+            className="w-full px-4 py-2 border rounded-md text-sm font-thin placeholder-primary"
             required
           />
         </div>
@@ -71,7 +82,7 @@ const Profile = () => {
             id="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full px-4 py-2 border rounded-md"
+            className="w-full px-4 py-2 border rounded-md text-sm font-thin placeholder-primary"
             required
           />
         </div>
@@ -83,7 +94,7 @@ const Profile = () => {
             id="phone"
             value={phone}
             onChange={(e) => setPhone(e.target.value)}
-            className="w-full px-4 py-2 border rounded-md"
+            className="w-full px-4 py-2 border rounded-md text-sm font-thin placeholder-primary"
             required
           />
         </div>
@@ -95,14 +106,14 @@ const Profile = () => {
             id="address"
             value={address}
             onChange={(e) => setAddress(e.target.value)}
-            className="w-full px-4 py-2 border rounded-md"
+            className="w-full px-4 py-2 border rounded-md text-sm font-thin placeholder-primary"
             required
           />
         </div>
 
         <button
           type="submit"
-          className="w-full bg-blue-500 text-white py-2 rounded-md"
+          className="w-full bg-secondary text-white py-2 rounded-md"
         >
           Update Profile
         </button>

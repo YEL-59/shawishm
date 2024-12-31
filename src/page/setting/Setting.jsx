@@ -9,9 +9,9 @@ const Setting = () => {
     <div>
       <h2 className="text-2xl font-bold">Settings</h2>
       <p>Manage your settings here.</p>
-      {/* <DraggableTable/>  */}
+      <DraggableTable/> 
 
-      <EnhancedTable/>
+      {/* <EnhancedTable/> */}
     </div>
     
     </>
