@@ -1,9 +1,12 @@
+
 import { createBrowserRouter, Navigate } from "react-router-dom";
 import Layout from "../layout/Layout";
 import Home from "../page/home/Home";
 import Setting from "../page/setting/Setting";
 import Logout from "../page/logout/Logout";
 import Patient from "../page/patient/Patient";
+import Login from "../page/login/Login";
+import PrivateRoute from "../components/PrivateRoute";
 
 
 const router = createBrowserRouter([
@@ -17,17 +20,30 @@ const router = createBrowserRouter([
       },
       {
         path: "patients",
-        element: <Patient/>,
+        element: (
+          <PrivateRoute> <Patient /></PrivateRoute>
+
+
+        ),
       },
       {
         path: "settings",
-        element: <Setting />,
+        element: (
+          <PrivateRoute> <Setting /></PrivateRoute>
+
+
+        ),
       },
-      {
-        path: "logout",
-        element: <Logout />,
-      },
+
     ],
+  },
+  {
+    path: "/login",
+    element: <Login />,
+  },
+  {
+    path: "/logout",
+    element: <Logout />,
   },
   {
     path: "*",
@@ -36,3 +52,4 @@ const router = createBrowserRouter([
 ]);
 
 export default router;
+
