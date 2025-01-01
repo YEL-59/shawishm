@@ -7,9 +7,8 @@ const Setting = () => {
   return (
     <>
     
-    <div>
-      <h2 className="text-2xl font-bold">Settings</h2>
-      <p>Manage your settings here.</p>
+    <div className="w-auto mx-auto px-4 py-4">
+     
       {/* <DraggableTable/>  */}
       <Tabledrag/>
 
