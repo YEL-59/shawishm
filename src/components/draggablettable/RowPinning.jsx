@@ -42,7 +42,7 @@ const pinnedRows = {
 export default function RowPinning() {
     return (
         <div style={{ height: 500, width: '100%' }}>
-            <DataGrid columns={columns} rows={rows} pinnedRows={pinnedRows} />
+            <DataGrid columns={columns} rows={rows} pinnedRows={pinnedRows} /> 
         </div>
     );
 }
