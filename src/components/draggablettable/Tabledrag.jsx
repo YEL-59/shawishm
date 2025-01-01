@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import {
   DndContext,
   useSensor,
@@ -18,6 +18,7 @@ import { IoEyeOutline } from "react-icons/io5";
 import { Link } from "react-router-dom";
 import { usePagination } from "../../contexts/PaginationContext";
 import Pagination from "../paginationcontrol/PaginationControls";
+import { ModalContext } from "../../contexts/ModalContext";
 
 const initialColumns = ["Action", "#", "Name", "Study Date", "Patient ID", "Report Status", "Modality", "Comment", "Viewed", "Branch", "Image", "Gender", "Series", "RefPhysician", "Institution", "Radiologist Group", "Procedure", "Other Comments"];
 
@@ -54,7 +55,7 @@ const DragAndDropTable = () => {
   const commentsDropdownRef = useRef(null); // Ref for Other Comments dropdown
   const { currentPage, itemsPerPage, setTotalItems } = usePagination(); 
 
-
+  const { openModal } = useContext(ModalContext); // Get openModal from context
 
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -144,11 +145,16 @@ const DragAndDropTable = () => {
 
 
 
+  // const handleActionClick = (actionType, row) => {
+  //   if (actionType === "Edit") {
+  //     setModalData(row); // Set the row data to show in the modal
+  //     setModalOpen(true); // Open the modal 
+  //     setDropdownOpen(null); // Close dropdown when modal is opened
+  //   }
+  // };
   const handleActionClick = (actionType, row) => {
     if (actionType === "Edit") {
-      setModalData(row); // Set the row data to show in the modal
-      setModalOpen(true); // Open the modal 
-      setDropdownOpen(null); // Close dropdown when modal is opened
+      openModal(row); // Open the modal with the row data
     }
   };
 
@@ -300,42 +306,6 @@ const DragAndDropTable = () => {
 
 
 
-          {/* Modal */}
-          {modalOpen && modalData && (
-            <div
-              ref={modalRef}
-              style={{
-                position: "fixed",
-                top: "50%",
-                left: "50%",
-                transform: "translate(-50%, -50%)",
-                backgroundColor: "white",
-                padding: "20px",
-                border: "1px solid #ccc",
-                zIndex: 2,
-              }}
-            >
-              <h2>Edit Row</h2>
-              <div>
-                <label>Name:</label>
-                <input
-                  type="text"
-                  value={modalData.Name}
-                  onChange={(e) => setModalData({ ...modalData, Name: e.target.value })}
-                />
-              </div>
-              <div>
-                <label>Study Date:</label>
-                <input
-                  type="text"
-                  value={modalData["Study Date"]}
-                  onChange={(e) => setModalData({ ...modalData, "Study Date": e.target.value })}
-                />
-              </div>
-              {/* Add other fields as needed */}
-              <button onClick={closeModal}>Close</button> 
-            </div>
-          )}
         </table>
         <Pagination totalItems={data.length} /> 
 

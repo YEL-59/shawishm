@@ -5,21 +5,24 @@ import { VisibilityProvider } from "../contexts/VisibilityContext";
 import { AuthProvider } from "../contexts/AuthProvider";
 import "../App.css";
 import { PaginationProvider } from "../contexts/PaginationContext";
+import { ModalProvider } from "../contexts/ModalContext";
 
 const Layout = () => {
   return (
-    <AuthProvider> 
+    <AuthProvider>
       <VisibilityProvider>
-      <PaginationProvider>
-        <div className="flex h-screen">
-          <Sidebar />
-          <div className="flex flex-col flex-1"> 
-            <Navbar />
-            <main className="flex-1 p-4 bg-gray-100 overflow-auto scrollbar-thin scrollbar-thumb-green-500 scrollbar-track-gray-200"> 
-              <Outlet /> 
-            </main>
-          </div>
-        </div>
+        <PaginationProvider>
+          <ModalProvider>
+            <div className="flex h-screen">
+              <Sidebar />
+              <div className="flex flex-col flex-1">
+                <Navbar />
+                <main className="flex-1 p-4 bg-gray-100 overflow-auto scrollbar-thin scrollbar-thumb-green-500 scrollbar-track-gray-200">
+                  <Outlet />
+                </main>
+              </div>
+            </div>
+          </ModalProvider>
         </PaginationProvider>
       </VisibilityProvider>
     </AuthProvider>
