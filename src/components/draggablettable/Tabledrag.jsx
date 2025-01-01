@@ -15,7 +15,7 @@ import {
 import { CSS } from "@dnd-kit/utilities";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { IoEyeOutline } from "react-icons/io5";
-import { Link } from "react-router-dom";
+import { Link } from "react-router-dom"; 
 import { usePagination } from "../../contexts/PaginationContext";
 import Pagination from "../paginationcontrol/PaginationControls";
 import { ModalContext } from "../../contexts/ModalContext";
@@ -30,6 +30,8 @@ const SortableColumn = ({ id }) => {
     transform: CSS.Transform.toString(transform),
     transition,
     cursor: "grab",
+    'font-weight':"500"
+    
   };
 
   return (
@@ -182,9 +184,9 @@ const DragAndDropTable = () => {
         <table border="1" className="w-full text-center" > 
           <thead>
             <SortableContext items={columns} strategy={verticalListSortingStrategy}>
-              <tr className="space-x-10">
+              <tr className="space-x-10 text-sm">
                 {columns.map((column) => (
-                  <SortableColumn key={column} id={column}   className=" mr-10 border-r last:border-r-0"/>
+                  <SortableColumn key={column} id={column}   className=" mr-10 border-r  last:border-r-0"/>
                 ))}
               </tr>
             </SortableContext>
@@ -193,7 +195,7 @@ const DragAndDropTable = () => {
             {paginatedData.map((row, rowIndex) => (
               <tr key={rowIndex} className={rowIndex % 2 === 0 ? "" : "bg-gray-200"}>
                 {columns.map((column, columnIndex) => (
-                  <td key={columnIndex} className="py-5 relative ">
+                  <td key={columnIndex} className="py-5 relative text-sm font-normal">
                     {column === "Action" ? (
                       <>
                         <BsThreeDotsVertical onClick={() => handleActionDropdownToggle(rowIndex)} />
@@ -274,10 +276,10 @@ const DragAndDropTable = () => {
                               Edit Study
                               <span className="inline-block ml-2"> 
                                 <svg
-                                  xmlns="http://www.w3.org/2000/svg"
+                                  xmlns="http://www.w3.org/2000/svg" 
                                   width="16"
                                   height="16"
-                                  viewBox="0 0 16 16"
+                                  viewBox="0 0 16 16" 
                                   fill="none"
                                 >
                                   <path
@@ -294,7 +296,19 @@ const DragAndDropTable = () => {
                     ) : column === "Viewed" ? (<>
                       <div className="cursor-pointer text-center flex items-center justify-center">
                         <IoEyeOutline onClick={() => handleActionClick("Edit", row)} />
-                      </div></>) : (
+                      </div></>) :column === "Report Status" ? (
+            <span
+              className={`font-semibold ${
+                row[column] === "Completed"
+                  ? "text-blue-500"
+                  : row[column] === "Pending"
+                  ? "text-green-500"
+                  : "text-gray-500"
+              }`}
+            >
+              {row[column]}
+            </span>
+          ): (
                       row[column] || "N/A"
                     )}
                   </td>
