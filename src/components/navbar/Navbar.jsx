@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { useVisibility } from '../../contexts/VisibilityContext';
+
 import { Link } from 'react-router-dom';
+import { useDropdown } from '../../contexts/DropdownContext';
+import { useUser } from '../../contexts/UserProvider';
 
 
 const Navbar = () => {
@@ -12,9 +15,22 @@ const Navbar = () => {
   const toggleDropdown1 = () => setDropdown1Open(!dropdown1Open);
   const toggleDropdown2 = () => setDropdown2Open(!dropdown2Open);
   const toggleMenu = () => setMenuOpen(!menuOpen);
-
+  const { dropdownData, setDropdownData } = useDropdown();
   const { isVisible, toggleVisibility } = useVisibility();
+  const handleDropdown1Select = (value) => {
+    setDropdownData((prev) => ({ ...prev, dropdown1: value }));
+    setDropdown1Open(false);
+  };
 
+  const handleDropdown2Select = (value) => {
+    setDropdownData((prev) => ({ ...prev, dropdown2: value }));
+    setDropdown2Open(false);
+  };
+  const { user } = useUser();
+
+    if (!user) {
+        return <div>Loading...</div>; // Show a loading state while user data is being fetched
+    }
   return (
     <header className="bg-white shadow p-4">
       <div className="flex justify-between items-center">
@@ -61,48 +77,56 @@ const Navbar = () => {
           </button>
 
           {/* Dropdown 1 */}
-          <div className="relative">
-            <button
-              onClick={toggleDropdown1}
-              className="bg-gray-100 px-3 py-2 rounded-md text-sm w-32 text-left flex items-center justify-between"
-            >
-              Month
-              <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="none" viewBox="0 0 24 24">
-                <path d="M7 10l5 5 5-5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </button>
-            {dropdown1Open && (
-              <ul className="absolute bg-white border border-gray-300 rounded-md shadow-md mt-1 w-32 z-10">
-                {['January', 'February', 'March'].map((month) => (
-                  <li key={month} className="px-3 py-2 hover:bg-gray-100 cursor-pointer">
-                    {month}
-                  </li>
-                ))}
-              </ul>
-            )}
-          </div>
+        <div className="relative">
+          <button
+            onClick={toggleDropdown1}
+            className="bg-gray-100 px-3 py-2 rounded-md text-sm w-32 text-left flex items-center justify-between"
+          >
+            {dropdownData.dropdown1 || 'Select Month'}
+            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="none" viewBox="0 0 24 24">
+              <path d="M7 10l5 5 5-5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </button>
+          {dropdown1Open && (
+            <ul className="absolute bg-white border border-gray-300 rounded-md shadow-md mt-1 w-32 z-10">
+              {['January', 'February', 'March'].map((month) => (
+                <li
+                  key={month}
+                  className="px-3 py-2 hover:bg-gray-100 cursor-pointer"
+                  onClick={() => handleDropdown1Select(month)}
+                >
+                  {month}
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
 
           {/* Dropdown 2 */}
           <div className="relative">
-            <button
-              onClick={toggleDropdown2}
-              className="bg-gray-100 px-3 py-2 rounded-md text-sm w-32 text-left flex items-center justify-between"
-            >
-              Month
-              <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="none" viewBox="0 0 24 24">
-                <path d="M7 10l5 5 5-5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </button>
-            {dropdown2Open && (
-              <ul className="absolute bg-white border border-gray-300 rounded-md shadow-md mt-1 w-32 z-10">
-                {['January', 'February', 'March'].map((month) => (
-                  <li key={month} className="px-3 py-2 hover:bg-gray-100 cursor-pointer">
-                    {month}
-                  </li>
-                ))}
-              </ul>
-            )}
-          </div>
+          <button
+            onClick={toggleDropdown2}
+            className="bg-gray-100 px-3 py-2 rounded-md text-sm w-32 text-left flex items-center justify-between"
+          >
+            {dropdownData.dropdown2 || 'Select Year'}
+            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="none" viewBox="0 0 24 24">
+              <path d="M7 10l5 5 5-5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </button>
+          {dropdown2Open && (
+            <ul className="absolute bg-white border border-gray-300 rounded-md shadow-md mt-1 w-32 z-10">
+              {['2023', '2024', '2025'].map((year) => (
+                <li
+                  key={year}
+                  className="px-3 py-2 hover:bg-gray-100 cursor-pointer"
+                  onClick={() => handleDropdown2Select(year)}
+                >
+                  {year}
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
 
           {/* Filter Button */}
           <button
@@ -161,16 +185,22 @@ const Navbar = () => {
 
         
 
-          <Link to={'/profile'}>  {/* Profile */}
-          <div className="relative">
-            <div className="flex items-center justify-center">
-              <img className="rounded-full w-9 h-9" src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/avatars/karen-nelson.png" alt="profile" />
-              <div className="space-y-0.2 font-medium text-left rtl:text-right ms-2">
-                <div>Tanzir Rahman</div>
-                <div className="text-xs text-gray-500">View profile</div>
-              </div>
-            </div>
-          </div></Link>
+           {/* User Profile */}
+           <Link to={'/profile'}>
+                        <div className="relative">
+                            <div className="flex items-center justify-center">
+                                <img
+                                    className="rounded-full w-9 h-9"
+                                    src={user.profileImage || 'default-profile.png'} // Fallback image
+                                    alt="profile"
+                                />
+                                <div className="space-y-0.2 font-medium text-left ms-2">
+                                    <div>{user.name || 'User'}</div>
+                                    <div className="text-xs text-gray-500">View profile</div>
+                                </div>
+                            </div>
+                        </div>
+                    </Link>
         </div>
       </div>
 

@@ -8,6 +8,15 @@ export default {
         primary: '#333333',
         secondary: '#00CCFF',
         danger: '#e3342f',
+        blue: {
+          500: '#3b82f6', // Custom blue
+        },
+        green: {
+          500: '#22c55e', // Custom green 
+        },
+        gray: {
+          500: '#6b7280', // Custom gray
+        },
       },
     },
   },

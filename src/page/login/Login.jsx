@@ -21,36 +21,47 @@ const Login = () => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    setLoading(true);
-
-    try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/login`, {
-        method: 'POST',
-        body: JSON.stringify({ email, password }),
-        headers: { 'Content-Type': 'application/json' },
-      });
-
-      if (!response.ok) {
-        throw new Error('Invalid email or password');
-      }
-
-      const data = await response.json();
-
-      if (data.token) {
-        // Store the token in localStorage
-        localStorage.setItem('authToken', data.token);
-        // Set token in React state
-        setToken(data.token);
-        navigate('/');
-      } else {
-        alert('Login failed: Invalid credentials');
-      }
-    } catch (error) {
-      alert(`Login failed: ${error.message}`);
-    } finally {
-      setLoading(false);
+    setError('');
+    if (!name || !email || !password) {
+        setError('All fields are required');
+        return;
     }
-  };
+
+    setLoading(true);
+    try {
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/login`, {
+            method: 'POST',
+            body: JSON.stringify({ email, password }),
+            headers: { 'Content-Type': 'application/json' },
+        });
+
+        if (!response.ok) {
+            throw new Error('Invalid email or password');
+        }
+
+        const data = await response.json();
+        if (data.token) {
+            localStorage.setItem('authToken', data.token);
+
+            // Fetch user profile data
+            const profileResponse = await fetch(`${process.env.REACT_APP_API_URL}/profile`, {
+                headers: { Authorization: `Bearer ${data.token}` },
+            });
+            const profileData = await profileResponse.json();
+
+            // Store user data in context
+            setUser(profileData);
+
+            navigate('/');
+        } else {
+            alert('Login failed: Invalid credentials');
+        }
+    } catch (error) {
+        setError(`Login failed: ${error.message}`);
+    } finally {
+        setLoading(false);
+    }
+};
 
   // Optional: You can use the token in other parts of your component as needed
   console.log('Current token:', token);

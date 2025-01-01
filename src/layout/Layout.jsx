@@ -6,13 +6,17 @@ import { AuthProvider } from "../contexts/AuthProvider";
 import "../App.css";
 import { PaginationProvider } from "../contexts/PaginationContext";
 import { ModalProvider } from "../contexts/ModalContext";
+import { DropdownProvider } from "../contexts/DropdownContext";
+import { UserProvider } from "../contexts/UserProvider";
 
 const Layout = () => {
   return (
     <AuthProvider>
+      <UserProvider>
       <VisibilityProvider>
         <PaginationProvider>
           <ModalProvider>
+            <DropdownProvider>
             <div className="flex h-screen">
               <Sidebar />
               <div className="flex flex-col flex-1">
@@ -22,9 +26,11 @@ const Layout = () => {
                 </main>
               </div>
             </div>
+            </DropdownProvider>
           </ModalProvider>
         </PaginationProvider>
       </VisibilityProvider>
+      </UserProvider>
     </AuthProvider>
   );
 };
