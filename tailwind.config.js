@@ -6,11 +6,9 @@ export default {
     extend: {
       colors: {
         primary: '#333333',
-        secondary: '#00CCFF',
+        secondary: '#00CCFF', 
         danger: '#e3342f',
-        blue: {
-          500: '#3b82f6', // Custom blue
-        },
+        blue:'#3381FF',
         green: {
           500: '#22c55e', // Custom green 
         },

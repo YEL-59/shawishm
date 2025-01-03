@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import loginimg from "../../assets/login.png";
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import LogoIcon from '../../assets/icons/LogoIcon';
@@ -116,11 +116,11 @@ const Logout = () => {
                         </div>
                         <div>
                             <label htmlFor="email" className="block text-sm md:text-md font-bold text-primary">
-                                Email Address / Phone Number
+                                Email Address / Phone Number 
                             </label>
-                            <input
+                            <input 
                                 type="email"
-                                id="email"
+                                id="email" 
                                 name="email"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
@@ -167,7 +167,7 @@ const Logout = () => {
                                 type="submit"  onClick={handleLogin}
                                 className="w-full py-3 bg-secondary text-white font-semibold rounded-md hover:bg-secondary focus:outline-none focus:ring-2 focus:ring-secondary"
                             >
-                                {loading ? 'Sign in...' : 'Sign up'}
+                                {loading ? 'Sign in...' : 'Sign up'} 
                             </button>
                         </div>
 
@@ -184,12 +184,15 @@ const Logout = () => {
                             <span className="text-primary font-medium">Login with Google</span>
                         </button>
 
+                        <Link to="/login" className="text-center text-sm text-gray-600 hover:underline">
                         <p className="mt-4 text-sm text-gray-500 text-center">
                             Already have an account?{' '}
                             <a href="#" className="font-medium text-blue-600 hover:underline">
                                 Sign in here
                             </a>.
                         </p>
+
+                        </Link>
                     </form>
                 </div>
             </div>

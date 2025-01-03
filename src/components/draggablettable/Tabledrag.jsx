@@ -6,7 +6,7 @@ import {
   PointerSensor,
   KeyboardSensor,
   closestCenter,
-} from "@dnd-kit/core";
+} from "@dnd-kit/core"; 
 import {
   SortableContext,
   useSortable,
@@ -18,7 +18,8 @@ import { IoEyeOutline } from "react-icons/io5";
 import { Link } from "react-router-dom"; 
 import { usePagination } from "../../contexts/PaginationContext";
 import Pagination from "../paginationcontrol/PaginationControls";
-import { ModalContext } from "../../contexts/ModalContext";
+import ModalContainer from "../modalContainer/ModalContainer";
+
 
 const initialColumns = ["Action", "#", "Name", "Study Date", "Patient ID", "Report Status", "Modality", "Comment", "Viewed", "Branch", "Image", "Gender", "Series", "RefPhysician", "Institution", "Radiologist Group", "Procedure", "Other Comments"];
 
@@ -46,10 +47,9 @@ const DragAndDropTable = () => {
   const [data, setData] = useState([]); // To store the API data
   const [loading, setLoading] = useState(true); // To handle loading state
   const [error, setError] = useState(null); // To handle any errors
-  const [modalData, setModalData] = useState(null); // To store data for modal
-  const [modalOpen, setModalOpen] = useState(false); // To control modal visibility
+
   const [dropdownOpen, setDropdownOpen] = useState(null); // To control dropdown visibility per row 
-  const dropdownRef = useRef(null); // Reference for dropdown
+  const dropdownRef = useRef(null); // Reference for dropdown 
   const modalRef = useRef(null); // Reference for modal
   const [actionDropdownOpen, setActionDropdownOpen] = useState(null); // For Action column dropdown
   const [commentsDropdownOpen, setCommentsDropdownOpen] = useState(null); // For Other Comments column dropdown
@@ -57,7 +57,7 @@ const DragAndDropTable = () => {
   const commentsDropdownRef = useRef(null); // Ref for Other Comments dropdown
   const { currentPage, itemsPerPage, setTotalItems } = usePagination(); 
 
-  const { openModal } = useContext(ModalContext); // Get openModal from context
+
 
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -154,15 +154,17 @@ const DragAndDropTable = () => {
   //     setDropdownOpen(null); // Close dropdown when modal is opened
   //   }
   // };
-  const handleActionClick = (actionType, row) => {
-    if (actionType === "Edit") {
-      openModal(row); // Open the modal with the row data
-    }
+
+
+
+  const [activeModal, setActiveModal] = useState(null);
+
+  const handleOpenModal = (modalName) => {
+      setActiveModal(modalName);
   };
 
-  const closeModal = () => {
-    setModalOpen(false);
-    setModalData(null);
+  const handleCloseModal = () => {
+      setActiveModal(null);
   };
 
 
@@ -206,16 +208,16 @@ const DragAndDropTable = () => {
                           >
                            
                           
-                              {/* Dropdown Item - Edit Study */} 
+                              {/* Dropdown Item - delete Study */} 
                               <Link
                               to="#"
                               className="flex justify-between items-center w-full py-2 p- text-gray-700 hover:bg-gray-100 "
-                              onClick={() => handleActionClick("Edit", row)}
+                              onClick={() => handleOpenModal("modal3")}
                             >
-                              Edit Study
-                              <span className="inline-block ml-2"> 
+                              Delete Study
+                              <span className="inline-block ml-2">  
                                 <svg
-                                  xmlns="http://www.w3.org/2000/svg" 
+                                  xmlns="http://www.w3.org/2000/svg"  
                                   width="16"
                                   height="16"
                                   viewBox="0 0 16 16" 
@@ -230,7 +232,7 @@ const DragAndDropTable = () => {
                             </Link>
                             {/* Dropdown Item - Edit Study */}
                             <Link
-                              to="#"
+                              to="/editstudy"
                               className="flex justify-between items-center w-full py-2 text-gray-700 hover:bg-gray-100 hover:rounded-t-lg"
                             >
                               Edit Study
@@ -240,6 +242,50 @@ const DragAndDropTable = () => {
                                   width="16"
                                   height="16"
                                   viewBox="0 0 16 16"
+                                  fill="none"
+                                >
+                                  <path
+                                    d="M4.27614 10.5935L11.0375 3.83207L10.0947 2.88926L3.33333 9.65071V10.5935H4.27614ZM4.82843 11.9268H2V9.09837L9.62333 1.47505C9.88373 1.2147 10.3058 1.2147 10.5661 1.47505L12.4518 3.36067C12.7121 3.62101 12.7121 4.04312 12.4518 4.30347L4.82843 11.9268ZM2 13.2602H14V14.5935H2V13.2602Z"
+                                    fill="#4D4D4D"
+                                  />
+                                </svg>
+                              </span>
+                            </Link>
+                            {/* Dropdown Item - delete Study */} 
+                            <Link
+                              to="/assignstudy"
+                              className="flex justify-between items-center w-full py-2 p- text-gray-700 hover:bg-gray-100 "
+                              
+                            >
+                              Assign Study
+                              <span className="inline-block ml-2">  
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"  
+                                  width="16"
+                                  height="16"
+                                  viewBox="0 0 16 16" 
+                                  fill="none"
+                                >
+                                  <path
+                                    d="M4.27614 10.5935L11.0375 3.83207L10.0947 2.88926L3.33333 9.65071V10.5935H4.27614ZM4.82843 11.9268H2V9.09837L9.62333 1.47505C9.88373 1.2147 10.3058 1.2147 10.5661 1.47505L12.4518 3.36067C12.7121 3.62101 12.7121 4.04312 12.4518 4.30347L4.82843 11.9268ZM2 13.2602H14V14.5935H2V13.2602Z"
+                                    fill="#4D4D4D"
+                                  />
+                                </svg>
+                              </span>
+                            </Link>
+                             {/* Dropdown Item - delete Study */} 
+                             <Link
+                              to="#"
+                              className="flex justify-between items-center w-full py-2 p- text-gray-700 hover:bg-gray-100 "
+                              onClick={() => handleOpenModal("modal7")}
+                            >
+                              Merge Patient
+                              <span className="inline-block ml-2">  
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"  
+                                  width="16"
+                                  height="16"
+                                  viewBox="0 0 16 16" 
                                   fill="none"
                                 >
                                   <path
@@ -322,7 +368,11 @@ const DragAndDropTable = () => {
 
         </table>
         <Pagination totalItems={data.length} /> 
-
+        <ModalContainer
+                                    activeModal={activeModal}
+                                    handleCloseModal={handleCloseModal} 
+                                    handleOpenModal={handleOpenModal}
+                                />
       </div>
     </DndContext>
   );

@@ -8,6 +8,9 @@ import Patient from "../page/patient/Patient";
 import Login from "../page/login/Login";
 import PrivateRoute from "../components/PrivateRoute";
 import Profile from "../page/profile/Profile";
+import Editstudy from "../components/editstydy/Editstudy";
+import AssignStudy from "../components/assignstudy/AssignStudy";
+import MergePatient from "../components/mergepatient/MergePatient";
 
 
 const router = createBrowserRouter([
@@ -32,14 +35,27 @@ const router = createBrowserRouter([
         element: (
           // <PrivateRoute> <Setting /></PrivateRoute>
 
-<Setting />
+          <Setting />
         ),
-       
+
       },
       {
         path: "/profile",
-        element: <Profile />, 
+        element: <Profile />,
       },
+      {
+        path: "/editstudy",
+        element: <Editstudy />,
+      },
+      {
+        path: "/assignstudy",
+        element: <AssignStudy />,
+      },
+      {
+        path: "/mergepatient",
+        element: <MergePatient />,
+      },
+
 
     ],
   },

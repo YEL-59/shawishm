@@ -8,9 +8,9 @@ export const UserProvider = ({ children }) => {
     useEffect(() => {
         const fetchUsers = async () => {
             try {
-                const response = await fetch("http://localhost:5000/users");
+                const response = await fetch("http://localhost:3000/users"); 
                 const data = await response.json();
-                setUser(data[0]); // Assuming the API returns an array of users and you want the first user
+                setUser(data[0]); 
             } catch (error) {
                 console.error("Failed to fetch users:", error);
             }
