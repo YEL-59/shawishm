@@ -19,6 +19,7 @@ import { Link } from "react-router-dom";
 import { usePagination } from "../../contexts/PaginationContext";
 import Pagination from "../paginationcontrol/PaginationControls";
 import ModalContainer from "../modalContainer/ModalContainer";
+import { useDropdown } from "../../contexts/DropdownContext";
 
 
 const initialColumns = ["Action", "#", "Name", "Study Date", "Patient ID", "Report Status", "Modality", "Comment", "Viewed", "Branch", "Image", "Gender", "Series", "RefPhysician", "Institution", "Radiologist Group", "Procedure", "Other Comments"];
@@ -57,7 +58,7 @@ const DragAndDropTable = () => {
   const commentsDropdownRef = useRef(null); // Ref for Other Comments dropdown
   const { currentPage, itemsPerPage, setTotalItems } = usePagination(); 
 
-
+  const { dropdownData } = useDropdown(); // Access dropdown data
 
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -66,7 +67,7 @@ const DragAndDropTable = () => {
 
   // Fetch data from the fake JSON file when the component mounts
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchData = async () => { 
       try {
         const response = await fetch("/data.json");
         const result = await response.json();
@@ -81,6 +82,18 @@ const DragAndDropTable = () => {
 
     fetchData();
   }, [setTotalItems]);
+    // Filter data based on dropdown selections
+    const filteredData = data.filter((row) => {
+      const { modality, study, location, report, filterDate } = dropdownData;
+  
+      return (
+        (!modality || row.Modality === modality) &&
+        (!study || row.Study === study) &&
+        (!location || row.Location === location) &&
+        (!report || row.ReportStatus === report) &&
+        (!filterDate || row.Date === filterDate)
+      );
+    });
 
  // Paginate data
  const startIndex = (currentPage - 1) * itemsPerPage;
@@ -147,14 +160,7 @@ const DragAndDropTable = () => {
 
 
 
-  // const handleActionClick = (actionType, row) => {
-  //   if (actionType === "Edit") {
-  //     setModalData(row); // Set the row data to show in the modal
-  //     setModalOpen(true); // Open the modal 
-  //     setDropdownOpen(null); // Close dropdown when modal is opened
-  //   }
-  // };
-
+ 
 
 
   const [activeModal, setActiveModal] = useState(null);
@@ -194,7 +200,7 @@ const DragAndDropTable = () => {
             </SortableContext>
           </thead>
           <tbody>
-            {paginatedData.map((row, rowIndex) => (
+            {filteredData.map((row, rowIndex) => (
               <tr key={rowIndex} className={rowIndex % 2 === 0 ? "" : "bg-gray-200"}>
                 {columns.map((column, columnIndex) => (
                   <td key={columnIndex} className="py-5 relative text-sm font-normal">
@@ -314,7 +320,7 @@ const DragAndDropTable = () => {
                             <button onClick={() => handleActionClick("Edit", row)}>Edit</button>
                             <button onClick={() => handleActionClick("Delete", row)}>Delete</button>
 
-                            {/* Dropdown Item - Edit Study */}
+                            {/* Dropdown Item - Edit Study */} 
                             <Link
                               to="#"
                               className="flex justify-between items-center w-full py-2 text-gray-700 hover:bg-gray-100 hover:rounded-t-lg"
