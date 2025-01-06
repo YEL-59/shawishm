@@ -6,7 +6,7 @@ import {
   PointerSensor,
   KeyboardSensor,
   closestCenter,
-} from "@dnd-kit/core"; 
+} from "@dnd-kit/core";
 import {
   SortableContext,
   useSortable,
@@ -15,7 +15,7 @@ import {
 import { CSS } from "@dnd-kit/utilities";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { IoEyeOutline } from "react-icons/io5";
-import { Link } from "react-router-dom"; 
+import { Link } from "react-router-dom";
 import { usePagination } from "../../contexts/PaginationContext";
 import Pagination from "../paginationcontrol/PaginationControls";
 import ModalContainer from "../modalContainer/ModalContainer";
@@ -25,19 +25,19 @@ import { useDropdown } from "../../contexts/DropdownContext";
 const initialColumns = ["Action", "#", "Name", "Study Date", "Patient ID", "Report Status", "Modality", "Comment", "Viewed", "Branch", "Image", "Gender", "Series", "RefPhysician", "Institution", "Radiologist Group", "Procedure", "Other Comments"];
 
 const SortableColumn = ({ id }) => {
-  const { attributes, listeners, setNodeRef, transform, transition } = 
+  const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({ id });
 
   const style = {
     transform: CSS.Transform.toString(transform),
     transition,
     cursor: "grab",
-    'font-weight':"500"
-    
+    'font-weight': "500"
+
   };
 
   return (
-    <th ref={setNodeRef} style={style} {...attributes} {...listeners}> 
+    <th ref={setNodeRef} style={style} {...attributes} {...listeners}>
       {id}
     </th>
   );
@@ -56,7 +56,7 @@ const DragAndDropTable = () => {
   const [commentsDropdownOpen, setCommentsDropdownOpen] = useState(null); // For Other Comments column dropdown
   const actionDropdownRef = useRef(null); // Ref for Action dropdown
   const commentsDropdownRef = useRef(null); // Ref for Other Comments dropdown
-  const { currentPage, itemsPerPage, setTotalItems } = usePagination(); 
+  const { currentPage, itemsPerPage, setTotalItems } = usePagination();
 
   const { dropdownData } = useDropdown(); // Access dropdown data
 
@@ -67,7 +67,7 @@ const DragAndDropTable = () => {
 
   // Fetch data from the fake JSON file when the component mounts
   useEffect(() => {
-    const fetchData = async () => { 
+    const fetchData = async () => {
       try {
         const response = await fetch("/data.json");
         const result = await response.json();
@@ -82,22 +82,24 @@ const DragAndDropTable = () => {
 
     fetchData();
   }, [setTotalItems]);
-    // Filter data based on dropdown selections
-    const filteredData = data.filter((row) => {
-      const { modality, study, location, report, filterDate } = dropdownData;
-  
-      return (
-        (!modality || row.Modality === modality) &&
-        (!study || row.Study === study) &&
-        (!location || row.Location === location) &&
-        (!report || row.ReportStatus === report) &&
-        (!filterDate || row.Date === filterDate)
-      );
-    });
+  // Filter data based on dropdown selections
 
- // Paginate data
- const startIndex = (currentPage - 1) * itemsPerPage;
- const paginatedData = data.slice(startIndex, startIndex + itemsPerPage);
+  const filteredData = data.filter((row) => {
+    const { modality, study, location, report, filterDate } = dropdownData;
+  
+    return (
+      (!modality || modality === "All" || row.Modality === modality) &&
+      (!study || study === "All" || row.Study === study) &&
+      (!location || location === "All" || row.Location === location) &&
+      (!report || report === "All" || row.ReportStatus === report) &&
+      (!filterDate || filterDate === "All" || row.Date === filterDate)
+    );
+  });
+  
+
+  // Paginate data
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const paginatedData = data.slice(startIndex, startIndex + itemsPerPage);
 
 
   // Close dropdowns when clicking outside of them
@@ -160,17 +162,17 @@ const DragAndDropTable = () => {
 
 
 
- 
+
 
 
   const [activeModal, setActiveModal] = useState(null);
 
   const handleOpenModal = (modalName) => {
-      setActiveModal(modalName);
+    setActiveModal(modalName);
   };
 
   const handleCloseModal = () => {
-      setActiveModal(null);
+    setActiveModal(null);
   };
 
 
@@ -189,12 +191,12 @@ const DragAndDropTable = () => {
       onDragEnd={handleDragEnd}
     >
       <div className="">
-        <table border="1" className="w-full text-center" > 
+        <table border="1" className="w-full text-center" >
           <thead>
             <SortableContext items={columns} strategy={verticalListSortingStrategy}>
               <tr className="space-x-10 text-sm">
                 {columns.map((column) => (
-                  <SortableColumn key={column} id={column}   className=" mr-10 border-r  last:border-r-0"/>
+                  <SortableColumn key={column} id={column} className=" mr-10 border-r  last:border-r-0" />
                 ))}
               </tr>
             </SortableContext>
@@ -210,23 +212,23 @@ const DragAndDropTable = () => {
                         {actionDropdownOpen === rowIndex && (
                           <div
                             ref={actionDropdownRef}
-                            className=" absolute bg-white border border-gray-300 shadow-lg p-4 rounded-md mt-2 w-64 z-10" 
+                            className=" absolute bg-white border border-gray-300 shadow-lg p-4 rounded-md mt-2 w-64 z-10"
                           >
-                           
-                          
-                              {/* Dropdown Item - delete Study */} 
-                              <Link
+
+
+                            {/* Dropdown Item - delete Study */}
+                            <Link
                               to="#"
                               className="flex justify-between items-center w-full py-2 p- text-gray-700 hover:bg-gray-100 "
                               onClick={() => handleOpenModal("modal3")}
                             >
                               Delete Study
-                              <span className="inline-block ml-2">  
+                              <span className="inline-block ml-2">
                                 <svg
-                                  xmlns="http://www.w3.org/2000/svg"  
+                                  xmlns="http://www.w3.org/2000/svg"
                                   width="16"
                                   height="16"
-                                  viewBox="0 0 16 16" 
+                                  viewBox="0 0 16 16"
                                   fill="none"
                                 >
                                   <path
@@ -242,7 +244,7 @@ const DragAndDropTable = () => {
                               className="flex justify-between items-center w-full py-2 text-gray-700 hover:bg-gray-100 hover:rounded-t-lg"
                             >
                               Edit Study
-                              <span className="inline-block ml-2"> 
+                              <span className="inline-block ml-2">
                                 <svg
                                   xmlns="http://www.w3.org/2000/svg"
                                   width="16"
@@ -257,19 +259,19 @@ const DragAndDropTable = () => {
                                 </svg>
                               </span>
                             </Link>
-                            {/* Dropdown Item - delete Study */} 
+                            {/* Dropdown Item - delete Study */}
                             <Link
                               to="/assignstudy"
                               className="flex justify-between items-center w-full py-2 p- text-gray-700 hover:bg-gray-100 "
-                              
+
                             >
                               Assign Study
-                              <span className="inline-block ml-2">  
+                              <span className="inline-block ml-2">
                                 <svg
-                                  xmlns="http://www.w3.org/2000/svg"  
+                                  xmlns="http://www.w3.org/2000/svg"
                                   width="16"
                                   height="16"
-                                  viewBox="0 0 16 16" 
+                                  viewBox="0 0 16 16"
                                   fill="none"
                                 >
                                   <path
@@ -279,19 +281,19 @@ const DragAndDropTable = () => {
                                 </svg>
                               </span>
                             </Link>
-                             {/* Dropdown Item - delete Study */} 
-                             <Link
+                            {/* Dropdown Item - delete Study */}
+                            <Link
                               to="#"
                               className="flex justify-between items-center w-full py-2 p- text-gray-700 hover:bg-gray-100 "
                               onClick={() => handleOpenModal("modal7")}
                             >
                               Merge Patient
-                              <span className="inline-block ml-2">  
+                              <span className="inline-block ml-2">
                                 <svg
-                                  xmlns="http://www.w3.org/2000/svg"  
+                                  xmlns="http://www.w3.org/2000/svg"
                                   width="16"
                                   height="16"
-                                  viewBox="0 0 16 16" 
+                                  viewBox="0 0 16 16"
                                   fill="none"
                                 >
                                   <path
@@ -320,18 +322,18 @@ const DragAndDropTable = () => {
                             <button onClick={() => handleActionClick("Edit", row)}>Edit</button>
                             <button onClick={() => handleActionClick("Delete", row)}>Delete</button>
 
-                            {/* Dropdown Item - Edit Study */} 
+                            {/* Dropdown Item - Edit Study */}
                             <Link
                               to="#"
                               className="flex justify-between items-center w-full py-2 text-gray-700 hover:bg-gray-100 hover:rounded-t-lg"
                             >
                               Edit Study
-                              <span className="inline-block ml-2"> 
+                              <span className="inline-block ml-2">
                                 <svg
-                                  xmlns="http://www.w3.org/2000/svg" 
+                                  xmlns="http://www.w3.org/2000/svg"
                                   width="16"
                                   height="16"
-                                  viewBox="0 0 16 16" 
+                                  viewBox="0 0 16 16"
                                   fill="none"
                                 >
                                   <path
@@ -348,19 +350,18 @@ const DragAndDropTable = () => {
                     ) : column === "Viewed" ? (<>
                       <div className="cursor-pointer text-center flex items-center justify-center">
                         <IoEyeOutline onClick={() => handleActionClick("Edit", row)} />
-                      </div></>) :column === "Report Status" ? (
-            <span
-              className={`font-semibold ${
-                row[column] === "Completed"
-                  ? "text-blue-500"
-                  : row[column] === "Pending"
-                  ? "text-green-500"
-                  : "text-gray-500"
-              }`}
-            >
-              {row[column]}
-            </span>
-          ): (
+                      </div></>) : column === "Report Status" ? (
+                        <span
+                          className={`font-semibold ${row[column] === "Completed"
+                              ? "text-blue-500"
+                              : row[column] === "Pending"
+                                ? "text-green-500"
+                                : "text-gray-500"
+                            }`}
+                        >
+                          {row[column]}
+                        </span>
+                      ) : (
                       row[column] || "N/A"
                     )}
                   </td>
@@ -373,12 +374,12 @@ const DragAndDropTable = () => {
 
 
         </table>
-        <Pagination totalItems={data.length} /> 
+        <Pagination totalItems={data.length} />
         <ModalContainer
-                                    activeModal={activeModal}
-                                    handleCloseModal={handleCloseModal} 
-                                    handleOpenModal={handleOpenModal}
-                                />
+          activeModal={activeModal}
+          handleCloseModal={handleCloseModal}
+          handleOpenModal={handleOpenModal}
+        />
       </div>
     </DndContext>
   );
