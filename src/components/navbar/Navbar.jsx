@@ -4,6 +4,7 @@ import { useVisibility } from '../../contexts/VisibilityContext';
 import { Link, useLocation } from 'react-router-dom';
 import { useDropdown } from '../../contexts/DropdownContext';
 import { useUser } from '../../contexts/UserProvider';
+import DateFilter from '../datefilter/DateFilter';
 
 
 const Navbar = () => {
@@ -87,22 +88,22 @@ const Navbar = () => {
           <div className="relative">
             <button
               onClick={toggleDropdown1}
-              className="bg-gray-100 px-3 py-2 rounded-md text-sm w-32 text-left flex items-center justify-between"
+              className="bg-transparent border px-3 py-2 rounded-md text-sm w-32 text-left flex items-center justify-between"
             >
-              {dropdownData.dropdown1 || 'Select Month'}
+              {dropdownData.dropdown1 || 'BMD'}
               <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="none" viewBox="0 0 24 24">
                 <path d="M7 10l5 5 5-5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
             </button>
             {dropdown1Open && (
               <ul className="absolute bg-white border border-gray-300 rounded-md shadow-md mt-1 w-32 z-10">
-                {['January', 'February', 'March'].map((month) => (
+                {['All', 'BMD', 'CR','CT'].map((item) => (
                   <li
-                    key={month}
-                    className="px-3 py-2 hover:bg-gray-100 cursor-pointer"
-                    onClick={() => handleDropdown1Select(month)}
+                    key={item}
+                    className="px-3 py-2 hover:bg-gray-100 cursor-pointer" 
+                    onClick={() => handleDropdown1Select(item)}
                   >
-                    {month}
+                    {item}
                   </li>
                 ))}
               </ul>
@@ -113,7 +114,7 @@ const Navbar = () => {
           <div className="relative">
             <button
               onClick={toggleDropdown2}
-              className="bg-gray-100 px-3 py-2 rounded-md text-sm w-32 text-left flex items-center justify-between"
+              className="bg-transparent border px-3 py-2 rounded-md text-sm w-32 text-left flex items-center justify-between"
             >
               {dropdownData.dropdown2 || 'Select Year'}
               <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="none" viewBox="0 0 24 24">
@@ -122,7 +123,7 @@ const Navbar = () => {
             </button>
             {dropdown2Open && (
               <ul className="absolute bg-white border border-gray-300 rounded-md shadow-md mt-1 w-32 z-10">
-                {['2023', '2024', '2025'].map((year) => (
+                {['ALL', 'With Image', 'Without Images'].map((year) => (
                   <li
                     key={year}
                     className="px-3 py-2 hover:bg-gray-100 cursor-pointer"
@@ -134,6 +135,11 @@ const Navbar = () => {
               </ul>
             )}
           </div>
+          {/* <div>
+
+            <DateFilter/>
+            
+          </div> */}
 
           {/* Filter Button */}
           <button

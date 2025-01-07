@@ -4,12 +4,13 @@ const DropdownContext = createContext();
 
 export const DropdownProvider = ({ children }) => {
   const [dropdownData, setDropdownData] = useState({
-    modality: '',
-    study: '',
-    location: '',
-    report: '',
-    filterDate: '',
+    modality: 'All',
+    study: 'All',
+    location: 'All',
+    report: 'All',
+    filterDate: 'All',
   });
+  
 
   const updateDropdown = (key, value) => {
     setDropdownData((prev) => ({
