@@ -1,3 +1,6 @@
+
+
+
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import loginimg from "../../assets/login.png";
@@ -5,7 +8,7 @@ import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import LogoIcon from '../../assets/icons/LogoIcon';
 import GoogleIcon from '../../assets/icons/GoogleIcon';
 
-const Logout = () => {
+const SignUp = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [name, setName] = useState('');
@@ -143,7 +146,7 @@ const Logout = () => {
                                     id="password"
                                     name="password"
                                     value={password}
-                                    onChange={(e) => setPassword(e.target.value)}
+                                    onChange={(e) => setPassword(e.target.value)} 
                                     required
                                     className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 />
@@ -179,12 +182,12 @@ const Logout = () => {
                             </div>
                         </div>
 
-                        <button className="w-full text-center py-3 my-3 border flex items-center justify-center bg-[#E4E7EB] border-slate-200 rounded-lg text-black">
+                        <button className="w-full text-center py-3  border flex items-center justify-center bg-[#E4E7EB] border-slate-200 rounded-lg text-black">
                             <GoogleIcon className="w-5 h-5 mr-2" />
-                            <span className="text-primary font-medium">Login with Google</span>
+                            <span className="text-primary font-medium">Signup with Google</span>
                         </button>
 
-                        <Link to="/login" className="text-center text-sm text-gray-600 hover:underline">
+                        {/* <Link className="text-center text-sm text-gray-600 hover:underline">
                         <p className="mt-4 text-sm text-gray-500 text-center">
                             Already have an account?{' '}
                             <a href="#" className="font-medium text-blue-600 hover:underline">
@@ -192,7 +195,7 @@ const Logout = () => {
                             </a>.
                         </p>
 
-                        </Link>
+                        </Link> */}
                     </form>
                 </div>
             </div>
@@ -205,4 +208,4 @@ const Logout = () => {
     );
 };
 
-export default Logout;
+export default SignUp;

@@ -5,9 +5,9 @@ const DropdownContext = createContext();
 export const DropdownProvider = ({ children }) => {
   const [dropdownData, setDropdownData] = useState({
     modality: 'All',
-    study: 'All',
+    image: 'All',
     location: 'All',
-    report: 'All',
+    reportStatus: 'All',
     filterDate: 'All',
   });
   
@@ -22,9 +22,9 @@ export const DropdownProvider = ({ children }) => {
   const resetDropdowns = () => {
     setDropdownData({
       modality: '',
-      study: '',
+      image: '',
       location: '',
-      report: '',
+      reportStatus: '',
       filterDate: '',
     });
   };

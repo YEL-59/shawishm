@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
 import { useDropdown } from '../../contexts/DropdownContext';
+import MinasIcon from '../../assets/icons/MinasIcon.';
+import { useVisibility } from '../../contexts/VisibilityContext';
 
 const Tabledropdown = ({ data }) => {
   const { dropdownData, updateDropdown, resetDropdowns } = useDropdown();
   const [openDropdown, setOpenDropdown] = useState(null);
+    const { isVisible, toggleVisibility } = useVisibility();
 
   const toggleDropdown = (key) => {
     setOpenDropdown((prev) => (prev === key ? null : key));
@@ -22,17 +25,24 @@ const Tabledropdown = ({ data }) => {
 
   const filterData = () => {
     return data.filter((item) => {
-      const { modality, study, location, reportStatus, filterDate } = dropdownData;
-
+      const { modality, image, location, reportStatus, filterDate } = dropdownData;
+  
+      // Debugging to inspect values
+      console.log("Dropdown reportStatus:", reportStatus);
+      console.log("Item Report Status:", item["Report Status"]);
+  
+      
       const modalityMatch = modality === 'All' || item.Modality === modality;
-      const studyMatch = study === 'All' || item.Image === study;
-      const locationMatch = location === 'All' || item.Branch === location;
-      const reportMatch = reportStatus === 'All' || item['Report Status'] === reportStatus;
-      const filterDateMatch = checkDateFilter(item['Study Date'], filterDate);
+      const imageMatch = image === 'All' || item.Image === image;
+      const locationMatch = location === 'All' || item.Institution === location;
+      const reportMatch = reportStatus === 'All' || (item["Report Status"] && item["Report Status"].trim().toLowerCase() === reportStatus.trim().toLowerCase())
 
-      return modalityMatch && studyMatch && locationMatch && reportMatch && filterDateMatch;
+      const filterDateMatch = checkDateFilter(item['Study Date'], filterDate);
+  
+      return modalityMatch && imageMatch && locationMatch && reportMatch && filterDateMatch;
     });
   };
+  
 
   const checkDateFilter = (studyDate, filterDate) => {
     const today = new Date();
@@ -54,9 +64,9 @@ const Tabledropdown = ({ data }) => {
 
   const dropdownOptions = {
     modality: ['All', 'CR', 'CT', 'X-Ray', 'MRI'],
-    study: ['All', 'With Image', 'Without Image'],
+    image: ['All', 'With Image', 'Without Image'],
     location: ['All', 'XYZ Hospital', 'ABC Medical Center', 'Texas'],
-    reportStatus: ['All', 'Partial', 'Completed', 'Verified', 'None'],
+    reportStatus: ['All', 'Partial','Verified','Completed','Pending', 'None'],
     filterDate: ['All', 'Today', 'This Week', 'This Month'],
   };
 
@@ -96,21 +106,26 @@ const Tabledropdown = ({ data }) => {
             )}
           </div>
         ))}
-      </div>
-      <div className="flex justify-center gap-4 mt-4">
-        <button
-          onClick={handleFilter}
-          className="px-4 py-2 rounded bg-blue-500 text-white"
+         <div className="flex justify-center gap-4 ">
+        {/* <button
+          onClick={filterData}
+          className="px-4 py-2 rounded bg-blue-500 text-black"
         >
           Filter
-        </button>
+        </button> */}
         <button
           onClick={resetDropdowns}
-          className="px-4 py-2 rounded bg-gray-500 text-white"
+          className="px-4 py-2 rounded bg-[#00CCFF] text-white"
         >
           Reset
         </button>
       </div>
+      <div onClick={toggleVisibility} className=" items-center gap-6  cursor-pointer">
+        <MinasIcon/>
+      </div>
+      </div>
+      
+     
     </div>
   );
 };

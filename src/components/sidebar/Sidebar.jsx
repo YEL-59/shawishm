@@ -23,7 +23,7 @@ const Sidebar = () => {
         { name: "Dashboard", icon: DashboardIcon, path: "/" },
         { name: "Patients", icon: PatientIcon, path: "/patients" },
         { name: "Settings", icon: SettingIcon, path: "/settings" },
-        { name: "Logout", icon: Logout, path: "/logout" },
+        { name: "Logout", icon: Logout, path: "/login" },
     ];
 
     return (

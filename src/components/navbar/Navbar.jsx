@@ -5,6 +5,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { useDropdown } from '../../contexts/DropdownContext';
 import { useUser } from '../../contexts/UserProvider';
 import DateFilter from '../datefilter/DateFilter';
+import FilterIcon from '../../assets/icons/FilterIcon';
 
 
 const Navbar = () => {
@@ -143,10 +144,12 @@ const Navbar = () => {
 
           {/* Filter Button */}
           <button
-            onClick={toggleVisibility}
+            onClick={toggleVisibility} 
             className="bg-gray-100 px-3 py-2 rounded-md text-sm flex items-center"
           >
             Filter
+
+            <FilterIcon className="text-sm"/>
 
           </button></>)}
 
@@ -156,7 +159,7 @@ const Navbar = () => {
           {/* User Profile */}
           <Link to={'/profile'}>
             <div className="relative">
-              <div className="flex items-center justify-center">
+              <div className="flex items-center justify-center"> 
                 <img
                   className="rounded-full w-9 h-9"
                   src={user.profileImage || 'default-profile.png'} // Fallback image

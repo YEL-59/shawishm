@@ -85,17 +85,17 @@ const DragAndDropTable = () => {
   // Filter data based on dropdown selections
 
   const filteredData = data.filter((row) => {
-    const { modality, study, location, report, filterDate } = dropdownData;
-  
+    const { modality, image, location, reportStatus, filterDate } = dropdownData;
+
     return (
       (!modality || modality === "All" || row.Modality === modality) &&
-      (!study || study === "All" || row.Study === study) &&
-      (!location || location === "All" || row.Location === location) &&
-      (!report || report === "All" || row.ReportStatus === report) &&
+      (!image || image === "All" || row.Image === image) &&
+      (!location || location === "All" || row.Institution === location) &&
+      (!reportStatus || reportStatus === "All" || row["Report Status"] === reportStatus) &&
       (!filterDate || filterDate === "All" || row.Date === filterDate)
     );
   });
-  
+
 
   // Paginate data
   const startIndex = (currentPage - 1) * itemsPerPage;
@@ -194,9 +194,9 @@ const DragAndDropTable = () => {
         <table border="1" className="w-full text-center" >
           <thead>
             <SortableContext items={columns} strategy={verticalListSortingStrategy}>
-              <tr className="space-x-10 text-sm">
+              <tr className="space-x-10 text-sm font-semibold">
                 {columns.map((column) => (
-                  <SortableColumn key={column} id={column} className=" mr-10 border-r  last:border-r-0" />
+                  <SortableColumn key={column} id={column} className=" mr-10 border-r font-semibold  last:border-r-0" />
                 ))}
               </tr>
             </SortableContext>
@@ -353,10 +353,10 @@ const DragAndDropTable = () => {
                       </div></>) : column === "Report Status" ? (
                         <span
                           className={`font-semibold ${row[column] === "Completed"
-                              ? "text-blue-500"
-                              : row[column] === "Pending"
-                                ? "text-green-500"
-                                : "text-gray-500"
+                            ? "text-blue-500"
+                            : row[column] === "Pending"
+                              ? "text-green-500"
+                              : "text-gray-500"
                             }`}
                         >
                           {row[column]}
@@ -374,7 +374,7 @@ const DragAndDropTable = () => {
 
 
         </table>
-        <Pagination totalItems={data.length} />
+        <Pagination totalItems={filteredData.length} />
         <ModalContainer
           activeModal={activeModal}
           handleCloseModal={handleCloseModal}

@@ -3,7 +3,6 @@ import { createBrowserRouter, Navigate } from "react-router-dom";
 import Layout from "../layout/Layout";
 import Home from "../page/home/Home";
 import Setting from "../page/setting/Setting";
-import Logout from "../page/logout/Logout";
 import Patient from "../page/patient/Patient";
 import Login from "../page/login/Login";
 import PrivateRoute from "../components/PrivateRoute";
@@ -11,12 +10,16 @@ import Profile from "../page/profile/Profile";
 import Editstudy from "../components/editstydy/Editstudy";
 import AssignStudy from "../components/assignstudy/AssignStudy";
 import MergePatient from "../components/mergepatient/MergePatient";
+import SignUp from "../page/signup/SignUp";
+import ForgottenPassword from "../page/forgottenpassword/ForgottenPassword";
+import ErrorPage from "../page/errorpage/ErrorPage";
 
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <Layout />,
+    errorElement: <ErrorPage/>,
     children: [
       {
         index: true,
@@ -64,13 +67,18 @@ const router = createBrowserRouter([
     element: <Login />,
   },
   {
-    path: "/logout",
-    element: <Logout />,
+    path: "/signup",
+    element: <SignUp />,
   },
   {
-    path: "*",
-    element: <Navigate to="/" replace />,
+    path: "/forgotpassword",
+    element:<ForgottenPassword/>,
+
   },
+  // {
+  //   path: "*",
+  //   element: <Navigate to="/" replace />,
+  // },
 ]);
 
 export default router;

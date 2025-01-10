@@ -15,14 +15,7 @@ const Setting = () => {
     {isVisible && (<Tabledropdown/>)}
     <div className="w-auto mx-auto px-4 py-4">
      
-      {/* <DraggableTable/>  */}
-     
-      <ModalProvider>
-      <Tabledrag/>
-      <Modal /> {/* Add the Modal component here */} 
-    </ModalProvider>
-
-      {/* <EnhancedTable/> */}
+    
     </div>
     
     </>

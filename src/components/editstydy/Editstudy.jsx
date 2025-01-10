@@ -128,50 +128,44 @@ const Editstudy = () => {
 
                                         <div class="grid gap-6 mb-6 md:grid-cols-2">
                                             <div class="relative">
-                                                <label for="first_name" class="block text-md md:text-md font-medium text-primary">First name</label>
-                                                <input type="text" id="first_name" class=" border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-3 " placeholder="John" required />
-                                                {/* <button
-                                                    type="button" 
-
-                                                    className="absolute inset-y-0 right-3 flex items-center text-gray-500 border p-2 h-5 w-5 "
-                                                >
-                                                    <PlusIcon />  
-                                                </button> */}
-
-
+                                                <label for="first_name" class="block text-md md:text-md font-medium text-primary">Procedure Name</label>
+                                                <input type="text" id="first_name" class=" border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-3 " placeholder="Procedure Name" required />
                                             </div>
                                             <div>
-                                                <label for="last_name" class="block text-md md:text-md font-medium text-primary">Last name</label>
-                                                <input type="text" id="last_name" class=" border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-3 " placeholder="Doe" required />
+                                                <label for="last_name" class="block text-md md:text-md font-medium text-primary">Study ID</label>
+                                                <input type="text" id="last_name" class=" border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-3 " placeholder="Study ID" required />
                                             </div>
 
                                             <div>
-                                                <label for="phone" class="block text-md md:text-md font-medium text-primary">Phone number</label>
+                                                <label for="phone" class="block text-md md:text-md font-medium text-primary">Study Description
+                                                </label>
                                                 <textarea id="message" rows="3" class="block p-2.5 w-full text-sm text-gray-900 bg-[#e7e3e3] rounded border border-gray-300 focus:ring-blue-500 focus:border-blue-500 " placeholder="Write your thoughts here..."></textarea>
                                             </div>
                                             <div>
-                                                <label for="company" class="block text-md md:text-md font-medium text-primary">Company</label>
+                                                <label for="company" class="block text-md md:text-md font-medium text-primary">Study Date</label>
                                                 <input type="text" id="company" class=" border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-3 " placeholder="Flowbite" required />
                                             </div>
                                             <div>
-                                                <label for="website" class="block text-md md:text-md font-medium text-primary">Website URL</label>
+                                                <label for="website" class="block text-md md:text-md font-medium text-primary">Ref.Physican</label>
                                                 <input type="url" id="website" class=" border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-3 " placeholder="flowbite.com" required />
                                             </div>
                                             <div>
-                                                <label for="visitors" class="block text-md md:text-md font-medium text-primary">Unique visitors (per month)</label>
+                                                <label for="visitors" class="block text-md md:text-md font-medium text-primary">Radiologist</label>
                                                 <input type="number" id="visitors" class=" border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-3 " placeholder="" required />
                                             </div>
                                             <div>
-                                                <label for="last_name" class="block text-md md:text-md font-medium text-primary">Last name</label>
+                                                <label for="last_name" class="block text-md md:text-md font-medium text-primary">Radiologist Group</label> 
                                                 <input type="text" id="last_name" class=" border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-3 " placeholder="Doe" required />
                                             </div>
 
                                             <div>
-                                                <label for="phone" class="block text-md md:text-md font-medium text-primary">Phone number</label>
+                                                <label for="last_name" class="block text-md md:text-md font-medium text-primary">Comment </label>
+                                             
+
                                                 <textarea id="message" rows="3" class="block p-2.5 w-full text-sm text-gray-900 bg-[#e7e3e3] rounded border border-gray-300 focus:ring-blue-500 focus:border-blue-500 " placeholder="Write your thoughts here..."></textarea>
                                             </div>
                                             <div>
-                                                <label for="last_name" class="block text-md md:text-md font-medium text-primary">Last name</label>
+                                                <label for="last_name" class="block text-md md:text-md font-medium text-primary">Institution Name </label>
                                                 <input type="text" id="last_name" class="border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-3 " placeholder="Doe" required />
                                             </div>
                                         </div>
@@ -190,17 +184,17 @@ const Editstudy = () => {
                                 <div><button className='rounded-lg bg-transparent text-blue px-5 py-2 border font-medium'>cancle</button></div>
                                 <button
                                     onClick={() => handleOpenModal("modal1")}
-                                    className="rounded-lg bg-blue text-white px-5 py-2 font-medium" 
+                                    className="rounded-lg bg-blue text-white px-5 py-2 font-medium"
                                 >
-                                    Save 
+                                    Save
                                 </button>
 
 
                                 <ModalContainer
-                                    activeModal={activeModal} 
-                                    handleCloseModal={handleCloseModal}  
-                                    handleOpenModal={handleOpenModal} 
-                                /> 
+                                    activeModal={activeModal}
+                                    handleCloseModal={handleCloseModal}
+                                    handleOpenModal={handleOpenModal}
+                                />
 
                             </div>
                         </div>
