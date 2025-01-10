@@ -1,53 +1,31 @@
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import Cookies from "js-cookie";
+import { toast } from "react-toastify";
 
-
-
-
+// Set tokens in cookies with 5-minute expiration
 export const setTokens = (accessToken, refreshToken) => {
-  const date = new Date();
-  date.setFullYear(date.getFullYear() + 1);
+  const expiresIn = new Date(new Date().getTime() + 1 * 60 * 1000); 
 
   // Store tokens in cookies
-  document.cookie = `accessToken=${accessToken}; path=/; expires=${date.toUTCString()}; secure; SameSite=Strict`;
-  document.cookie = `refreshToken=${refreshToken}; path=/; expires=${date.toUTCString()}; secure; SameSite=Strict`;
+  Cookies.set("accessToken", accessToken, { expires: expiresIn, secure: true, sameSite: "Strict" });
+  Cookies.set("refreshToken", refreshToken, { expires: expiresIn, secure: true, sameSite: "Strict" });
 };
 
-
+// Get access token from cookies
 export const getAccessToken = () => {
-  const name = "accessToken=";
-  const cookies = document.cookie.split(";");
-
-  for (let cookie of cookies) {
-    cookie = cookie.trim();
-    if (cookie.startsWith(name)) {
-      return cookie.substring(name.length);
-    }
-  }
-  return null;
+  return Cookies.get("accessToken");
 };
 
+// Get refresh token from cookies
 export const getRefreshToken = () => {
-  const name = "refreshToken=";
-  const cookies = document.cookie.split(";");
-
-  for (let cookie of cookies) {
-    cookie = cookie.trim();
-    if (cookie.startsWith(name)) {
-      return cookie.substring(name.length);
-    }
-  }
-  return null;
+  return Cookies.get("refreshToken");
 };
 
-
-
-
-
+// Clear tokens from cookies
 export const clearTokens = () => {
-  document.cookie = "accessToken=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT; secure; SameSite=Strict";
-  document.cookie = "refreshToken=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT; secure; SameSite=Strict";
+  Cookies.remove("accessToken");
+  Cookies.remove("refreshToken");
   toast.success("Logged out Successfully!");
   window.location.href = "/login";
 };
+
 

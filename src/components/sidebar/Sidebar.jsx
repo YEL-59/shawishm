@@ -1,14 +1,16 @@
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import DashboardIcon from "../../assets/icons/DashboardIcon";
 import SettingIcon from "../../assets/icons/SettingIcon";
 import Logout from "../../assets/icons/Logout";
 import LogoIcon from "../../assets/icons/LogoIcon";
 import PatientIcon from "../../assets/icons/PatientIcon";
+import { clearTokens } from "../../utils/cookieHelper"; // Import the clearTokens function
 
 const Sidebar = () => {
     const [isOpen, setIsOpen] = useState(false);
     const location = useLocation();
+    const navigate = useNavigate(); // For navigation after logout
 
     // Close the sidebar on route change in responsive mode
     useEffect(() => {
@@ -19,11 +21,15 @@ const Sidebar = () => {
         setIsOpen(!isOpen);
     };
 
+    const handleLogout = () => {
+        clearTokens(); // Clear the tokens from cookies
+        navigate("/login"); // Redirect to login page after logout
+    };
+
     const menuItems = [
         { name: "Dashboard", icon: DashboardIcon, path: "/" },
         { name: "Patients", icon: PatientIcon, path: "/patients" },
         { name: "Settings", icon: SettingIcon, path: "/settings" },
-        { name: "Logout", icon: Logout, path: "/login" },
     ];
 
     return (
@@ -77,6 +83,17 @@ const Sidebar = () => {
                             <span className="text-sm font-medium">{name}</span>
                         </NavLink>
                     ))}
+
+                    {/* Logout Button */}
+                    <button
+                        onClick={handleLogout}
+                        className="flex items-center gap-4 p-3 w-full rounded-md mb-4  hover:bg-[#00CCFF] text-[#4C4C4C] hover:text-white"
+                    >
+                        <span className="text-lg">
+                            <Logout />
+                        </span>
+                        <span className="text-sm font-medium">Logout</span>
+                    </button>
                 </nav>
             </aside>
 

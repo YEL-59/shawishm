@@ -10,6 +10,8 @@ import GoogleIcon from '../../assets/icons/GoogleIcon';
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useEffect } from 'react';
+import axios from 'axios';
+import axiosInstance from '../../utils/axiosInstance';
 
 
 const SignUp = () => {
@@ -52,32 +54,53 @@ const SignUp = () => {
         setLoading(true);
 
         try {
-            const response = await fetch("https://shawishm-django.onrender.com/api/users/signup/", {
-                method: "POST",
-                body: JSON.stringify({ username: name, email, password }),
-                headers: { "Content-Type": "application/json" },
-            });
+            const response = await axiosInstance.post(
+                "users/signup/",
+                {
+                    username: name,
+                    email: email,
+                    password: password,
+                },
+                {
+                    headers: { "Content-Type": "application/json" },
+                }
+            );
 
-            if (!response.ok) {
-                throw new Error("Sign-up failed");
-            }
-
-            const data = await response.json();
-            if (data.access && data.refresh) {
-                setTokens(data.access, data.refresh);
-                toast.success("Sign-up successful!");
-                navigate("/");
+            if (response.status === 201) {
+                toast.success("Sign-up successful! Please log in.");
+                navigate("/login"); // Redirect to the login page after successful sign-up
+                const accessToken = Cookies.get("accessToken");
+                const refreshToken = Cookies.get("refreshToken");
+                console.log("Access Token:", accessToken);
+                console.log("Refresh Token:", refreshToken);
             } else {
-                toast.error("Sign-up failed: Invalid response");
+                toast.error("Sign-up failed. Please try again.");
             }
         } catch (error) {
-            toast.error(`Sign-up failed: ${error.message}`);
+            if (error.response && error.response.data) {
+                const errors = error.response.data;
+
+                // Extract and display error messages
+                for (const key in errors) {
+                    if (errors[key] instanceof Array) {
+                        errors[key].forEach((msg) => toast.error(msg));
+                    } else {
+                        toast.error(errors[key]);
+                    }
+                }
+            } else {
+                // Handle generic errors
+                toast.error(`Sign-up failed: ${error.message}`);
+            }
         } finally {
             setTimeout(() => {
                 setLoading(false);
             }, 3000);
         }
     };
+
+
+
 
 
 
@@ -193,6 +216,16 @@ const SignUp = () => {
                                     className="w-full py-3 bg-secondary text-white font-semibold rounded-md hover:bg-secondary focus:outline-none focus:ring-2 focus:ring-secondary"
                                 >
                                     {loading ? `Signing in${ellipsis}` : 'Sign up'}
+                                    {/*   {loading ? (
+    <>
+        Signing in
+        <span className="animate-[fadeInOut_1s_ease-in-out_infinite]">.</span>
+        <span className="animate-[fadeInOut_1s_ease-in-out_infinite] delay-200">.</span>
+        <span className="animate-[fadeInOut_1s_ease-in-out_infinite] delay-400">.</span>
+    </>
+) : (
+    'Sign up'
+)} */}
                                 </button>
                             </div>
 

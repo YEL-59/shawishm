@@ -1,5 +1,6 @@
 import axios from "axios";
-import { getAccessToken, getRefreshToken, setTokens, clearTokens } from "../../utils/cookieHelper";
+import {  getAccessToken, getRefreshToken, setTokens, clearTokens }  from "./cookieHelper";
+
 
 const axiosInstance = axios.create({
   baseURL: "https://shawishm-django.onrender.com/api/",
@@ -27,7 +28,7 @@ axiosInstance.interceptors.response.use(
       const refreshToken = getRefreshToken();
       if (refreshToken) {
         try {
-          const { data } = await axios.post("https://shawishm-django.onrender.com/api/token/refresh/", {
+          const { data } = await axios.post("https://shawishm-django.onrender.com/api/users/signin/", {
             refresh: refreshToken,
           });
           setTokens(data.access, refreshToken);
