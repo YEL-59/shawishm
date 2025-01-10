@@ -40,7 +40,7 @@ const SignUp = () => {
     // useEffect(() => {
     //     toast.error("Test error message!");
     // }, []);
-    
+
     const handleSignUp = async (e) => {
         e.preventDefault();
 
@@ -73,11 +73,30 @@ const SignUp = () => {
         } catch (error) {
             toast.error(`Sign-up failed: ${error.message}`);
         } finally {
-            setLoading(false);
+            setTimeout(() => {
+                setLoading(false);
+            }, 3000);
         }
     };
 
 
+
+
+
+
+
+    const [ellipsis, setEllipsis] = useState('');
+
+    useEffect(() => {
+        if (loading) {
+            const interval = setInterval(() => {
+                setEllipsis((prev) => (prev === '...' ? '' : prev + '.'));
+            }, 500); // Change ellipsis every 500ms
+            return () => clearInterval(interval);
+        } else {
+            setEllipsis('');
+        }
+    }, [loading]);
 
     return (
 
@@ -160,20 +179,20 @@ const SignUp = () => {
                                     </button>
                                 </div>
                             </div>
-                        
+
                             <div>
-                            
+
                                 <div class="flex items-start mb-6">
-        <div class="flex items-center h-5">
-        <input id="remember" type="checkbox" value="" class="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 " required />
-        </div>
-        <label for="remember" class="ms-2 text-sm font-medium text-gray-900 "> By continuing, you agree to our <a href="#" class="text-secondary hover:underline ">terms and conditions</a>.</label>
-    </div>
+                                    <div class="flex items-center h-5">
+                                        <input id="remember" type="checkbox" value="" class="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 " required />
+                                    </div>
+                                    <label for="remember" class="ms-2 text-sm font-medium text-gray-900 "> By continuing, you agree to our <a href="#" class="text-secondary hover:underline ">terms and conditions</a>.</label>
+                                </div>
                                 <button
                                     type="submit" onClick={handleSignUp}
                                     className="w-full py-3 bg-secondary text-white font-semibold rounded-md hover:bg-secondary focus:outline-none focus:ring-2 focus:ring-secondary"
                                 >
-                                    {loading ? 'Sign in...' : 'Sign up'}
+                                    {loading ? `Signing in${ellipsis}` : 'Sign up'}
                                 </button>
                             </div>
 
