@@ -124,11 +124,11 @@ const Login = () => {
               >
                 {loading ? 'Logging in...' : 'Log In'}
               </button>
-              <Link to={'/signup'}  className="text-center text-sm text-gray-600 hover:underline">
+              <Link to={'/signup'}  className="text-center text-xs text-secondary hover:underline">
                 <p className="mt-4 text-sm text-gray-500 text-center">
                   Already have an account?
-                  <a href="#" className="font-medium text-blue-600 hover:underline">
-                    Sign in here
+                  <a href="#" className="font-medium text-xs text-secondary hover:underline">
+                    Signin here
                   </a>.
                 </p>
 
