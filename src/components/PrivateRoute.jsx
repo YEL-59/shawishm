@@ -1,16 +1,26 @@
+import React, { useContext } from 'react';
 
 
-
-import React from "react";
-import { Navigate } from "react-router-dom";
-import { getAccessToken } from "../utils/cookieHelper";
-
+import { Navigate, useLocation } from 'react-router-dom';
+import { UserProvider } from '../contexts/UserProvider';
+import Spinner from './spinner/Spinner';
 
 const PrivateRoute = ({ children }) => {
-  const token = getAccessToken();
+  const { user, loading } = useContext(UserProvider); 
+  const location = useLocation(); 
 
-  return token ? children : <Navigate to="/login" />;
+ 
+  if (loading) {
+    return <Spinner />;
+  }
+
+ 
+  if (user) {
+    return children;
+  }
+
+
+  return <Navigate state={{ from: location }} to="/login" replace />;
 };
 
 export default PrivateRoute;
-

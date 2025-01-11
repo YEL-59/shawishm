@@ -3,7 +3,7 @@ import { useDropdown } from '../../contexts/DropdownContext';
 import { useUser } from '../../contexts/UserProvider';
 
 const Profile = () => {
-  const [name, setName] = useState('John Doe'); // Placeholder values
+  const [name, setName] = useState('John Doe');
   const [email, setEmail] = useState('john.doe@example.com');
   const [phone, setPhone] = useState('123-456-7890');
   const [address, setAddress] = useState('123 Main St, City, Country');
@@ -31,17 +31,17 @@ const Profile = () => {
   };
 
   return (
-    <div className="profile-container max-w-full h-full  mx-auto p-16 bg-white shadow-lg rounded-lg">
-  
-{console.log(dropdownData)}
+    <div className="profile-container max-w-full h-auto  mx-auto p-16 bg-white shadow-lg rounded-lg">
+
+      {console.log(dropdownData)}
       {/* Profile Picture */}
       <div className="profile-image-container mb-6 flex flex-col gap-2 py-5 items-center justify-center">
         <img
-         src={user?.profileImage || profileImage || 'https://via.placeholder.com/150'}
+          src={user?.profileImage || profileImage || 'https://via.placeholder.com/150'}
           alt="Profile"
-          className="w-32 h-32 rounded-full object-cover"
+          className="w-32 h-32 rounded-full object-cover border-2"
         />
-        <h1 className="text-2xl font-bold mb-2">{user?.name || 'Guest'}</h1> 
+        <h1 className="text-2xl font-bold mb-2">{user?.name || 'Guest'}</h1>
         <label
           htmlFor="profileImageInput"
           className="flex items-center gap-2 mt-2 px-4 py-2  text-primary text-sm rounded-md cursor-pointer "
@@ -74,6 +74,55 @@ const Profile = () => {
             id="name"
             value={name}
             onChange={(e) => setName(e.target.value)}
+            className="w-full px-4 py-2 border rounded-md text-sm font-thin placeholder-primary"
+            required
+          />
+        </div>
+
+        <div className="form-group mb-4">
+          <label htmlFor="name" className="block text-sm font-medium mb-1">FullName</label>
+          <input
+            type="text"
+            id="name"
+            value={fullname}
+            onChange={(e) => setName(e.target.value)}
+            className="w-full px-4 py-2 border rounded-md text-sm font-thin placeholder-primary"
+            required
+          />
+        </div>
+        <div className="form-group mb-4">
+          <label htmlFor="name" className="block text-sm font-medium mb-1">Gender</label>
+         {/* here add 2 check box */}
+          <div className="flex gap-2">
+            <input
+              type="radio"
+              id="male"
+              name="gender"
+              value="male"
+              checked={gender ==='male'}
+              onChange={(e) => setGender(e.target.value)}
+            />
+            <label htmlFor="male" className="text-sm font-medium">Male</label>
+            <input
+              type="radio"
+              id="female"
+              name="gender"
+              value="female"
+              checked={gender === 'female'}
+              onChange={(e) => setGender(e.target.value)}
+            />
+            <label htmlFor="female" className="text-sm font-medium">Female</label>
+          </div>
+        </div>
+      
+
+        <div className="form-group mb-4">
+          <label htmlFor="email" className="block text-sm font-medium mb-1">Role</label>
+          <input
+            type="email"
+            id="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             className="w-full px-4 py-2 border rounded-md text-sm font-thin placeholder-primary"
             required
           />

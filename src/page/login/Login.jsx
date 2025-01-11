@@ -1,20 +1,25 @@
 import loginimg from "../../assets/login.png";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import LogoIcon from "../../assets/icons/LogoIcon";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import axios from "axios";
+
 import { useForm } from "react-hook-form";
 import axiosInstance from "../../utils/axiosInstance";
+import "../../App.css";
 
 const Login = () => {
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const [setToken,setTokens] = useState(false);
+  const [setToken, setTokens] = useState(false);
   const navigate = useNavigate();
 
+  // useEffect(() => {
+  //   toast.info("Toast is working!");
+  // }, []);
+  
   const {
     register,
     handleSubmit,
@@ -26,37 +31,35 @@ const Login = () => {
   };
 
   const onSubmit = async (data) => {
-    const { email, password } = data;
-  
+    const { name, password } = data;
+
     setLoading(true);
-    
-  
+
     try {
       const response = await axiosInstance.post("/users/signin/", {
-        username: email, 
+        username: name,
         password,
       });
-  
+
       const { access, refresh } = response.data;
-  
+
       // Store tokens using your cookie helper
       setTokens(access, refresh);
-  
+
       toast.success("Login successful!");
       navigate("/"); // Redirect to the home page or dashboard
     } catch (error) {
       if (error.response && error.response.data) {
-        const errorMessage = error.response.data.detail || "Invalid email or password";
+        const errorMessage =
+          error.response.data.detail || "Invalid email or password";
         toast.error(errorMessage);
       } else {
         toast.error(`Login failed: ${error.message}`);
-   
       }
     } finally {
       setLoading(false);
     }
   };
-  
 
   return (
     <>
@@ -71,7 +74,9 @@ const Login = () => {
         draggable
         pauseOnHover
         theme="light"
+        style={{ zIndex: 9999 }}
       />
+
 
       <div className="h-screen flex flex-col justify-center md:flex-row bg-[#e9f1f7]">
         {/* Left Side: Form */}
@@ -83,22 +88,25 @@ const Login = () => {
                 Login to your account
               </h2>
             </div>
-            <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 w-full">
+            <form
+              onSubmit={handleSubmit(onSubmit)}
+              className="space-y-6 w-full"
+            >
               <div>
                 <label
-                  htmlFor="email"
+                  htmlFor="name"
                   className="block text-sm md:text-md font-bold text-primary"
                 >
                   User Name
                 </label>
                 <input
                   type="text"
-                  id="email"
-                  {...register("email", { required: "Email is required" })}
+                  id="name"
+                  {...register("name", { required: "Name is required" })}
                   className="w-full p-3 mt-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
-                {errors.email && (
-                  <p className="text-red-500 text-sm">{errors.email.message}</p>
+                {errors.name && (
+                  <p className="text-red-500 text-sm">{errors.name.message}</p>
                 )}
               </div>
               <div>
@@ -120,7 +128,9 @@ const Login = () => {
                   <input
                     type={showPassword ? "text" : "password"}
                     id="password"
-                    {...register("password", { required: "Password is required" })}
+                    {...register("password", {
+                      required: "Password is required",
+                    })}
                     className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
                   <button
@@ -143,7 +153,22 @@ const Login = () => {
                   className="w-full py-2 md:py-3 bg-secondary text-white font-semibold rounded-md hover:bg-secondary focus:outline-none focus:ring-2 focus:ring-secondary"
                   disabled={loading}
                 >
-                  {loading ? "Logging in..." : "Log In"}
+                  {loading ? (
+                    <>
+                      Login
+                      <span className="animate-[fadeInOut_1s_ease-in-out_infinite]">
+                        .
+                      </span>
+                      <span className="animate-[fadeInOut_1s_ease-in-out_infinite] delay-200">
+                        .
+                      </span>
+                      <span className="animate-[fadeInOut_1s_ease-in-out_infinite] delay-400">
+                        .
+                      </span>
+                    </>
+                  ) : (
+                    "Log in"
+                  )}
                 </button>
                 <Link
                   to={"/signup"}

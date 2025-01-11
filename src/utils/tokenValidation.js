@@ -1,51 +1,23 @@
-// src/utils/tokenValidation.js
-import Cookies from 'js-cookie';
+import axios from "axios";
+import { getAccessToken } from "./cookieHelper";
 
 export const validateToken = async () => {
-  const token = Cookies.get('authToken');
-  
+  const token = getAccessToken();
+
   if (!token) {
-    return { valid: false, message: 'No token found' };
+    return { valid: false, message: "No token found" };
   }
 
   try {
-    // Replace with your backend API endpoint that validates the token
-    const response = await fetch('/api/validate-token', {
-      method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${token}`,
-      },
+    const response = await axios.get("https://shawishm-django.onrender.com/api/token/validate/", {
+      headers: { Authorization: `Bearer ${token}` },
     });
 
-    if (!response.ok) {
-      return { valid: false, message: 'Invalid token' };
+    if (response.status === 200) {
+      return { valid: true, message: "Token is valid" };
     }
-
-    const data = await response.json();
-
-    if (data.isValid) {
-      return { valid: true, message: 'Token is valid' };
-    } else {
-      return { valid: false, message: 'Invalid token' };
-    }
+    return { valid: false, message: "Token is invalid" };
   } catch (error) {
-    return { valid: false, message: 'Error validating token' };
+    return { valid: false, message: "Error validating token" };
   }
 };
-
-
-// src/utils/tokenValidation.js
-// import axiosInstance from './axiosInstance'; // Import the axios instance
-
-// export const validateToken = async () => {
-//   try {
-//     const response = await axiosInstance.get('/validate-token'); // Use the axios instance
-//     if (response.data.isValid) {
-//       return { valid: true, message: 'Token is valid' }; 
-//     } else {
-//       return { valid: false, message: 'Invalid token' };
-//     }
-//   } catch (error) {
-//     return { valid: false, message: 'Error validating token' };
-//   }
-// };

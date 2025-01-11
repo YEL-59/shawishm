@@ -66,7 +66,7 @@ const ForgottenPassword = () => {
 };
 
   // Optional: You can use the token in other parts of your component as needed
-  console.log('Current token:', token);
+  //console.log('Current token:', token);
 
   return (
     <div className="h-screen flex flex-col justify-center md:flex-row bg-[#e9f1f7]">
@@ -78,7 +78,9 @@ const ForgottenPassword = () => {
             <h2 className="text-xl md:text-2xl font-bold text-primary">Reset Password</h2>
           </div>
           <form onSubmit={handleLogin} className="space-y-6 w-full">
-            <div>
+            <h1 className="text-center">Please Contact To the Admin </h1>
+           
+            {/* <div>
               <label htmlFor="email" className="block text-sm md:text-md font-bold text-primary">
                 User Email/phoneNumber
               </label>
@@ -143,7 +145,7 @@ const ForgottenPassword = () => {
                   {showPassword ? <FaEyeSlash /> : <FaEye />}
                 </button>
               </div>
-            </div>
+            </div> */}
             <div>
               <button
                 type="submit"

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useContext } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   DndContext,
   useSensor,
@@ -20,7 +20,7 @@ import { usePagination } from "../../contexts/PaginationContext";
 import Pagination from "../paginationcontrol/PaginationControls";
 import ModalContainer from "../modalContainer/ModalContainer";
 import { useDropdown } from "../../contexts/DropdownContext";
-
+import axiosInstance from "../../utils/axiosInstance";
 
 const initialColumns = ["Action", "#", "Name", "Study Date", "Patient ID", "Report Status", "Modality", "Comment", "Viewed", "Branch", "Image", "Gender", "Series", "RefPhysician", "Institution", "Radiologist Group", "Procedure", "Other Comments"];
 
@@ -33,7 +33,6 @@ const SortableColumn = ({ id }) => {
     transition,
     cursor: "grab",
     'font-weight': "500"
-
   };
 
   return (
@@ -49,8 +48,8 @@ const DragAndDropTable = () => {
   const [loading, setLoading] = useState(true); // To handle loading state
   const [error, setError] = useState(null); // To handle any errors
 
-  const [dropdownOpen, setDropdownOpen] = useState(null); // To control dropdown visibility per row 
-  const dropdownRef = useRef(null); // Reference for dropdown 
+  const [dropdownOpen, setDropdownOpen] = useState(null); // To control dropdown visibility per row
+  const dropdownRef = useRef(null); // Reference for dropdown
   const modalRef = useRef(null); // Reference for modal
   const [actionDropdownOpen, setActionDropdownOpen] = useState(null); // For Action column dropdown
   const [commentsDropdownOpen, setCommentsDropdownOpen] = useState(null); // For Other Comments column dropdown
@@ -65,16 +64,36 @@ const DragAndDropTable = () => {
     useSensor(KeyboardSensor)
   );
 
-  // Fetch data from the fake JSON file when the component mounts
+  const [filteredData, setFilteredData] = useState([]); 
+
+ 
+
+
+
   useEffect(() => {
     const fetchData = async () => {
+      setLoading(true);
       try {
-        const response = await fetch("/data.json");
-        const result = await response.json();
-        setData(result);
-        setTotalItems(result.length); // Set total items for pagination
+      
+        const response = await axiosInstance.get("/studies/");
+
+       
+        if (response.data.success) {
+          setData(response.data.data);
+          setFilteredData(response.data.data); 
+          setTotalItems(response.data.data.length); 
+        } else {
+          setError("Failed to load data");
+        }
       } catch (error) {
-        setError("Failed to load data");
+  
+        if (error.response && error.response.status === 401) {
+          setError("Unauthorized. Please log in again.");
+       
+          window.location.href = "/login";
+        } else {
+          setError("Failed to load data");
+        }
       } finally {
         setLoading(false);
       }
@@ -82,9 +101,9 @@ const DragAndDropTable = () => {
 
     fetchData();
   }, [setTotalItems]);
-  // Filter data based on dropdown selections
 
-  const filteredData = data.filter((row) => {
+  // Filter data based on dropdown selections
+  const filteredDataList = filteredData.filter((row) => {
     const { modality, image, location, reportStatus, filterDate } = dropdownData;
 
     return (
@@ -96,11 +115,9 @@ const DragAndDropTable = () => {
     );
   });
 
-
   // Paginate data
   const startIndex = (currentPage - 1) * itemsPerPage;
-  const paginatedData = data.slice(startIndex, startIndex + itemsPerPage);
-
+  const paginatedData = filteredDataList.slice(startIndex, startIndex + itemsPerPage);
 
   // Close dropdowns when clicking outside of them
   useEffect(() => {
@@ -123,7 +140,6 @@ const DragAndDropTable = () => {
     };
   }, []);
 
-
   const handleDragEnd = (event) => {
     const { active, over } = event;
 
@@ -139,13 +155,12 @@ const DragAndDropTable = () => {
     }
   };
 
-
   const handleActionDropdownToggle = (index) => {
     if (actionDropdownOpen === index) {
       setActionDropdownOpen(null); // Close if already open
     } else {
       setActionDropdownOpen(index);
-      setCommentsDropdownOpen(null); // Close Other Comments dropdown if it's open 
+      setCommentsDropdownOpen(null); // Close Other Comments dropdown if it's open
     }
   };
 
@@ -158,13 +173,6 @@ const DragAndDropTable = () => {
     }
   };
 
-
-
-
-
-
-
-
   const [activeModal, setActiveModal] = useState(null);
 
   const handleOpenModal = (modalName) => {
@@ -174,7 +182,6 @@ const DragAndDropTable = () => {
   const handleCloseModal = () => {
     setActiveModal(null);
   };
-
 
   if (loading) {
     return <div>Loading...</div>;
@@ -191,18 +198,18 @@ const DragAndDropTable = () => {
       onDragEnd={handleDragEnd}
     >
       <div className="">
-        <table border="1" className="w-full text-center" >
+        <table border="1" className="w-full text-center">
           <thead>
             <SortableContext items={columns} strategy={verticalListSortingStrategy}>
               <tr className="space-x-10 text-sm font-semibold">
                 {columns.map((column) => (
-                  <SortableColumn key={column} id={column} className=" mr-10 border-r font-semibold  last:border-r-0" />
+                  <SortableColumn key={column} id={column} className="mr-10 border-r font-semibold last:border-r-0" />
                 ))}
               </tr>
             </SortableContext>
           </thead>
           <tbody>
-            {filteredData.map((row, rowIndex) => (
+            {paginatedData.map((row, rowIndex) => (
               <tr key={rowIndex} className={rowIndex % 2 === 0 ? "" : "bg-gray-200"}>
                 {columns.map((column, columnIndex) => (
                   <td key={columnIndex} className="py-5 relative text-sm font-normal">
@@ -212,175 +219,44 @@ const DragAndDropTable = () => {
                         {actionDropdownOpen === rowIndex && (
                           <div
                             ref={actionDropdownRef}
-                            className=" absolute bg-white border border-gray-300 shadow-lg p-4 rounded-md mt-2 w-64 z-10"
+                            className="absolute bg-white border border-gray-300 shadow-lg p-4 rounded-md mt-2 w-64 z-10"
                           >
-
-
-                            {/* Dropdown Item - delete Study */}
-                            <Link
-                              to="#"
-                              className="flex justify-between items-center w-full py-2 p- text-gray-700 hover:bg-gray-100 "
-                              onClick={() => handleOpenModal("modal3")}
-                            >
-                              Delete Study
-                              <span className="inline-block ml-2">
-                                <svg
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  width="16"
-                                  height="16"
-                                  viewBox="0 0 16 16"
-                                  fill="none"
-                                >
-                                  <path
-                                    d="M4.27614 10.5935L11.0375 3.83207L10.0947 2.88926L3.33333 9.65071V10.5935H4.27614ZM4.82843 11.9268H2V9.09837L9.62333 1.47505C9.88373 1.2147 10.3058 1.2147 10.5661 1.47505L12.4518 3.36067C12.7121 3.62101 12.7121 4.04312 12.4518 4.30347L4.82843 11.9268ZM2 13.2602H14V14.5935H2V13.2602Z"
-                                    fill="#4D4D4D"
-                                  />
-                                </svg>
-                              </span>
-                            </Link>
-                            {/* Dropdown Item - Edit Study */}
-                            <Link
-                              to="/editstudy"
-                              className="flex justify-between items-center w-full py-2 text-gray-700 hover:bg-gray-100 hover:rounded-t-lg"
-                            >
-                              Edit Study
-                              <span className="inline-block ml-2">
-                                <svg
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  width="16"
-                                  height="16"
-                                  viewBox="0 0 16 16"
-                                  fill="none"
-                                >
-                                  <path
-                                    d="M4.27614 10.5935L11.0375 3.83207L10.0947 2.88926L3.33333 9.65071V10.5935H4.27614ZM4.82843 11.9268H2V9.09837L9.62333 1.47505C9.88373 1.2147 10.3058 1.2147 10.5661 1.47505L12.4518 3.36067C12.7121 3.62101 12.7121 4.04312 12.4518 4.30347L4.82843 11.9268ZM2 13.2602H14V14.5935H2V13.2602Z"
-                                    fill="#4D4D4D"
-                                  />
-                                </svg>
-                              </span>
-                            </Link>
-                            {/* Dropdown Item - delete Study */}
-                            <Link
-                              to="/assignstudy"
-                              className="flex justify-between items-center w-full py-2 p- text-gray-700 hover:bg-gray-100 "
-
-                            >
-                              Assign Study
-                              <span className="inline-block ml-2">
-                                <svg
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  width="16"
-                                  height="16"
-                                  viewBox="0 0 16 16"
-                                  fill="none"
-                                >
-                                  <path
-                                    d="M4.27614 10.5935L11.0375 3.83207L10.0947 2.88926L3.33333 9.65071V10.5935H4.27614ZM4.82843 11.9268H2V9.09837L9.62333 1.47505C9.88373 1.2147 10.3058 1.2147 10.5661 1.47505L12.4518 3.36067C12.7121 3.62101 12.7121 4.04312 12.4518 4.30347L4.82843 11.9268ZM2 13.2602H14V14.5935H2V13.2602Z"
-                                    fill="#4D4D4D"
-                                  />
-                                </svg>
-                              </span>
-                            </Link>
-                            {/* Dropdown Item - delete Study */}
-                            <Link
-                              to="#"
-                              className="flex justify-between items-center w-full py-2 p- text-gray-700 hover:bg-gray-100 "
-                              onClick={() => handleOpenModal("modal7")}
-                            >
-                              Merge Patient
-                              <span className="inline-block ml-2">
-                                <svg
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  width="16"
-                                  height="16"
-                                  viewBox="0 0 16 16"
-                                  fill="none"
-                                >
-                                  <path
-                                    d="M4.27614 10.5935L11.0375 3.83207L10.0947 2.88926L3.33333 9.65071V10.5935H4.27614ZM4.82843 11.9268H2V9.09837L9.62333 1.47505C9.88373 1.2147 10.3058 1.2147 10.5661 1.47505L12.4518 3.36067C12.7121 3.62101 12.7121 4.04312 12.4518 4.30347L4.82843 11.9268ZM2 13.2602H14V14.5935H2V13.2602Z"
-                                    fill="#4D4D4D"
-                                  />
-                                </svg>
-                              </span>
-                            </Link>
+                            {/* Dropdown Items */}
                           </div>
                         )}
                       </>
                     ) : column === "Other Comments" ? (
                       <>
-                        <div
-                          className="cursor-pointer"
-                          onClick={() => handleCommentsDropdownToggle(rowIndex)}
-                        >
+                        <div className="cursor-pointer" onClick={() => handleCommentsDropdownToggle(rowIndex)}>
                           {row[column] || "No Comments"}
                         </div>
                         {commentsDropdownOpen === rowIndex && (
-                          <div
-                            ref={commentsDropdownRef}
-                            className="absolute bg-white border-2 p-2 z-10 flex flex-col"
-                          >
+                          <div ref={commentsDropdownRef} className="absolute bg-white border-2 p-2 z-10 flex flex-col">
                             <button onClick={() => handleActionClick("Edit", row)}>Edit</button>
                             <button onClick={() => handleActionClick("Delete", row)}>Delete</button>
-
-                            {/* Dropdown Item - Edit Study */}
-                            <Link
-                              to="#"
-                              className="flex justify-between items-center w-full py-2 text-gray-700 hover:bg-gray-100 hover:rounded-t-lg"
-                            >
-                              Edit Study
-                              <span className="inline-block ml-2">
-                                <svg
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  width="16"
-                                  height="16"
-                                  viewBox="0 0 16 16"
-                                  fill="none"
-                                >
-                                  <path
-                                    d="M4.27614 10.5935L11.0375 3.83207L10.0947 2.88926L3.33333 9.65071V10.5935H4.27614ZM4.82843 11.9268H2V9.09837L9.62333 1.47505C9.88373 1.2147 10.3058 1.2147 10.5661 1.47505L12.4518 3.36067C12.7121 3.62101 12.7121 4.04312 12.4518 4.30347L4.82843 11.9268ZM2 13.2602H14V14.5935H2V13.2602Z"
-                                    fill="#4D4D4D"
-                                  />
-                                </svg>
-                              </span>
-                            </Link>
                           </div>
                         )}
-
                       </>
-                    ) : column === "Viewed" ? (<>
+                    ) : column === "Viewed" ? (
                       <div className="cursor-pointer text-center flex items-center justify-center">
                         <IoEyeOutline onClick={() => handleActionClick("Edit", row)} />
-                      </div></>) : column === "Report Status" ? (
-                        <span
-                          className={`font-semibold ${row[column] === "Completed"
-                            ? "text-blue-500"
-                            : row[column] === "Pending"
-                              ? "text-green-500"
-                              : "text-gray-500"
-                            }`}
-                        >
-                          {row[column]}
-                        </span>
-                      ) : (
-                      row[column] || "N/A"
+                      </div>
+                    ) : column === "Report Status" ? (
+                      <span className={`font-semibold ${row[column] === "Completed" ? "text-blue-500" : "text-red-500"}`}>
+                        {row[column]}
+                      </span>
+                    ) : (
+                      row[column]
                     )}
                   </td>
                 ))}
               </tr>
             ))}
           </tbody>
-
-
-
-
         </table>
-        <Pagination totalItems={filteredData.length} />
-        <ModalContainer
-          activeModal={activeModal}
-          handleCloseModal={handleCloseModal}
-          handleOpenModal={handleOpenModal}
-        />
+        <Pagination />
       </div>
+      {activeModal && <ModalContainer modalRef={modalRef} handleCloseModal={handleCloseModal} />}
     </DndContext>
   );
 };

@@ -28,8 +28,8 @@ const router = createBrowserRouter([
       {
         path: "patients",
         element: (
-          // <PrivateRoute> <Patient /></PrivateRoute>
-          <Patient />
+        // <PrivateRoute> <Patient /></PrivateRoute>
+        <Patient />
 
         ),
       },
@@ -75,10 +75,7 @@ const router = createBrowserRouter([
     element:<ForgottenPassword/>,
 
   },
-  // {
-  //   path: "*",
-  //   element: <Navigate to="/" replace />,
-  // },
+
 ]);
 
 export default router;
