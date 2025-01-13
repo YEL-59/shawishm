@@ -33,7 +33,7 @@ const AssignStudy = () => {
                                 <h1 className='text-primary font-bold text-2xl mt-2'>Tanzir Rahman</h1>
                             </div>
                             <div className=''>
-                            <div className='flex justify-between'>
+                                <div className='flex justify-between'>
                                     <div><span className='text-gray-400 font-semibold '>Patient ID: :</span></div>
                                     <div><span>131</span></div>
                                 </div>
@@ -93,10 +93,10 @@ const AssignStudy = () => {
                                     <form action="">
 
 
-                                        <div class="grid gap-6 mb-6 md:grid-cols-1">
-                                            <div class="relative">
-                                                <label for="countries" class="block mb-2 text-[16px] font-medium text-black ">Assign to Radiologist:</label>
-                                                <select id="countries" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ">
+                                        <div className="grid gap-6 mb-6 md:grid-cols-1">
+                                            <div className="relative">
+                                                <label for="countries" className="block mb-2 text-[16px] font-medium text-black ">Assign to Radiologist:</label>
+                                                <select id="countries" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ">
                                                     <option selected>Choose a country</option>
                                                     <option value="US">United States</option>
                                                     <option value="CA">Canada</option>
@@ -106,9 +106,9 @@ const AssignStudy = () => {
 
 
                                             </div>
-                                            <div class="relative">
-                                                <label for="countries" class="block mb-2 text-[16px] font-medium text-black ">Radiologist Group:</label>
-                                                <select id="countries" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ">
+                                            <div className="relative">
+                                                <label for="countries" className="block mb-2 text-[16px] font-medium text-black ">Radiologist Group:</label>
+                                                <select id="countries" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ">
                                                     <option selected>Choose a country</option>
                                                     <option value="US">United States</option>
                                                     <option value="CA">Canada</option>
@@ -120,8 +120,8 @@ const AssignStudy = () => {
                                             </div>
 
                                             <div>
-                                                <label for="phone" class="block text-md mb-2 md:text-md font-medium text-primary">Comment :</label>
-                                                <textarea id="message" rows="3" class="block p-2.5 w-full text-sm text-gray-900 bg-[#e7e3e3] rounded border border-gray-300 focus:ring-blue-500 focus:border-blue-500 " placeholder="Write your thoughts here..."></textarea>
+                                                <label for="phone" className="block text-md mb-2 md:text-md font-medium text-primary">Comment :</label>
+                                                <textarea id="message" rows="3" className="block p-2.5 w-full text-sm text-gray-900 bg-[#e7e3e3] rounded border border-gray-300 focus:ring-blue-500 focus:border-blue-500 " placeholder="Write your thoughts here..."></textarea>
 
                                             </div>
                                         </div>

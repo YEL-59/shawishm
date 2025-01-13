@@ -31,26 +31,26 @@ const SignUp = () => {
 
   const handleSignUp = async (e) => {
     e.preventDefault();
-  
-    if (!name  || !password) {
+
+    if (!name || !password) {
       toast.error("All fields are required");
       return;
     }
-  
+
     setLoading(true);
-  
+
     try {
       const response = await axiosInstance.post(
         "users/signup/",
         {
-          username: name,  
+          username: name,
           password: password,
         },
         {
           headers: { "Content-Type": "application/json" },
         }
       );
-  
+
       if (response.status === 201 && response.data.success) {
         toast.success("Sign-up successful! Please log in.");
         navigate("/login");
@@ -60,7 +60,7 @@ const SignUp = () => {
     } catch (error) {
       if (error.response && error.response.data) {
         const errors = error.response.data;
-  
+
         // Extract and display error messages
         for (const key in errors) {
           if (errors[key] instanceof Array) {
@@ -79,7 +79,7 @@ const SignUp = () => {
       }, 3000);
     }
   };
-  
+
 
   const [ellipsis, setEllipsis] = useState("");
 
@@ -139,7 +139,7 @@ const SignUp = () => {
                   className="w-full p-3 mt-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
               </div>
-          
+
               <div>
                 <div className="flex justify-between items-center">
                   <label
@@ -169,23 +169,23 @@ const SignUp = () => {
                 </div>
               </div>
               <div>
-                <div class="flex items-start mb-6">
-                  <div class="flex items-center h-5">
+                <div className="flex items-start mb-6">
+                  <div className="flex items-center h-5">
                     <input
                       id="remember"
                       type="checkbox"
                       value=""
-                      class="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 "
+                      className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 "
                       required
                     />
                   </div>
                   <label
                     for="remember"
-                    class="ms-2 text-sm font-medium text-gray-900 "
+                    className="ms-2 text-sm font-medium text-gray-900 "
                   >
                     {" "}
                     By continuing, you agree to our{" "}
-                    <a href="#" class="text-secondary hover:underline ">
+                    <a href="#" className="text-secondary hover:underline ">
                       terms and conditions
                     </a>
                     .

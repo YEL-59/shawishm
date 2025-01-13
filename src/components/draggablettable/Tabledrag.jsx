@@ -15,14 +15,42 @@ import {
 import { CSS } from "@dnd-kit/utilities";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { IoEyeOutline } from "react-icons/io5";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { usePagination } from "../../contexts/PaginationContext";
 import Pagination from "../paginationcontrol/PaginationControls";
 import ModalContainer from "../modalContainer/ModalContainer";
 import { useDropdown } from "../../contexts/DropdownContext";
 import axiosInstance from "../../utils/axiosInstance";
 
-const initialColumns = ["Action", "#", "Name", "Study Date", "Patient ID", "Report Status", "Modality", "Comment", "Viewed", "Branch", "Image", "Gender", "Series", "RefPhysician", "Institution", "Radiologist Group", "Procedure", "Other Comments"];
+const initialColumns = [
+  "Action",
+  "#",
+  "Name",
+  "Study Date",
+  "Patient ID",
+  "Report Status",
+  "Modality",
+  "report verifier",
+  "Viewed",
+  "Branch",
+  "Image",
+  "Gender",
+  "Series",
+  "RefPhysician",
+  "Institution Name",
+  "Radiologist Group",
+  "Procedure",
+  "Other Comments",
+  "Proc Start",
+  "radiologist Name",
+  "Study Bodyparts",
+  "Report Url",
+  "Branch Name",
+  "Machine Name",
+  "Procedure Name",
+  "Study Directory",
+  "Study Description",
+];
 
 const SortableColumn = ({ id }) => {
   const { attributes, listeners, setNodeRef, transform, transition } =
@@ -32,11 +60,17 @@ const SortableColumn = ({ id }) => {
     transform: CSS.Transform.toString(transform),
     transition,
     cursor: "grab",
-    'font-weight': "500"
+    "font-weight": "500",
   };
 
   return (
-    <th ref={setNodeRef} style={style} {...attributes} {...listeners}>
+    <th
+      className="p-5 text-md font-semibold"
+      ref={setNodeRef}
+      style={style}
+      {...attributes}
+      {...listeners}
+    >
       {id}
     </th>
   );
@@ -64,33 +98,25 @@ const DragAndDropTable = () => {
     useSensor(KeyboardSensor)
   );
 
-  const [filteredData, setFilteredData] = useState([]); 
-
- 
-
-
+  const [filteredData, setFilteredData] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
       try {
-      
         const response = await axiosInstance.get("/studies/");
 
-       
         if (response.data.success) {
-          setData(response.data.data);
-          setFilteredData(response.data.data); 
-          setTotalItems(response.data.data.length); 
+          setData(response.data.data); // Store the data in state
+          setFilteredData(response.data.data); // Store the filtered data in state
+          setTotalItems(response.data.data.length); // Set the total number of items for pagination
         } else {
           setError("Failed to load data");
         }
       } catch (error) {
-  
         if (error.response && error.response.status === 401) {
           setError("Unauthorized. Please log in again.");
-       
-          window.location.href = "/login";
+          window.location.href = "/login"; // Redirect to login if unauthorized
         } else {
           setError("Failed to load data");
         }
@@ -104,27 +130,35 @@ const DragAndDropTable = () => {
 
   // Filter data based on dropdown selections
   const filteredDataList = filteredData.filter((row) => {
-    const { modality, image, location, reportStatus, filterDate } = dropdownData;
+    const { modality, image, location, reportStatus, filterDate } =
+      dropdownData;
 
     return (
       (!modality || modality === "All" || row.Modality === modality) &&
       (!image || image === "All" || row.Image === image) &&
       (!location || location === "All" || row.Institution === location) &&
-      (!reportStatus || reportStatus === "All" || row["Report Status"] === reportStatus) &&
+      (!reportStatus ||
+        reportStatus === "All" ||
+        row["Report Status"] === reportStatus) &&
       (!filterDate || filterDate === "All" || row.Date === filterDate)
     );
   });
 
   // Paginate data
   const startIndex = (currentPage - 1) * itemsPerPage;
-  const paginatedData = filteredDataList.slice(startIndex, startIndex + itemsPerPage);
+  const paginatedData = filteredDataList.slice(
+    startIndex,
+    startIndex + itemsPerPage
+  );
 
   // Close dropdowns when clicking outside of them
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (
-        (actionDropdownRef.current && !actionDropdownRef.current.contains(event.target)) &&
-        (commentsDropdownRef.current && !commentsDropdownRef.current.contains(event.target))
+        actionDropdownRef.current &&
+        !actionDropdownRef.current.contains(event.target) &&
+        commentsDropdownRef.current &&
+        !commentsDropdownRef.current.contains(event.target)
       ) {
         setActionDropdownOpen(null); // Close Action dropdown if clicked outside
         setCommentsDropdownOpen(null); // Close Other Comments dropdown if clicked outside
@@ -190,6 +224,13 @@ const DragAndDropTable = () => {
   if (error) {
     return <div>{error}</div>;
   }
+  const handleActionClick = (action, row) => {
+    if (action === "Edit") {
+      useNavigate("/editstudy");
+    } else if (action === "Delete") {
+      handleOpenModal("Delete");
+    }
+  };
 
   return (
     <DndContext
@@ -197,25 +238,40 @@ const DragAndDropTable = () => {
       collisionDetection={closestCenter}
       onDragEnd={handleDragEnd}
     >
-      <div className="">
+      <div className="overflow-x-auto">
         <table border="1" className="w-full text-center">
           <thead>
-            <SortableContext items={columns} strategy={verticalListSortingStrategy}>
-              <tr className="space-x-10 text-sm font-semibold">
+            <SortableContext
+              items={columns}
+              strategy={verticalListSortingStrategy}
+            >
+              <tr className="text-md  truncate">
                 {columns.map((column) => (
-                  <SortableColumn key={column} id={column} className="mr-10 border-r font-semibold last:border-r-0" />
+                  <SortableColumn
+                    key={column}
+                    id={column}
+                    className="font-semibold"
+                  />
                 ))}
               </tr>
             </SortableContext>
           </thead>
           <tbody>
             {paginatedData.map((row, rowIndex) => (
-              <tr key={rowIndex} className={rowIndex % 2 === 0 ? "" : "bg-gray-200"}>
+              <tr
+                key={rowIndex}
+                className={rowIndex % 2 === 0 ? "" : "bg-gray-200"}
+              >
                 {columns.map((column, columnIndex) => (
-                  <td key={columnIndex} className="py-5 relative text-sm font-normal">
+                  <td
+                    key={columnIndex}
+                    className="py-5 relative text-sm font-normal"
+                  >
                     {column === "Action" ? (
                       <>
-                        <BsThreeDotsVertical onClick={() => handleActionDropdownToggle(rowIndex)} />
+                        <BsThreeDotsVertical
+                          onClick={() => handleActionDropdownToggle(rowIndex)}
+                        />
                         {actionDropdownOpen === rowIndex && (
                           <div
                             ref={actionDropdownRef}
@@ -227,22 +283,129 @@ const DragAndDropTable = () => {
                       </>
                     ) : column === "Other Comments" ? (
                       <>
-                        <div className="cursor-pointer" onClick={() => handleCommentsDropdownToggle(rowIndex)}>
+                        <div
+                          className="cursor-pointer"
+                          onClick={() => handleCommentsDropdownToggle(rowIndex)}
+                        >
                           {row[column] || "No Comments"}
                         </div>
                         {commentsDropdownOpen === rowIndex && (
-                          <div ref={commentsDropdownRef} className="absolute bg-white border-2 p-2 z-10 flex flex-col">
-                            <button onClick={() => handleActionClick("Edit", row)}>Edit</button>
-                            <button onClick={() => handleActionClick("Delete", row)}>Delete</button>
+                          <div
+                            ref={commentsDropdownRef}
+                            className="absolute bg-white border-2 p-2 z-10 flex flex-col"
+                          >
+                            <button
+                              onClick={() => handleActionClick("Edit", row)}
+                            >
+                              Edit
+                            </button>
+                            <button
+                              onClick={() => handleActionClick("Delete", row)}
+                            >
+                              Delete
+                            </button>
                           </div>
                         )}
                       </>
+                    ) : column === "Name" ? (
+                      <span>
+                        {row.pat_inc_id_det
+                          ? row.pat_inc_id_det.Pat_Name
+                          : "N/A"}
+                      </span>
+                    ) : column === "Study Date" ? (
+                      <span>{row.studydate ? row.studydate : "N/A"}</span>
+                    ) : column === "Patient ID" ? (
+                      <span>
+                        {row.pat_inc_id_det ? row.pat_inc_id_det.Pat_ID : "N/A"}
+                      </span>
+                    ) : column === "Report Status" ? (
+                      <span>
+                        {row.status_reported ? row.status_reported : "N/A"}
+                      </span>
+                    ) : column === "Modality" ? (
+                      <span>{row.modality ? row.modality : "N/A"}</span>
+                    ) : column === "Branch" ? (
+                      <span>{row.branch_name ? row.branch_name : "N/A"}</span>
+                    ) : column === "Image" ? (
+                      <span>{row.images ? row.images : "N/A"}</span>
+                    ) : column === "Gender" ? (
+                      <span>
+                        {row.pat_inc_id_det
+                          ? row.pat_inc_id_det.Pat_Sex
+                          : "N/A"}
+                      </span>
+                    ) : column === "Series" ? (
+                      <span>{row.series ? row.series : "N/A"}</span>
+                    ) : column === "Radiologist Group" ? (
+                      <span>
+                        {/* Check if radiology_group exists and display Rg_Name procedure_name studydate status_reported  */}
+                        {row.radiology_group
+                          ? row.radiology_group.Rg_Name
+                          : "N/A"}
+                      </span>
+                    ) : column === "RefPhysician" ? (
+                      <span>
+                        {row.ref_inc ? row.ref_inc.Ref_Phy_Name : "N/A"}
+                      </span>
+                    ) : column === "Procedure" ? (
+                      <span>
+                        {row.procedure_name ? row.procedure_name : "N/A"}
+                      </span>
+                    ) : column === "Proc Start" ? (
+                      <span>{row.proc_start ? row.proc_start : "N/A"}</span>
+                    ) : column === "radiologist Name" ? (
+                      <span>
+                        {row.radiologist_name ? row.radiologist_name : "N/A"}
+                      </span>
+                    ) : column === "Study Bodyparts" ? (
+                      <span>
+                        {row.study_bodyparts ? row.study_bodyparts : "N/A"}
+                      </span>
+                    ) : column === "Report Url" ? (
+                      <span>{row.report_url ? row.report_url : "N/A"}</span>
+                    ) : column === "Branch Name" ? (
+                      <span>{row.branch_name ? row.branch_name : "N/A"}</span>
+                    ) : column === "Machine Name" ? (
+                      <span>{row.machine_name ? row.machine_name : "N/A"}</span>
+                    ) : column === "Procedure Name" ? (
+                      <span>
+                        {row.procedure_name ? row.procedure_name : "N/A"}
+                      </span>
+                    ) : column === "Institution Name" ? (
+                      <span>
+                        {row.institution_name ? row.institution_name : "N/A"}
+                      </span>
+                    ) : column === "Study Description" ? (
+                      <span>
+                        {row.study_description ? row.study_description : "N/A"}
+                      </span>
+                    ) : column === "Study Directory" ? (
+                      <span>
+                        {row.study_directory ? row.study_directory : "N/A"}
+                      </span>
+                    ) : column === "Institution" ? (
+                      <span>
+                        {row.institution_name ? row.institution_name : "N/A"}
+                      </span>
+                    ) : column === "report verifier" ? (
+                      <span>
+                        {row.report_verifier ? row.report_verifier : "N/A"}
+                      </span>
                     ) : column === "Viewed" ? (
                       <div className="cursor-pointer text-center flex items-center justify-center">
-                        <IoEyeOutline onClick={() => handleActionClick("Edit", row)} />
+                        <IoEyeOutline
+                          onClick={() => handleActionClick("Edit", row)}
+                        />
                       </div>
                     ) : column === "Report Status" ? (
-                      <span className={`font-semibold ${row[column] === "Completed" ? "text-blue-500" : "text-red-500"}`}>
+                      <span
+                        className={`font-semibold ${
+                          row[column] === "Completed"
+                            ? "text-blue-500"
+                            : "text-red-500"
+                        }`}
+                      >
                         {row[column]}
                       </span>
                     ) : (
@@ -256,7 +419,12 @@ const DragAndDropTable = () => {
         </table>
         <Pagination />
       </div>
-      {activeModal && <ModalContainer modalRef={modalRef} handleCloseModal={handleCloseModal} />}
+      {activeModal && (
+        <ModalContainer
+          modalRef={modalRef}
+          handleCloseModal={handleCloseModal}
+        />
+      )}
     </DndContext>
   );
 };

@@ -1,27 +1,29 @@
 import Cookies from "js-cookie";
-import { toast } from "react-toastify";
 
-// Set tokens in localStorage, sessionStorage, and cookies
+
 export const setTokens = (accessToken, refreshToken) => {
-  // Set token in localStorage (persists across page reloads)
   localStorage.setItem("accessToken", accessToken);
   localStorage.setItem("refreshToken", refreshToken);
 
-  // Set token in sessionStorage (persists only for the current session)
   sessionStorage.setItem("accessToken", accessToken);
   sessionStorage.setItem("refreshToken", refreshToken);
 
-  // Set token in cookies (with expiration times)
-  const accessTokenExpiresIn = new Date(new Date().getTime() + 2 * 60 * 1000); // 2 minutes for access token
-  const refreshTokenExpiresIn = new Date(new Date().getTime() + 1 * 24 * 60 * 60 * 1000); // 1 day for refresh token
+  const accessTokenExpiresIn = new Date(new Date().getTime() + 60 * 60 * 1000);
+  const refreshTokenExpiresIn = new Date(new Date().getTime() + 1 * 24 * 60 * 60 * 1000); 
 
-  Cookies.set("accessToken", accessToken, { expires: accessTokenExpiresIn, sameSite: "Lax" });
-  Cookies.set("refreshToken", refreshToken, { expires: refreshTokenExpiresIn, sameSite: "Lax" });
+  Cookies.set("accessToken", accessToken, {
+    expires: accessTokenExpiresIn,
+    sameSite: "Lax",
+    secure: true,
+  });
 
-  toast.success("Tokens set successfully!");
+  Cookies.set("refreshToken", refreshToken, {
+    expires: refreshTokenExpiresIn,
+    sameSite: "Lax",
+    secure: true,
+  });
 };
 
-// Get access token from localStorage, sessionStorage, or cookies
 export const getAccessToken = () => {
   return (
     localStorage.getItem("accessToken") ||
@@ -30,7 +32,6 @@ export const getAccessToken = () => {
   );
 };
 
-// Get refresh token from localStorage, sessionStorage, or cookies
 export const getRefreshToken = () => {
   return (
     localStorage.getItem("refreshToken") ||
@@ -39,14 +40,13 @@ export const getRefreshToken = () => {
   );
 };
 
-// Clear tokens from all storages
-export const clearTokens = () => {
+export const clearTokens = (navigate) => {
   localStorage.removeItem("accessToken");
   localStorage.removeItem("refreshToken");
   sessionStorage.removeItem("accessToken");
   sessionStorage.removeItem("refreshToken");
   Cookies.remove("accessToken");
   Cookies.remove("refreshToken");
-  toast.success("Logged out Successfully!");
-  window.location.href = "/login";
+
+  navigate("/login");
 };

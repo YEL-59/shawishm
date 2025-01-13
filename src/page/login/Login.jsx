@@ -1,25 +1,23 @@
 import loginimg from "../../assets/login.png";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import LogoIcon from "../../assets/icons/LogoIcon";
-import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useState } from "react";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import { useForm } from "react-hook-form";
+import { setTokens } from "../../utils/cookieHelper";
 import axiosInstance from "../../utils/axiosInstance";
-import "../../App.css";
+
 
 const Login = () => {
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const [setToken, setTokens] = useState(false);
-  const navigate = useNavigate();
 
-  // useEffect(() => {
-  //   toast.info("Toast is working!");
-  // }, []);
-  
+  const navigate = useNavigate();
+  const location = useLocation();
+
   const {
     register,
     handleSubmit,
@@ -32,34 +30,59 @@ const Login = () => {
 
   const onSubmit = async (data) => {
     const { name, password } = data;
-
+  
     setLoading(true);
-
+  
     try {
-      const response = await axiosInstance.post("/users/signin/", {
+      // Send login request
+      const response = await axiosInstance.post("users/signin/", {
         username: name,
         password,
       });
-
-      const { access, refresh } = response.data;
-
-      // Store tokens using your cookie helper
+  
+      // Destructure the response data
+      const { access, refresh, message } = response.data;
+  
+      // Set tokens in storage
       setTokens(access, refresh);
-
-      toast.success("Login successful!");
-      navigate("/"); // Redirect to the home page or dashboard
+  
+      // Show success message from API response
+      toast.success(message || "Login successful!");
+  
+      // Redirect user to the intended page or home
+      const from = location.state?.from?.pathname || "/";
+      navigate(from);
     } catch (error) {
-      if (error.response && error.response.data) {
-        const errorMessage =
-          error.response.data.detail || "Invalid email or password";
-        toast.error(errorMessage);
+      // Handle errors
+      const status = error.response?.status;
+      const errorMessage = error.response?.data?.message || "An unexpected error occurred.";
+  
+      if (status === 401) {
+        // Handle invalid credentials
+        if (errorMessage.includes("username")) {
+          setError("name", {
+            type: "manual",
+            message: "Invalid username. Please check and try again.",
+          });
+        } else if (errorMessage.includes("password")) {
+          setError("password", {
+            type: "manual",
+            message: "Invalid password. Please check and try again.",
+          });
+        } else {
+          toast.error(errorMessage);
+        }
       } else {
-        toast.error(`Login failed: ${error.message}`);
+        // Handle other errors
+        toast.error("An unexpected error occurred. Please try again later.");
       }
     } finally {
+      // Stop loading spinner
       setLoading(false);
     }
   };
+  
+  
 
   return (
     <>
@@ -77,9 +100,7 @@ const Login = () => {
         style={{ zIndex: 9999 }}
       />
 
-
       <div className="h-screen flex flex-col justify-center md:flex-row bg-[#e9f1f7]">
-        {/* Left Side: Form */}
         <div className="lg:w-1/2 w-full flex justify-center items-center p-4">
           <div className="w-full max-w-md bg-white rounded p-6 md:p-16 border shadow-lg">
             <div className="text-center flex flex-col justify-center items-center mb-8 md:mb-14">
@@ -88,10 +109,7 @@ const Login = () => {
                 Login to your account
               </h2>
             </div>
-            <form
-              onSubmit={handleSubmit(onSubmit)}
-              className="space-y-6 w-full"
-            >
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 w-full">
               <div>
                 <label
                   htmlFor="name"
@@ -130,6 +148,10 @@ const Login = () => {
                     id="password"
                     {...register("password", {
                       required: "Password is required",
+                      minLength: {
+                        value: 8,
+                        message: "Password must be at least 8 characters",
+                      },
                     })}
                     className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
@@ -137,6 +159,7 @@ const Login = () => {
                     type="button"
                     onClick={togglePasswordVisibility}
                     className="absolute inset-y-0 right-3 flex items-center text-gray-500"
+                    aria-label={showPassword ? "Hide password" : "Show password"}
                   >
                     {showPassword ? <FaEyeSlash /> : <FaEye />}
                   </button>
@@ -154,18 +177,29 @@ const Login = () => {
                   disabled={loading}
                 >
                   {loading ? (
-                    <>
-                      Login
-                      <span className="animate-[fadeInOut_1s_ease-in-out_infinite]">
-                        .
-                      </span>
-                      <span className="animate-[fadeInOut_1s_ease-in-out_infinite] delay-200">
-                        .
-                      </span>
-                      <span className="animate-[fadeInOut_1s_ease-in-out_infinite] delay-400">
-                        .
-                      </span>
-                    </>
+                    <div className="flex items-center justify-center">
+                      <svg
+                        className="animate-spin h-5 w-5 text-white"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                      >
+                        <circle
+                          className="opacity-25"
+                          cx="12"
+                          cy="12"
+                          r="10"
+                          stroke="currentColor"
+                          strokeWidth="4"
+                        ></circle>
+                        <path
+                          className="opacity-75"
+                          fill="currentColor"
+                          d="M4 12a8 8 0 018-8v8H4z"
+                        ></path>
+                      </svg>
+                      <span className="ml-2">Logging in...</span>
+                    </div>
                   ) : (
                     "Log in"
                   )}
@@ -187,7 +221,6 @@ const Login = () => {
           </div>
         </div>
 
-        {/* Right Side: Image */}
         <div className="hidden lg:flex w-full md:w-1/2">
           <img
             src={loginimg}

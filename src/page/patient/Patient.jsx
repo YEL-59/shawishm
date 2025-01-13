@@ -13,9 +13,9 @@ const Patient = () => {
     return (
         <>
 
-          
+
             {isVisible && (<Tabledropdown />)}
-            <div className="w-auto mx-auto px-4 py-4">
+            <div className="w-auto mx-auto px-4 py-4 ">
 
 
 

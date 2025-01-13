@@ -5,14 +5,15 @@ import SettingIcon from "../../assets/icons/SettingIcon";
 import Logout from "../../assets/icons/Logout";
 import LogoIcon from "../../assets/icons/LogoIcon";
 import PatientIcon from "../../assets/icons/PatientIcon";
-import { clearTokens } from "../../utils/cookieHelper"; // Import the clearTokens function
+import { clearTokens } from "../../utils/cookieHelper";
+
 
 const Sidebar = () => {
     const [isOpen, setIsOpen] = useState(false);
     const location = useLocation();
-    const navigate = useNavigate(); // For navigation after logout
+    const navigate = useNavigate(); 
 
-    // Close the sidebar on route change in responsive mode
+
     useEffect(() => {
         setIsOpen(false);
     }, [location]);
@@ -22,8 +23,7 @@ const Sidebar = () => {
     };
 
     const handleLogout = () => {
-        clearTokens(); // Clear the tokens from cookies
-        navigate("/login"); // Redirect to login page after logout
+        clearTokens(navigate);
     };
 
     const menuItems = [

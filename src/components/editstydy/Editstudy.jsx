@@ -76,30 +76,30 @@ const Editstudy = () => {
                                     <form action="">
 
 
-                                        <div class="grid gap-6 mb-6 md:grid-cols-2">
+                                        <div className="grid gap-6 mb-6 md:grid-cols-2">
                                             <div>
-                                                <label for="first_name" class="block text-md md:text-md font-medium text-primary">First name</label>
-                                                <input type="text" id="first_name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-3 " placeholder="John" required />
+                                                <label for="first_name" className="block text-md md:text-md font-medium text-primary">First name</label>
+                                                <input type="text" id="first_name" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-3 " placeholder="John" required />
                                             </div>
                                             <div>
-                                                <label for="last_name" class="block text-md md:text-md font-medium text-primary">Last name</label>
-                                                <input type="text" id="last_name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-3 " placeholder="Doe" required />
+                                                <label for="last_name" className="block text-md md:text-md font-medium text-primary">Last name</label>
+                                                <input type="text" id="last_name" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-3 " placeholder="Doe" required />
                                             </div>
                                             <div>
-                                                <label for="company" class="block text-md md:text-md font-medium text-primary">Company</label>
-                                                <input type="text" id="company" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-3 " placeholder="Flowbite" required />
+                                                <label for="company" className="block text-md md:text-md font-medium text-primary">Company</label>
+                                                <input type="text" id="company" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-3 " placeholder="Flowbite" required />
                                             </div>
                                             <div>
-                                                <label for="phone" class="block text-md md:text-md font-medium text-primary">Phone number</label>
-                                                <input type="tel" id="phone" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-3 " placeholder="123-45-678" pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}" required />
+                                                <label for="phone" className="block text-md md:text-md font-medium text-primary">Phone number</label>
+                                                <input type="tel" id="phone" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-3 " placeholder="123-45-678" pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}" required />
                                             </div>
                                             <div>
-                                                <label for="website" class="block text-md md:text-md font-medium text-primary">Website URL</label>
-                                                <input type="url" id="website" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-3 " placeholder="flowbite.com" required />
+                                                <label for="website" className="block text-md md:text-md font-medium text-primary">Website URL</label>
+                                                <input type="url" id="website" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-3 " placeholder="flowbite.com" required />
                                             </div>
                                             <div>
-                                                <label for="visitors" class="block text-md md:text-md font-medium text-primary">Unique visitors (per month)</label>
-                                                <input type="number" id="visitors" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-3 " placeholder="" required />
+                                                <label for="visitors" className="block text-md md:text-md font-medium text-primary">Unique visitors (per month)</label>
+                                                <input type="number" id="visitors" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-3 " placeholder="" required />
                                             </div>
                                         </div>
 
@@ -126,47 +126,47 @@ const Editstudy = () => {
                                     <form action="">
 
 
-                                        <div class="grid gap-6 mb-6 md:grid-cols-2">
-                                            <div class="relative">
-                                                <label for="first_name" class="block text-md md:text-md font-medium text-primary">Procedure Name</label>
-                                                <input type="text" id="first_name" class=" border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-3 " placeholder="Procedure Name" required />
+                                        <div className="grid gap-6 mb-6 md:grid-cols-2">
+                                            <div className="relative">
+                                                <label for="first_name" className="block text-md md:text-md font-medium text-primary">Procedure Name</label>
+                                                <input type="text" id="first_name" className=" border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-3 " placeholder="Procedure Name" required />
                                             </div>
                                             <div>
-                                                <label for="last_name" class="block text-md md:text-md font-medium text-primary">Study ID</label>
-                                                <input type="text" id="last_name" class=" border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-3 " placeholder="Study ID" required />
+                                                <label for="last_name" className="block text-md md:text-md font-medium text-primary">Study ID</label>
+                                                <input type="text" id="last_name" className=" border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-3 " placeholder="Study ID" required />
                                             </div>
 
                                             <div>
-                                                <label for="phone" class="block text-md md:text-md font-medium text-primary">Study Description
+                                                <label for="phone" className="block text-md md:text-md font-medium text-primary">Study Description
                                                 </label>
-                                                <textarea id="message" rows="3" class="block p-2.5 w-full text-sm text-gray-900 bg-[#e7e3e3] rounded border border-gray-300 focus:ring-blue-500 focus:border-blue-500 " placeholder="Write your thoughts here..."></textarea>
+                                                <textarea id="message" rows="3" className="block p-2.5 w-full text-sm text-gray-900 bg-[#e7e3e3] rounded border border-gray-300 focus:ring-blue-500 focus:border-blue-500 " placeholder="Write your thoughts here..."></textarea>
                                             </div>
                                             <div>
-                                                <label for="company" class="block text-md md:text-md font-medium text-primary">Study Date</label>
-                                                <input type="text" id="company" class=" border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-3 " placeholder="Flowbite" required />
+                                                <label for="company" className="block text-md md:text-md font-medium text-primary">Study Date</label>
+                                                <input type="text" id="company" className=" border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-3 " placeholder="Flowbite" required />
                                             </div>
                                             <div>
-                                                <label for="website" class="block text-md md:text-md font-medium text-primary">Ref.Physican</label>
-                                                <input type="url" id="website" class=" border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-3 " placeholder="flowbite.com" required />
+                                                <label for="website" className="block text-md md:text-md font-medium text-primary">Ref.Physican</label>
+                                                <input type="url" id="website" className=" border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-3 " placeholder="flowbite.com" required />
                                             </div>
                                             <div>
-                                                <label for="visitors" class="block text-md md:text-md font-medium text-primary">Radiologist</label>
-                                                <input type="number" id="visitors" class=" border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-3 " placeholder="" required />
+                                                <label for="visitors" className="block text-md md:text-md font-medium text-primary">Radiologist</label>
+                                                <input type="number" id="visitors" className=" border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-3 " placeholder="" required />
                                             </div>
                                             <div>
-                                                <label for="last_name" class="block text-md md:text-md font-medium text-primary">Radiologist Group</label> 
-                                                <input type="text" id="last_name" class=" border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-3 " placeholder="Doe" required />
+                                                <label for="last_name" className="block text-md md:text-md font-medium text-primary">Radiologist Group</label>
+                                                <input type="text" id="last_name" className=" border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-3 " placeholder="Doe" required />
                                             </div>
 
                                             <div>
-                                                <label for="last_name" class="block text-md md:text-md font-medium text-primary">Comment </label>
-                                             
+                                                <label for="last_name" className="block text-md md:text-md font-medium text-primary">Comment </label>
 
-                                                <textarea id="message" rows="3" class="block p-2.5 w-full text-sm text-gray-900 bg-[#e7e3e3] rounded border border-gray-300 focus:ring-blue-500 focus:border-blue-500 " placeholder="Write your thoughts here..."></textarea>
+
+                                                <textarea id="message" rows="3" className="block p-2.5 w-full text-sm text-gray-900 bg-[#e7e3e3] rounded border border-gray-300 focus:ring-blue-500 focus:border-blue-500 " placeholder="Write your thoughts here..."></textarea>
                                             </div>
                                             <div>
-                                                <label for="last_name" class="block text-md md:text-md font-medium text-primary">Institution Name </label>
-                                                <input type="text" id="last_name" class="border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-3 " placeholder="Doe" required />
+                                                <label for="last_name" className="block text-md md:text-md font-medium text-primary">Institution Name </label>
+                                                <input type="text" id="last_name" className="border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-3 " placeholder="Doe" required />
                                             </div>
                                         </div>
 

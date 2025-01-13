@@ -17,11 +17,11 @@ const Layout = () => {
         <PaginationProvider>
           <ModalProvider>
             <DropdownProvider>
-            <div className="flex h-screen">
+            <div className="flex h-screen overflow-hidden">
               <Sidebar />
-              <div className="flex flex-col flex-1">
+              <div className="flex flex-col flex-1 overflow-hidden">
                 <Navbar />
-                <main className="flex-1 p-4 bg-gray-100 overflow-auto scrollbar-thin scrollbar-thumb-green-500 scrollbar-track-gray-200">
+                <main className="flex-1 p-4 bg-gray-100 overflow-y-auto scrollbar-thin scrollbar-thumb-green-500 scrollbar-track-gray-200">
                   <Outlet />
                 </main>
               </div>

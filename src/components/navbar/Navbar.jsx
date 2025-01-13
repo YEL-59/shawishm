@@ -7,6 +7,7 @@ import { useDropdown } from '../../contexts/DropdownContext';
 import DateFilter from '../datefilter/DateFilter';
 import FilterIcon from '../../assets/icons/FilterIcon';
 import { useUser } from '../../contexts/UserProvider';
+import Personicon from '../../assets/icons/Personicon';
 
 
 const Navbar = () => {
@@ -165,13 +166,13 @@ const Navbar = () => {
               <div className="flex items-center justify-center">
                 <img
                   className="rounded-full w-9 h-9"
-                  src={'default-profile.png'}
+                  src={Personicon}
                   alt="profile"
                 />
-             {user &&   <div className="space-y-0.2 font-medium text-left ms-2">
-                  <div>{user?.name || 'User'}</div>
-                  <div className="text-xs text-gray-500">View profile</div>
-                </div> }
+                {user && <div className="space-y-0.2 font-medium text-left ms-2">
+                  <div>{user?.username || 'User'}</div>
+                  <div className="text-xs text-gray-500">   View profile </div>
+                </div>}
               </div>
             </div>
           </Link>
