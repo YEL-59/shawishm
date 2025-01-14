@@ -40,6 +40,8 @@ const Tabledropdown = ({ data }) => {
       const filterDateMatch = checkDateFilter(item['Study Date'], filterDate);
   
       return modalityMatch && imageMatch && locationMatch && reportMatch && filterDateMatch;
+
+      
     });
   };
   
