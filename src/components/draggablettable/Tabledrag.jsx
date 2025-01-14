@@ -82,8 +82,6 @@ const DragAndDropTable = () => {
   const [loading, setLoading] = useState(true); // To handle loading state
   const [error, setError] = useState(null); // To handle any errors
 
-  const [dropdownOpen, setDropdownOpen] = useState(null); // To control dropdown visibility per row
-  const dropdownRef = useRef(null); // Reference for dropdown
   const modalRef = useRef(null); // Reference for modal
   const [actionDropdownOpen, setActionDropdownOpen] = useState(null); // For Action column dropdown
   const [commentsDropdownOpen, setCommentsDropdownOpen] = useState(null); // For Other Comments column dropdown
@@ -107,16 +105,16 @@ const DragAndDropTable = () => {
         const response = await axiosInstance.get("/studies/");
 
         if (response.data.success) {
-          setData(response.data.data); // Store the data in state
-          setFilteredData(response.data.data); // Store the filtered data in state
-          setTotalItems(response.data.data.length); // Set the total number of items for pagination
+          setData(response.data.data);
+          setFilteredData(response.data.data);
+          setTotalItems(response.data.data.length);
         } else {
           setError("Failed to load data");
         }
       } catch (error) {
         if (error.response && error.response.status === 401) {
           setError("Unauthorized. Please log in again.");
-          window.location.href = "/login"; // Redirect to login if unauthorized
+          window.location.href = "/login";
         } else {
           setError("Failed to load data");
         }
@@ -129,18 +127,18 @@ const DragAndDropTable = () => {
   }, [setTotalItems]);
 
   // Filter data based on dropdown selections
-  const filteredDataList = filteredData.filter((row) => {
+  const filteredDataList = data.filter((row) => {
     const { modality, image, location, reportStatus, filterDate } =
       dropdownData;
 
     return (
-      (!modality || modality === "All" || row.Modality === modality) &&
-      (!image || image === "All" || row.Image === image) &&
-      (!location || location === "All" || row.Institution === location) &&
+      (!modality || modality === "All" || row.modality === modality) &&
+      (!image || image === "All" || row.images === image) &&
+      (!location || location === "All" || row.institution_name === location) &&
       (!reportStatus ||
         reportStatus === "All" ||
-        row["Report Status"] === reportStatus) &&
-      (!filterDate || filterDate === "All" || row.Date === filterDate)
+        row.status_reported === reportStatus) &&
+      (!filterDate || filterDate === "All" || row.studydate === filterDate)
     );
   });
 
@@ -150,29 +148,6 @@ const DragAndDropTable = () => {
     startIndex,
     startIndex + itemsPerPage
   );
-
-  // Close dropdowns when clicking outside of them
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (
-        actionDropdownRef.current &&
-        !actionDropdownRef.current.contains(event.target) &&
-        commentsDropdownRef.current &&
-        !commentsDropdownRef.current.contains(event.target)
-      ) {
-        setActionDropdownOpen(null); // Close Action dropdown if clicked outside
-        setCommentsDropdownOpen(null); // Close Other Comments dropdown if clicked outside
-      }
-    };
-
-    // Add event listener for click outside
-    document.addEventListener("click", handleClickOutside);
-
-    // Clean up the event listener on component unmount
-    return () => {
-      document.removeEventListener("click", handleClickOutside);
-    };
-  }, []);
 
   const handleDragEnd = (event) => {
     const { active, over } = event;
@@ -239,7 +214,7 @@ const DragAndDropTable = () => {
       onDragEnd={handleDragEnd}
     >
       <div className="overflow-x-auto">
-        <table border="1" className="w-full text-center">
+        <table border="1" className="w-full text-center ">
           <thead>
             <SortableContext
               items={columns}
@@ -417,7 +392,9 @@ const DragAndDropTable = () => {
             ))}
           </tbody>
         </table>
-        <Pagination />
+        <div className="mt-5 mb-5">
+          <Pagination />
+        </div>
       </div>
       {activeModal && (
         <ModalContainer

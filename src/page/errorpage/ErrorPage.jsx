@@ -1,10 +1,17 @@
-
-
-
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 const ErrorPage = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  // Previous page URL (if available)
+  const previousPage = location.state?.from || "/";
+
+  // const handleGoBack = () => {
+  //   navigate(previousPage, { replace: true });
+  // };
+
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-[#151515] text-white px-4 sm:px-6 lg:px-8">
       {/* 404 Error Code */}
@@ -22,10 +29,19 @@ const ErrorPage = () => {
         you back on track!
       </p>
 
+      {/* Go Back Button */}
+      {/* <button
+        onClick={handleGoBack}
+        className="px-4 sm:px-5 py-2 sm:py-3 rounded-md text-white bg-[#00CCFF] hover:bg-[#024040] transition duration-300 ease-in-out text-sm sm:text-base"
+      >
+        Go Back
+      </button> */}
+
       {/* Go Back Home Button */}
       <Link
         to="/"
-        className="px-4 sm:px-5 py-2 sm:py-3 rounded-md text-white bg-[#00CCFF] hover:bg-[#024040] transition duration-300 ease-in-out text-sm sm:text-base"
+        replace
+        className="px-4 sm:px-5 py-2 sm:py-3 rounded-md text-white bg-[#00CCFF] hover:bg-[#024040] transition duration-300 ease-in-out text-sm sm:text-base mt-4"
       >
         Go Back Home
       </Link>

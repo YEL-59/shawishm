@@ -31,14 +31,14 @@ const SignUp = () => {
 
   const handleSignUp = async (e) => {
     e.preventDefault();
-
+  
     if (!name || !password) {
       toast.error("All fields are required");
       return;
     }
-
+  
     setLoading(true);
-
+  
     try {
       const response = await axiosInstance.post(
         "users/signup/",
@@ -50,7 +50,7 @@ const SignUp = () => {
           headers: { "Content-Type": "application/json" },
         }
       );
-
+  
       if (response.status === 201 && response.data.success) {
         toast.success("Sign-up successful! Please log in.");
         navigate("/login");
@@ -60,13 +60,19 @@ const SignUp = () => {
     } catch (error) {
       if (error.response && error.response.data) {
         const errors = error.response.data;
-
-        // Extract and display error messages
-        for (const key in errors) {
-          if (errors[key] instanceof Array) {
-            errors[key].forEach((msg) => toast.error(msg));
-          } else {
-            toast.error(errors[key]);
+  
+        // Check if the error is due to an existing user
+        if (error.response.status === 400) {
+          toast.info("User already exists. Please log in.");
+          navigate("/login");
+        } else {
+          // Extract and display error messages
+          for (const key in errors) {
+            if (errors[key] instanceof Array) {
+              errors[key].forEach((msg) => toast.error(msg));
+            } else {
+              toast.error(errors[key]);
+            }
           }
         }
       } else {
@@ -79,6 +85,8 @@ const SignUp = () => {
       }, 3000);
     }
   };
+  
+  
 
 
   const [ellipsis, setEllipsis] = useState("");

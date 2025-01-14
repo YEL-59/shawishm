@@ -4,8 +4,8 @@
 
 
 /* Custom scrollbar styling */
-::-webkit-scrollbar {
-  width: 8px;
+/* ::-webkit-scrollbar {
+  width: 2px;
 }
 
 ::-webkit-scrollbar-thumb {
@@ -15,7 +15,7 @@
 
 ::-webkit-scrollbar-track {
   background: #f1f1f1;
-}
+} */
 @keyframes fadeInOut {
     0%, 100% { opacity: 0; }
     50% { opacity: 1; }

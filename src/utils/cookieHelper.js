@@ -9,7 +9,7 @@ export const setTokens = (accessToken, refreshToken) => {
   sessionStorage.setItem("refreshToken", refreshToken);
 
   const accessTokenExpiresIn = new Date(new Date().getTime() + 60 * 60 * 1000);
-  const refreshTokenExpiresIn = new Date(new Date().getTime() + 1 * 24 * 60 * 60 * 1000); 
+  const refreshTokenExpiresIn = new Date(new Date().getTime() +  24 * 60 * 60 * 1000); 
 
   Cookies.set("accessToken", accessToken, {
     expires: accessTokenExpiresIn,

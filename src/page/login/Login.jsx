@@ -50,8 +50,8 @@ const Login = () => {
       toast.success(message || "Login successful!");
   
       // Redirect user to the intended page or home
-      const from = location.state?.from?.pathname || "/";
-      navigate(from);
+ 
+      navigate('/');
     } catch (error) {
       // Handle errors
       const status = error.response?.status;
