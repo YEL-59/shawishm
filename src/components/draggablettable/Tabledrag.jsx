@@ -135,19 +135,14 @@ const DragAndDropTable = () => {
       (!modality || modality === "All" || row.modality === modality) &&
       (!image || image === "All" || row.images === image) &&
       (!location || location === "All" || row.institution_name === location) &&
-      (!reportStatus ||
-        reportStatus === "All" ||
-        row.status_reported === reportStatus) &&
+      (!reportStatus || reportStatus === "All" || row.status_reported === reportStatus) &&
       (!filterDate || filterDate === "All" || row.studydate === filterDate)
     );
   });
 
   // Paginate data
   const startIndex = (currentPage - 1) * itemsPerPage;
-  const paginatedData = filteredDataList.slice(
-    startIndex,
-    startIndex + itemsPerPage
-  );
+  const paginatedData = filteredDataList.slice(startIndex,startIndex + itemsPerPage);
 
   const handleDragEnd = (event) => {
     const { active, over } = event;

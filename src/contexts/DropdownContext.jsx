@@ -37,12 +37,20 @@ export const DropdownProvider = ({ children }) => {
         const locations = Array.from(
           new Set(data.map((item) => item.institution_name).filter(Boolean))
         );
+        const reportStatuses = Array.from(
+          new Set(data.map((item) => item.status_reported).filter(Boolean))
+        );
+        const imageses = Array.from(
+          new Set(data.map((item) => item.images).filter(Boolean))
+        );
 
         // Update dropdown options
         setDropdownOptions((prev) => ({
           ...prev,
           modality: ["All", ...modalities],
           location: ["All", ...locations],
+          reportStatus: ["All", ...reportStatuses],
+          imageses: ["All", ...imageses],
         }));
       } else {
         console.error("Unexpected response format:", response);
