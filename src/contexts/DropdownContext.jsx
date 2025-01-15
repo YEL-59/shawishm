@@ -1,4 +1,4 @@
-import React, { createContext, useState, useContext, useEffect } from "react";
+import  { createContext, useState, useContext, useEffect } from "react";
 import axiosInstance from "../utils/axiosInstance";
 
 const DropdownContext = createContext();
@@ -50,7 +50,7 @@ export const DropdownProvider = ({ children }) => {
           modality: ["All", ...modalities],
           location: ["All", ...locations],
           reportStatus: ["All", ...reportStatuses],
-          imageses: ["All", ...imageses],
+          image: ["All", ...imageses],
         }));
       } else {
         console.error("Unexpected response format:", response);

@@ -1,5 +1,5 @@
 
-import React, { createContext, useState, useContext } from 'react';
+import  { createContext, useState, useContext } from 'react';
 
 // Create a Context
 const VisibilityContext = createContext();

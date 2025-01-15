@@ -1,5 +1,5 @@
 // components/Pagination.js
-import React from "react";
+
 import { usePagination } from "../../contexts/PaginationContext";
 
 

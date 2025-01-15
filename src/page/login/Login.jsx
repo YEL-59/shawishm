@@ -1,8 +1,8 @@
 import loginimg from "../../assets/login.png";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import LogoIcon from "../../assets/icons/LogoIcon";
-import React, { useState } from "react";
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import  { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -16,11 +16,12 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
 
   const navigate = useNavigate();
-  const location = useLocation();
+ 
 
   const {
     register,
     handleSubmit,
+    setError,
     formState: { errors },
   } = useForm();
 
@@ -204,18 +205,18 @@ const Login = () => {
                     "Log in"
                   )}
                 </button>
-                <Link
+                {/* <Link
                   to={"/signup"}
                   className="text-center text-xs text-secondary hover:underline"
                 >
                   <p className="mt-4 text-sm text-gray-500 text-center">
-                    Don't have an account?{" "}
+                   {"  Don't have an account?"}
                     <span className="font-medium text-xs text-secondary hover:underline">
                       Sign up here
                     </span>
                     .
                   </p>
-                </Link>
+                </Link> */}
               </div>
             </form>
           </div>

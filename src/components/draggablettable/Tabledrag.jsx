@@ -97,7 +97,7 @@ const DragAndDropTable = () => {
   );
 
   const [filteredData, setFilteredData] = useState([]);
-
+  const [isExpanded, setIsExpanded] = useState(false);
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
@@ -196,7 +196,7 @@ const DragAndDropTable = () => {
   }
   const handleActionClick = (action, row) => {
     if (action === "Edit") {
-      useNavigate("/editstudy");
+      //useNavigate("/editstudy");
     } else if (action === "Delete") {
       handleOpenModal("Delete");
     }
@@ -285,15 +285,35 @@ const DragAndDropTable = () => {
                       </span>
                     ) : column === "Study Date" ? (
                       <span>{row.studydate ? row.studydate : "N/A"}</span>
+                    ) : column === "#" ? (
+                      <span>
+                        {row.study_ID
+                          ? row.study_ID
+                          : "N/A"}
+                      </span>
                     ) : column === "Patient ID" ? (
                       <span>
                         {row.pat_inc_id_det ? row.pat_inc_id_det.Pat_ID : "N/A"}
                       </span>
                     ) : column === "Report Status" ? (
-                      <span>
+                      <span
+                        className={
+                          row.status_reported?.toLowerCase() === "verified"
+                            ? "text-green-500"
+                            : row.status_reported?.toLowerCase() === "partial"
+                            ? "text-red-500"
+                            : ""
+                        }
+                        style={
+                          row.status_reported?.toLowerCase() === "none"
+                            ? { color: "#666666" }
+                            : {}
+                        }
+                      >
                         {row.status_reported ? row.status_reported : "N/A"}
                       </span>
-                    ) : column === "Modality" ? (
+                    ) :
+                     column === "Modality" ? (
                       <span>{row.modality ? row.modality : "N/A"}</span>
                     ) : column === "Branch" ? (
                       <span>{row.branch_name ? row.branch_name : "N/A"}</span>
@@ -352,8 +372,22 @@ const DragAndDropTable = () => {
                       </span>
                     ) : column === "Study Directory" ? (
                       <span>
-                        {row.study_directory ? row.study_directory : "N/A"}
-                      </span>
+    {row.study_directory ? (
+      <>
+        {isExpanded
+          ? row.study_directory
+          : row.study_directory.slice(0, 50) + "..."}
+        <button
+          onClick={() => setIsExpanded(!isExpanded)}
+          className="text-blue-500 underline ml-2"
+        >
+          {isExpanded ? "Show Less" : "View More"}
+        </button>
+      </>
+    ) : (
+      "N/A"
+    )}
+  </span>
                     ) : column === "Institution" ? (
                       <span>
                         {row.institution_name ? row.institution_name : "N/A"}
@@ -388,7 +422,7 @@ const DragAndDropTable = () => {
           </tbody>
         </table>
         <div className="mt-5 mb-5">
-          <Pagination />
+          <Pagination totalItems={filteredDataList.length} />
         </div>
       </div>
       {activeModal && (

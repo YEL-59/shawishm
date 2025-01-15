@@ -1,53 +1,104 @@
-import React, { useState } from 'react';
-import { useDropdown } from '../../contexts/DropdownContext';
+import  { useState, useEffect } from 'react';
 import { useUser } from '../../contexts/UserProvider';
+import axiosInstance from '../../utils/axiosInstance';
 
 const Profile = () => {
-  const [name, setName] = useState('John Doe');
-  const [email, setEmail] = useState('john.doe@example.com');
-  const [phone, setPhone] = useState('123-456-7890');
-  const [address, setAddress] = useState('123 Main St, City, Country');
-  const [profileImage, setProfileImage] = useState(null); // For storing the uploaded image
-  const { user } = useUser(); // Get the user data from the context
-  //test dropdown data 
-  const { dropdownData } = useDropdown();
+  const { user, loading } = useUser();
+  const [profile, setProfile] = useState({
+    username: '',
+    fullname: '',
+    gender: '',
+    address: '',
+    phone: '',
+    role: '',
+  });
+  const [profileImage, setProfileImage] = useState(null);
+  const [isUpdating, setIsUpdating] = useState(false);
+
+  // Fetch user profile data
+  useEffect(() => {
+    const fetchProfile = async () => {
+      if (user) {
+        try {
+          const response = await axiosInstance.get('users/user/');
+          if (response.data.success) {
+            const data = response.data.data;
+            setProfile({
+              username: data.username,
+              fullname: data.U_fullname,
+              gender: data.U_sex,
+              address: data.U_address,
+              phone: data.U_phone,
+              role: data.U_Role,
+            });
+          }
+        } catch (error) {
+          console.error('Error fetching profile:', error);
+        }
+      }
+    };
+
+    fetchProfile();
+  }, [user]);
+
   // Handle image upload
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setProfileImage(reader.result); // Set the image preview
+        setProfileImage(reader.result);
       };
-      reader.readAsDataURL(file); // Convert the image to base64
+      reader.readAsDataURL(file);
     }
   };
 
   // Handle form submission
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Here you can send the updated profile data to the backend via an API
-    console.log('Profile updated:', { name, email, phone, address, profileImage });
+    setIsUpdating(true);
+    try {
+      const response = await axiosInstance.post('users/update/', {
+        U_ID: user?.U_ID,
+        username: profile.username,
+        U_fullname: profile.fullname,
+        U_sex: profile.gender,
+        U_address: profile.address,
+        U_phone: profile.phone,
+        U_Role: profile.role,
+      });
+
+      if (response.data.success) {
+        alert('Profile updated successfully!');
+      } else {
+        alert('Failed to update profile.');
+      }
+    } catch (error) {
+      console.error('Error updating profile:', error);
+      alert('An error occurred while updating the profile.');
+    } finally {
+      setIsUpdating(false);
+    }
   };
 
-  return (
-    <div className="profile-container max-w-full h-auto  mx-auto p-16 bg-white shadow-lg rounded-lg">
+  if (loading) return <p>Loading...</p>;
 
-      {console.log(dropdownData)}
+  return (
+    <div className="profile-container max-w-full h-auto mx-auto p-16 bg-white shadow-lg rounded-lg">
       {/* Profile Picture */}
       <div className="profile-image-container mb-6 flex flex-col gap-2 py-5 items-center justify-center">
         <img
-          src={user?.profileImage || profileImage || 'https://via.placeholder.com/150'}
+          src={profileImage || 'https://via.placeholder.com/150'}
           alt="Profile"
           className="w-32 h-32 rounded-full object-cover border-2"
         />
-        <h1 className="text-2xl font-bold mb-2">{user?.name || 'Guest'}</h1>
+        <h1 className="text-xl font-normal mb-2"><span className='text-md font-normal'>User Name:</span>{profile.username || 'Guest'}</h1>
         <label
           htmlFor="profileImageInput"
-          className="flex items-center gap-2 mt-2 px-4 py-2  text-primary text-sm rounded-md cursor-pointer "
+          className="flex items-center gap-2 mt-2 px-4 py-2 text-primary text-sm rounded-md cursor-pointer"
         >
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="15" viewBox="0 0 24 24" fill="none">
-            <path d="M12 3.99985H6C4.89543 3.99985 4 4.89528 4 5.99985V17.9998C4 19.1044 4.89543 19.9998 6 19.9998H18C19.1046 19.9998 20 19.1044 20 17.9998V11.9998M18.4142 8.41405L19.5 7.32829C20.281 6.54724 20.281 5.28092 19.5 4.49988C18.7189 3.71883 17.4526 3.71883 16.6715 4.49989L15.5858 5.58563M18.4142 8.41405L12.3779 14.4504C12.0987 14.7296 11.7431 14.9199 11.356 14.9974L8.41422 15.5857L9.00257 12.644C9.08001 12.2568 9.27032 11.9012 9.54951 11.622L15.5858 5.58563M18.4142 8.41405L15.5858 5.58563" stroke="#333333" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path>
+            <path d="..." stroke="#333333" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path>
           </svg>
           Edit Image
         </label>
@@ -59,82 +110,53 @@ const Profile = () => {
         />
       </div>
 
-      {/* Personal Information */}
-      <div className="personal-info mb-6">
-        <h2 className="text-xl font-semibold mb-2">Personal Information</h2>
-        <p className="text-gray-700">Your all information's are showing here</p>
-      </div>
-
       {/* Profile Form */}
       <form onSubmit={handleSubmit}>
         <div className="form-group mb-4">
-          <label htmlFor="name" className="block text-sm font-medium mb-1">Name</label>
+          <label htmlFor="fullname" className="block text-sm font-medium mb-1">Full Name</label>
           <input
             type="text"
-            id="name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
+            id="fullname"
+            value={profile.fullname}
+            onChange={(e) => setProfile({ ...profile, fullname: e.target.value })}
             className="w-full px-4 py-2 border rounded-md text-sm font-thin placeholder-primary"
             required
           />
         </div>
 
         <div className="form-group mb-4">
-          <label htmlFor="name" className="block text-sm font-medium mb-1">FullName</label>
-          <input
-            type="text"
-            id="name"
-            value={fullname}
-            onChange={(e) => setName(e.target.value)}
-            className="w-full px-4 py-2 border rounded-md text-sm font-thin placeholder-primary"
-            required
-          />
-        </div>
-        <div className="form-group mb-4">
-          <label htmlFor="name" className="block text-sm font-medium mb-1">Gender</label>
-          {/* here add 2 check box */}
+          <label htmlFor="gender" className="block text-sm font-medium mb-1">Gender</label>
           <div className="flex gap-2">
-            <input
-              type="radio"
-              id="male"
-              name="gender"
-              value="male"
-              checked={gender === 'male'}
-              onChange={(e) => setGender(e.target.value)}
-            />
-            <label htmlFor="male" className="text-sm font-medium">Male</label>
-            <input
-              type="radio"
-              id="female"
-              name="gender"
-              value="female"
-              checked={gender === 'female'}
-              onChange={(e) => setGender(e.target.value)}
-            />
-            <label htmlFor="female" className="text-sm font-medium">Female</label>
+            <label>
+              <input
+                type="radio"
+                name="gender"
+                value="Male"
+                checked={profile.gender === 'Male'}
+                onChange={(e) => setProfile({ ...profile, gender: e.target.value })}
+              />
+              Male
+            </label>
+            <label>
+              <input
+                type="radio"
+                name="gender"
+                value="Female"
+                checked={profile.gender === 'Female'}
+                onChange={(e) => setProfile({ ...profile, gender: e.target.value })}
+              />
+              Female
+            </label>
           </div>
         </div>
 
-
         <div className="form-group mb-4">
-          <label htmlFor="email" className="block text-sm font-medium mb-1">Role</label>
+          <label htmlFor="address" className="block text-sm font-medium mb-1">Address</label>
           <input
-            type="email"
-            id="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="w-full px-4 py-2 border rounded-md text-sm font-thin placeholder-primary"
-            required
-          />
-        </div>
-
-        <div className="form-group mb-4">
-          <label htmlFor="email" className="block text-sm font-medium mb-1">Email</label>
-          <input
-            type="email"
-            id="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            type="text"
+            id="address"
+            value={profile.address}
+            onChange={(e) => setProfile({ ...profile, address: e.target.value })}
             className="w-full px-4 py-2 border rounded-md text-sm font-thin placeholder-primary"
             required
           />
@@ -145,20 +167,8 @@ const Profile = () => {
           <input
             type="tel"
             id="phone"
-            value={phone}
-            onChange={(e) => setPhone(e.target.value)}
-            className="w-full px-4 py-2 border rounded-md text-sm font-thin placeholder-primary"
-            required
-          />
-        </div>
-
-        <div className="form-group mb-4">
-          <label htmlFor="address" className="block text-sm font-medium mb-1">Address</label>
-          <input
-            type="text"
-            id="address"
-            value={address}
-            onChange={(e) => setAddress(e.target.value)}
+            value={profile.phone}
+            onChange={(e) => setProfile({ ...profile, phone: e.target.value })}
             className="w-full px-4 py-2 border rounded-md text-sm font-thin placeholder-primary"
             required
           />
@@ -167,8 +177,9 @@ const Profile = () => {
         <button
           type="submit"
           className="w-full bg-secondary text-white py-2 rounded-md"
+          disabled={isUpdating}
         >
-          Update Profile
+          {isUpdating ? 'Updating...' : 'Update Profile'}
         </button>
       </form>
     </div>
