@@ -9,7 +9,9 @@ export const DropdownProvider = ({ children }) => {
     image: "All",
     location: "All",
     reportStatus: "All",
-    filterDate: "All",
+  
+    startDate: null, 
+    endDate: null, 
   });
 
   console.log(dropdownData);
@@ -19,7 +21,7 @@ export const DropdownProvider = ({ children }) => {
     image: ["All"],
     location: ["All"],
     reportStatus: ["All"],
-    filterDate: ["All", "Today", "This Week", "This Month"],
+   
   });
 
   const fetchDropdownOptions = async () => {
@@ -70,7 +72,13 @@ export const DropdownProvider = ({ children }) => {
       [key]: value,
     }));
   };
-
+  const updateDateRange = (startDate, endDate) => {
+    setDropdownData((prev) => ({
+      ...prev,
+      startDate,
+      endDate,
+    }));
+  };
   const resetDropdowns = () => {
     setDropdownData({
       modality: "",
@@ -78,12 +86,14 @@ export const DropdownProvider = ({ children }) => {
       location: "",
       reportStatus: "",
       filterDate: "",
+      startDate: null,
+      endDate: null,
     });
   };
 
   return (
     <DropdownContext.Provider
-      value={{ dropdownData, dropdownOptions, updateDropdown, resetDropdowns }}
+      value={{ dropdownData, dropdownOptions, updateDropdown, resetDropdowns,updateDateRange }}
     >
       {children}
     </DropdownContext.Provider>
