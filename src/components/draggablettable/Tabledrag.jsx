@@ -135,14 +135,19 @@ const DragAndDropTable = () => {
       (!modality || modality === "All" || row.modality === modality) &&
       (!image || image === "All" || row.images === image) &&
       (!location || location === "All" || row.institution_name === location) &&
-      (!reportStatus || reportStatus === "All" || row.status_reported === reportStatus) &&
+      (!reportStatus ||
+        reportStatus === "All" ||
+        row.status_reported === reportStatus) &&
       (!filterDate || filterDate === "All" || row.studydate === filterDate)
     );
   });
 
   // Paginate data
   const startIndex = (currentPage - 1) * itemsPerPage;
-  const paginatedData = filteredDataList.slice(startIndex,startIndex + itemsPerPage);
+  const paginatedData = filteredDataList.slice(
+    startIndex,
+    startIndex + itemsPerPage
+  );
 
   const handleDragEnd = (event) => {
     const { active, over } = event;
@@ -194,13 +199,6 @@ const DragAndDropTable = () => {
   if (error) {
     return <div>{error}</div>;
   }
-  const handleActionClick = (action, row) => {
-    if (action === "Edit") {
-      //useNavigate("/editstudy");
-    } else if (action === "Delete") {
-      handleOpenModal("Delete");
-    }
-  };
 
   return (
     <DndContext
@@ -247,7 +245,32 @@ const DragAndDropTable = () => {
                             ref={actionDropdownRef}
                             className="absolute bg-white border border-gray-300 shadow-lg p-4 rounded-md mt-2 w-64 z-10"
                           >
-                            {/* Dropdown Items */}
+                            <ul className="space-y-2">
+                              <li className="cursor-pointer hover:bg-gray-100 p-2 rounded-md">
+                                <a
+                                  href={'/editstudy'}
+                                  className="text-blue-600 hover:underline"
+                                >
+                                  Edit
+                                </a>
+                              </li>
+                              <li className="cursor-pointer hover:bg-gray-100 p-2 rounded-md">
+                                <a
+                                  href={`/delete/${rowIndex}`}
+                                  className="text-blue-600 hover:underline"
+                                >
+                                  Delete
+                                </a>
+                              </li>
+                              <li className="cursor-pointer hover:bg-gray-100 p-2 rounded-md">
+                                <a
+                                  href={`/details/${rowIndex}`}
+                                  className="text-blue-600 hover:underline"
+                                >
+                                  View Details
+                                </a>
+                              </li>
+                            </ul>
                           </div>
                         )}
                       </>
@@ -286,11 +309,7 @@ const DragAndDropTable = () => {
                     ) : column === "Study Date" ? (
                       <span>{row.studydate ? row.studydate : "N/A"}</span>
                     ) : column === "#" ? (
-                      <span>
-                        {row.study_ID
-                          ? row.study_ID
-                          : "N/A"}
-                      </span>
+                      <span>{row.study_ID ? row.study_ID : "N/A"}</span>
                     ) : column === "Patient ID" ? (
                       <span>
                         {row.pat_inc_id_det ? row.pat_inc_id_det.Pat_ID : "N/A"}
@@ -312,8 +331,7 @@ const DragAndDropTable = () => {
                       >
                         {row.status_reported ? row.status_reported : "N/A"}
                       </span>
-                    ) :
-                     column === "Modality" ? (
+                    ) : column === "Modality" ? (
                       <span>{row.modality ? row.modality : "N/A"}</span>
                     ) : column === "Branch" ? (
                       <span>{row.branch_name ? row.branch_name : "N/A"}</span>
@@ -372,22 +390,22 @@ const DragAndDropTable = () => {
                       </span>
                     ) : column === "Study Directory" ? (
                       <span>
-    {row.study_directory ? (
-      <>
-        {isExpanded
-          ? row.study_directory
-          : row.study_directory.slice(0, 50) + "..."}
-        <button
-          onClick={() => setIsExpanded(!isExpanded)}
-          className="text-blue-500 underline ml-2"
-        >
-          {isExpanded ? "Show Less" : "View More"}
-        </button>
-      </>
-    ) : (
-      "N/A"
-    )}
-  </span>
+                        {row.study_directory ? (
+                          <>
+                            {isExpanded
+                              ? row.study_directory
+                              : row.study_directory.slice(0, 50) + "..."}
+                            <button
+                              onClick={() => setIsExpanded(!isExpanded)}
+                              className="text-blue-500 underline ml-2"
+                            >
+                              {isExpanded ? "Show Less" : "View More"}
+                            </button>
+                          </>
+                        ) : (
+                          "N/A"
+                        )}
+                      </span>
                     ) : column === "Institution" ? (
                       <span>
                         {row.institution_name ? row.institution_name : "N/A"}
