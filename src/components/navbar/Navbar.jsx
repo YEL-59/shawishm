@@ -7,11 +7,11 @@ import { useDropdown } from '../../contexts/DropdownContext';
 import DateFilter from '../datefilter/DateFilter';
 import FilterIcon from '../../assets/icons/FilterIcon';
 import { useUser } from '../../contexts/UserProvider';
-import Personicon from '../../assets/icons/Personicon';
+import Personicon from '../../assets/avatar.png';
 
 
 const Navbar = () => {
-  const [dropdownOpen, setDropdownOpen] = useState(false);
+ 
   const [menuOpen, setMenuOpen] = useState(false);
   const [dropdown1Open, setDropdown1Open] = useState(false);
   const [dropdown2Open, setDropdown2Open] = useState(false);

@@ -2,20 +2,31 @@ import { useEffect, useRef, useState } from "react";
 import Chart from "chart.js/auto";
 
 import axiosInstance from "../../utils/axiosInstance";
+import { usePatientChartContext } from "../../contexts/PatientChartContext";
 
 const PatientsChart = () => {
   const chartRef = useRef(null);
+  const { selectedDay, selectedMonth, selectedYear } = usePatientChartContext();
   const [chartData, setChartData] = useState({ labels: [], data: [] });
 
   useEffect(() => {
-    // Fetch data from the API
     const fetchStudies = async () => {
       try {
         const response = await axiosInstance.get("studies/");
         const studies = response.data.data;
 
+        // Filter by selected day, month, and year if applicable
+        const filteredStudies = studies.filter((study) => {
+          const studyDate = new Date(study.date);
+          return (
+            (!selectedDay || studyDate.getDate() === selectedDay) &&
+            (!selectedMonth || studyDate.getMonth() + 1 === selectedMonth) &&
+            (!selectedYear || studyDate.getFullYear() === selectedYear)
+          );
+        });
+
         // Count occurrences of each modality
-        const modalityCounts = studies.reduce((acc, study) => {
+        const modalityCounts = filteredStudies.reduce((acc, study) => {
           const modality = study.modality;
           if (modality) {
             acc[modality] = (acc[modality] || 0) + 1;
@@ -34,11 +45,16 @@ const PatientsChart = () => {
     };
 
     fetchStudies();
-  }, []);
+  }, [selectedDay, selectedMonth, selectedYear]); // Re-run when the selected values change
 
   useEffect(() => {
     if (chartData.labels.length > 0) {
       const ctx = chartRef.current.getContext("2d");
+
+      // Destroy the previous chart before creating a new one
+      if (window.patientsChartInstance) {
+        window.patientsChartInstance.destroy();
+      }
 
       const patientsChart = new Chart(ctx, {
         type: "bar",
@@ -72,12 +88,14 @@ const PatientsChart = () => {
         },
       });
 
-      // Cleanup function to destroy the chart instance
+      // Store the chart instance globally to destroy it later
+      window.patientsChartInstance = patientsChart;
+
       return () => {
-        patientsChart.destroy();
+        patientsChart.destroy(); // Cleanup on unmount or re-render
       };
     }
-  }, [chartData]);
+  }, [chartData]); // Re-run when chartData changes
 
   return (
     <div style={{ height: "400px", width: "100%" }}>

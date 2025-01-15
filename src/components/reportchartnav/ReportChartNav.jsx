@@ -1,29 +1,31 @@
-import React, { useState } from 'react'
+import { useState } from 'react';
 import { IoIosArrowDown } from "react-icons/io";
 import RightArrowIcon from '../../assets/icons/RightArrowIcon';
+
 const ReportChartNav = () => {
-
-
-    const [openDropdown, setOpenDropdown] = useState(null); // Tracks which dropdown is open
+    const [selectedDay, setSelectedDay] = useState(null);
+    const [selectedMonth, setSelectedMonth] = useState(null);
+    const [selectedYear, setSelectedYear] = useState(null);
+    const [selectedDepartment, setSelectedDepartment] = useState(null);
 
     const handleSelectChange = (type, value) => {
         console.log(`${type} selected: ${value}`);
+
+        if (type === "Day") setSelectedDay(value);
+        if (type === "Month") setSelectedMonth(value);
+        if (type === "Year") setSelectedYear(value);
+        if (type === "alldepartment") setSelectedDepartment(value);
     };
 
-    const toggleDropdown = (dropdown) => {
-        setOpenDropdown(openDropdown === dropdown ? null : dropdown);
-    };
+    const dropdownIconClass = (dropdown) => "rotate-0"; 
 
-    const dropdownIconClass = (dropdown) =>
-        openDropdown === dropdown ? "rotate-180" : "rotate-0";
     return (
         <>
-
             <div className="section-top flex items-center justify-between">
-                <div className="section-top-left flex items-center gap-4 p-4 bg-white  rounded-md">
+                <div className="section-top-left flex items-center gap-4 p-4 bg-white rounded-md">
                     {/* Title and Icon */}
                     <h3 className="section-title text-[#404a60] text-lg font-bold flex items-center gap-2">
-                        Total Number of Reports Per Year
+                       Total Number of Reports 
                         <span className="text-blue-500">
                             <RightArrowIcon />
                         </span>
@@ -31,7 +33,7 @@ const ReportChartNav = () => {
 
                     {/* Date */}
                     <p className="section-date text-[#818181] text-sm font-medium ml-auto">
-                        December, 2025
+                       {selectedDay || ''} {selectedMonth || ''} {selectedYear || ''}
                     </p>
                 </div>
 
@@ -43,7 +45,6 @@ const ReportChartNav = () => {
                                 <div className="relative">
                                     <select
                                         onChange={(e) => handleSelectChange("Day", e.target.value)}
-                                        onClick={() => toggleDropdown("Day")}
                                         className="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded focus:ring-blue-500 focus:border-blue-500 block w-full p-2 appearance-none pr-8"
                                     >
                                         <option value="" disabled selected>
@@ -68,26 +69,12 @@ const ReportChartNav = () => {
                                 <div className="relative">
                                     <select
                                         onChange={(e) => handleSelectChange("Month", e.target.value)}
-                                        onClick={() => toggleDropdown("Month")}
                                         className="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded focus:ring-blue-500 focus:border-blue-500 block w-full p-2 appearance-none pr-8"
                                     >
                                         <option value="" disabled selected>
                                             Select Month
                                         </option>
-                                        {[
-                                            "January",
-                                            "February",
-                                            "March",
-                                            "April",
-                                            "May",
-                                            "June",
-                                            "July",
-                                            "August",
-                                            "September",
-                                            "October",
-                                            "November",
-                                            "December",
-                                        ].map((month, index) => (
+                                        {["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"].map((month, index) => (
                                             <option key={index + 1} value={month}>
                                                 {month}
                                             </option>
@@ -106,7 +93,6 @@ const ReportChartNav = () => {
                                 <div className="relative">
                                     <select
                                         onChange={(e) => handleSelectChange("Year", e.target.value)}
-                                        onClick={() => toggleDropdown("Year")}
                                         className="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded focus:ring-blue-500 focus:border-blue-500 block w-full p-2 appearance-none pr-8"
                                     >
                                         <option value="" disabled selected>
@@ -132,20 +118,14 @@ const ReportChartNav = () => {
                             <div className="relative">
                                 <select
                                     onChange={(e) => handleSelectChange("alldepartment", e.target.value)}
-                                    onClick={() => toggleDropdown("alldepartment")}
                                     className="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded focus:ring-blue-500 focus:border-blue-500 block w-full p-2 appearance-none pr-8"
                                 >
                                     <option value="" disabled selected>
                                         All Department
                                     </option>
-                                    {[
-                                        "January",
-                                        "February",
-                                        "March",
-
-                                    ].map((month, index) => (
-                                        <option key={index + 1} value={month}>
-                                            {month}
+                                    {["HR", "Finance", "Operations", "Marketing"].map((department, index) => (
+                                        <option key={index + 1} value={department}>
+                                            {department}
                                         </option>
                                     ))}
                                 </select>
@@ -161,10 +141,8 @@ const ReportChartNav = () => {
                     </div>
                 </div>
             </div>
-
-
         </>
-    )
-}
+    );
+};
 
-export default ReportChartNav 
+export default ReportChartNav;

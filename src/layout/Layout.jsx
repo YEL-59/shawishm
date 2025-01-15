@@ -8,6 +8,7 @@ import { PaginationProvider } from "../contexts/PaginationContext";
 import { ModalProvider } from "../contexts/ModalContext";
 import { DropdownProvider } from "../contexts/DropdownContext";
 import { UserProvider } from "../contexts/UserProvider";
+import { PatientChartProvider } from "../contexts/PatientChartContext";
 
 const Layout = () => {
   return (
@@ -17,6 +18,7 @@ const Layout = () => {
         <PaginationProvider>
           <ModalProvider>
             <DropdownProvider>
+           <PatientChartProvider>
             <div className="flex h-screen overflow-hidden">
               <Sidebar />
               <div className="flex flex-col flex-1 overflow-hidden">
@@ -26,6 +28,7 @@ const Layout = () => {
                 </main>
               </div>
             </div>
+            </PatientChartProvider>
             </DropdownProvider>
           </ModalProvider>
         </PaginationProvider>

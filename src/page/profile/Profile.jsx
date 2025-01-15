@@ -1,16 +1,16 @@
-import  { useState, useEffect } from 'react';
-import { useUser } from '../../contexts/UserProvider';
-import axiosInstance from '../../utils/axiosInstance';
-
+import { useState, useEffect } from "react";
+import { useUser } from "../../contexts/UserProvider";
+import axiosInstance from "../../utils/axiosInstance";
+import Personicon from "../../assets/avatar.png";
 const Profile = () => {
   const { user, loading } = useUser();
   const [profile, setProfile] = useState({
-    username: '',
-    fullname: '',
-    gender: '',
-    address: '',
-    phone: '',
-    role: '',
+    username: "",
+    fullname: "",
+    gender: "",
+    address: "",
+    phone: "",
+    role: "",
   });
   const [profileImage, setProfileImage] = useState(null);
   const [isUpdating, setIsUpdating] = useState(false);
@@ -20,7 +20,7 @@ const Profile = () => {
     const fetchProfile = async () => {
       if (user) {
         try {
-          const response = await axiosInstance.get('users/user/');
+          const response = await axiosInstance.get("users/user/");
           if (response.data.success) {
             const data = response.data.data;
             setProfile({
@@ -33,7 +33,7 @@ const Profile = () => {
             });
           }
         } catch (error) {
-          console.error('Error fetching profile:', error);
+          console.error("Error fetching profile:", error);
         }
       }
     };
@@ -58,7 +58,7 @@ const Profile = () => {
     e.preventDefault();
     setIsUpdating(true);
     try {
-      const response = await axiosInstance.post('users/update/', {
+      const response = await axiosInstance.post("users/update/", {
         U_ID: user?.U_ID,
         username: profile.username,
         U_fullname: profile.fullname,
@@ -69,13 +69,13 @@ const Profile = () => {
       });
 
       if (response.data.success) {
-        alert('Profile updated successfully!');
+        alert("Profile updated successfully!");
       } else {
-        alert('Failed to update profile.');
+        alert("Failed to update profile.");
       }
     } catch (error) {
-      console.error('Error updating profile:', error);
-      alert('An error occurred while updating the profile.');
+      console.error("Error updating profile:", error);
+      alert("An error occurred while updating the profile.");
     } finally {
       setIsUpdating(false);
     }
@@ -88,17 +88,32 @@ const Profile = () => {
       {/* Profile Picture */}
       <div className="profile-image-container mb-6 flex flex-col gap-2 py-5 items-center justify-center">
         <img
-          src={profileImage || 'https://via.placeholder.com/150'}
+          src={profileImage || Personicon}
           alt="Profile"
           className="w-32 h-32 rounded-full object-cover border-2"
         />
-        <h1 className="text-xl font-normal mb-2"><span className='text-md font-normal'>User Name:</span>{profile.username || 'Guest'}</h1>
+        <h1 className="text-lg font-bold mb-2">
+          <span className="text-sm font-bold">User Name :</span>
+          {profile.username || "Guest"}
+        </h1>
         <label
           htmlFor="profileImageInput"
-          className="flex items-center gap-2 mt-2 px-4 py-2 text-primary text-sm rounded-md cursor-pointer"
+          className="flex items-center gap-2 mt-2 px-4 py-2 text-primary text-sm rounded-md cursor-pointer hidden"
         >
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="15" viewBox="0 0 24 24" fill="none">
-            <path d="..." stroke="#333333" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="15"
+            viewBox="0 0 24 24"
+            fill="none"
+          >
+            <path
+              d="..."
+              stroke="#333333"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            ></path>
           </svg>
           Edit Image
         </label>
@@ -113,27 +128,36 @@ const Profile = () => {
       {/* Profile Form */}
       <form onSubmit={handleSubmit}>
         <div className="form-group mb-4">
-          <label htmlFor="fullname" className="block text-sm font-medium mb-1">Full Name</label>
+          <label htmlFor="fullname" className="block text-sm font-bold mb-1">
+            Full Name :
+          </label>
           <input
             type="text"
             id="fullname"
             value={profile.fullname}
-            onChange={(e) => setProfile({ ...profile, fullname: e.target.value })}
+            onChange={(e) =>
+              setProfile({ ...profile, fullname: e.target.value })
+            }
             className="w-full px-4 py-2 border rounded-md text-sm font-thin placeholder-primary"
             required
           />
         </div>
 
         <div className="form-group mb-4">
-          <label htmlFor="gender" className="block text-sm font-medium mb-1">Gender</label>
+          <label htmlFor="gender" className="block text-sm font-bold mb-1">
+            Gender :
+          </label>
           <div className="flex gap-2">
             <label>
               <input
                 type="radio"
                 name="gender"
                 value="Male"
-                checked={profile.gender === 'Male'}
-                onChange={(e) => setProfile({ ...profile, gender: e.target.value })}
+                checked={profile.gender === "Male"}
+                onChange={(e) =>
+                  setProfile({ ...profile, gender: e.target.value })
+                }
+                className="mr-2"
               />
               Male
             </label>
@@ -142,28 +166,54 @@ const Profile = () => {
                 type="radio"
                 name="gender"
                 value="Female"
-                checked={profile.gender === 'Female'}
-                onChange={(e) => setProfile({ ...profile, gender: e.target.value })}
+                checked={profile.gender === "Female"}
+                onChange={(e) =>
+                  setProfile({ ...profile, gender: e.target.value })
+                }
+                className="mr-2"
               />
               Female
             </label>
           </div>
         </div>
 
-        <div className="form-group mb-4">
-          <label htmlFor="address" className="block text-sm font-medium mb-1">Address</label>
+        {/* <div className="form-group mb-4">
+          <label htmlFor="address" className="block text-sm font-bold mb-1">
+            Address :
+          </label>
           <input
             type="text"
             id="address"
             value={profile.address}
-            onChange={(e) => setProfile({ ...profile, address: e.target.value })}
+            onChange={(e) =>
+              setProfile({ ...profile, address: e.target.value })
+            }
             className="w-full px-4 py-2 border rounded-md text-sm font-thin placeholder-primary"
             required
           />
+        </div> */}
+
+        <div className="form-group mb-4">
+          <label htmlFor="address" className="block text-sm font-bold mb-1">
+            Address :
+          </label>
+          <textarea
+            id="address"
+            value={profile.address}
+            onChange={(e) =>
+              setProfile({ ...profile, address: e.target.value })
+            }
+            className="w-full px-4 py-2 border rounded-md text-sm font-thin placeholder-primary"
+            placeholder="Enter your address"
+            rows="2" 
+            required
+          ></textarea>
         </div>
 
         <div className="form-group mb-4">
-          <label htmlFor="phone" className="block text-sm font-medium mb-1">Phone Number</label>
+          <label htmlFor="phone" className="block text-sm font-bold mb-1">
+            Phone Number :
+          </label>
           <input
             type="tel"
             id="phone"
@@ -179,7 +229,7 @@ const Profile = () => {
           className="w-full bg-secondary text-white py-2 rounded-md"
           disabled={isUpdating}
         >
-          {isUpdating ? 'Updating...' : 'Update Profile'}
+          {isUpdating ? "Updating..." : "Update Profile"}
         </button>
       </form>
     </div>
