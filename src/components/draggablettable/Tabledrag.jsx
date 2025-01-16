@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import  { useState, useEffect, useRef } from "react";
 import {
   DndContext,
   useSensor,
@@ -96,7 +96,10 @@ const DragAndDropTable = () => {
     useSensor(KeyboardSensor)
   );
 
+  console.log(data);
+
   const [filteredData, setFilteredData] = useState([]);
+
   const [isExpanded, setIsExpanded] = useState(false);
   useEffect(() => {
     const fetchData = async () => {
@@ -247,20 +250,20 @@ const DragAndDropTable = () => {
                           >
                             <ul className="space-y-2">
                               <li className="cursor-pointer hover:bg-gray-100 p-2 rounded-md">
-                                <a
-                                  href={'/editstudy'}
+                                <Link
+                                  to={`/editstudy/${row?.study_uid}`}
                                   className="text-blue-600 hover:underline"
                                 >
                                   Edit
-                                </a>
+                                </Link>
                               </li>
                               <li className="cursor-pointer hover:bg-gray-100 p-2 rounded-md">
-                                <a
-                                  href={`/delete/${rowIndex}`}
+                                <Link
+                                  to={`/delete/${rowIndex}`}
                                   className="text-blue-600 hover:underline"
                                 >
                                   Delete
-                                </a>
+                                </Link>
                               </li>
                               <li className="cursor-pointer hover:bg-gray-100 p-2 rounded-md">
                                 <a

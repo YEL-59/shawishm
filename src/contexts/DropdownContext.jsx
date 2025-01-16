@@ -14,7 +14,7 @@ export const DropdownProvider = ({ children }) => {
     endDate: null, 
   });
 
-  console.log(dropdownData);
+ 
 
   const [dropdownOptions, setDropdownOptions] = useState({
     modality: ["All"],

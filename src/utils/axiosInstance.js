@@ -19,7 +19,7 @@ axiosInstance.interceptors.request.use(
 axiosInstance.interceptors.response.use(
   (response) => response,
   (error) => {
-    const originalRequest = error.config;
+   
 
     // If the access token is invalid or expired (401)
     if (error.response?.status === 401) {
