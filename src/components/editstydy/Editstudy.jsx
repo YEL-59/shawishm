@@ -126,6 +126,7 @@ const Editstudy = () => {
             </div>
           </div>
           <div className="col-span-9 ">
+          <form onSubmit={handleSubmit(onSubmit)}>
             <div className="bg-[#FFFFFF] p-10 rounded shadow-md">
               <div>
                 <div>
@@ -133,7 +134,7 @@ const Editstudy = () => {
                     Patient Information
                   </h1>
                 </div>
-                <form onSubmit={handleSubmit(onSubmit)}>
+              
                   <div className="grid gap-6 mb-6 md:grid-cols-2">
                     {/* Patient Name */}
                     <div>
@@ -304,9 +305,226 @@ const Editstudy = () => {
                       )}
                     </div>
                   </div>
-                </form>
+         
               </div>
             </div>
+
+
+            
+            <div className="bg-[#FFFFFF] p-10 rounded shadow-md mt-5">
+              <div>
+                <div>
+                  <h1 className="text-primary font-bold text-2xl">
+                    Study Information
+                  </h1>
+                </div>
+                
+                  <div className="grid gap-6 mb-6 md:grid-cols-2">
+                    <div className="relative">
+                      <label
+                        htmlFor="procedureName"
+                        className="block text-md md:text-md font-medium text-primary"
+                      >
+                        Procedure Name
+                      </label>
+                      <input
+                        {...register("procedureName", { required: true })}
+                        type="text"
+                        id="procedureName"
+                        className="border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-3"
+                        placeholder={
+                          personDetails?.procedure_name||
+                          "Enter name"
+                        } 
+                      />
+                      {errors.procedureName && (
+                        <span className="text-red-500">
+                          This field is required
+                        </span>
+                      )}
+                    </div>
+                    <div>
+                      <label
+                        htmlFor="studyID"
+                        className="block text-md md:text-md font-medium text-primary"
+                      >
+                        Study ID
+                      </label>
+                      <input
+                        {...register("studyID", { required: true })}
+                        type="text"
+                        id="studyID"
+                        className="border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-3"
+                        placeholder={ personDetails?.study_ID ||  "Enter Id" } 
+                      />
+                      {errors.studyID && (
+                        <span className="text-red-500">
+                          This field is required
+                        </span>
+                      )}
+                    </div>
+                    <div>
+                      <label
+                        htmlFor="studyDescription"
+                        className="block text-md md:text-md font-medium text-primary"
+                      >
+                        Study Description
+                      </label>
+                      <textarea
+                        {...register("studyDescription", { required: true })}
+                        id="studyDescription"
+                        rows="3"
+                        className="block p-2.5 w-full text-sm text-gray-900 bg-[#e7e3e3] rounded border border-gray-300 focus:ring-blue-500 focus:border-blue-500"
+                        placeholder={ personDetails?.study_description ||  "Enter your thughts" } 
+                      ></textarea>
+                      {errors.studyDescription && (
+                        <span className="text-red-500">
+                          This field is required
+                        </span>
+                      )}
+                    </div>
+
+                    <div>
+                      <label
+                        htmlFor="birthDate"
+                        className="block text-md md:text-md font-medium text-primary"
+                      >
+                        Study Date
+                      </label>
+                      <input
+                        {...register("studyDate", { required: true })}
+                        type="date"
+                        id="studyDate"
+                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-3"
+                      />
+                      {errors.studyDate && (
+                        <span className="text-red-500">
+                          This field is required
+                        </span>
+                      )}
+                    </div>
+
+                    <div>
+                      <label
+                        htmlFor="refPhysician"
+                        className="block text-md font-medium text-primary"
+                      >
+                        Ref. Physician
+                      </label>
+                      <Controller
+                        name="refPhysician"
+                        control={control}
+                        rules={{ required: "Referring physician is required" }}
+                        render={({ field }) => (
+                          <select
+                            {...field}
+                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-3"
+                          >
+                            <option value="">Select Physician</option>
+                            <option value="Dr. Smith">Dr. Smith</option>
+                            <option value="Dr. Johnson">Dr. Johnson</option>
+                          </select>
+                        )}
+                      />
+                      {errors.refPhysician && (
+                        <p className="text-red-500 text-sm">
+                          {errors.refPhysician.message}
+                        </p>
+                      )}
+                    </div>
+                    <div className="relative">
+                      <label
+                        htmlFor="radiologist"
+                        className="block text-md md:text-md font-medium text-primary"
+                      >
+                        Radiologist
+                      </label>
+                      <input
+                        {...register("radiologist", { required: true })}
+                        type="text"
+                        id="radiologist"
+                        className="border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-3"
+                        placeholder={ personDetails?.radiologist_name ||  "Enter your thughts" } 
+                      />
+                      {errors.radiologist && (
+                        <span className="text-red-500">
+                          This field is required
+                        </span>
+                      )}
+                    </div>
+                    <div>
+                      <label
+                        htmlFor="radiologistGroup"
+                        className="block text-md font-medium text-primary"
+                      >
+                        Radiologist Group
+                      </label>
+                      <Controller
+                        name="radiologistGroup"
+                        control={control}
+                        rules={{ required: "Referring physician is required" }}
+                        render={({ field }) => (
+                          <select
+                            {...field}
+                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-3"
+                          >
+                            <option value="">Select Physician</option>
+                            <option value="Dr. Smith">Dr. Smith</option>
+                            <option value="Dr. Johnson">Dr. Johnson</option>
+                          </select>
+                        )}
+                      />
+                      {errors.radiologistGroup && (
+                        <p className="text-red-500 text-sm">
+                          {errors.radiologistGroup.message}
+                        </p>
+                      )}
+                    </div>
+                    <div>
+                      <label
+                        htmlFor="comment"
+                        className="block text-md md:text-md font-medium text-primary"
+                      >
+                        Comment
+                      </label>
+                      <textarea
+                        {...register("comment", { required: true })}
+                        id="comment"
+                        rows="3"
+                        className="block p-2.5 w-full text-sm text-gray-900 bg-[#e7e3e3] rounded border border-gray-300 focus:ring-blue-500 focus:border-blue-500"
+                        placeholder="Write your thoughts here..."
+                      ></textarea>
+                      {errors.comment && (
+                        <span className="text-red-500">
+                          This field is required
+                        </span>
+                      )}
+                    </div>
+                    <div className="relative">
+                      <label
+                        htmlFor="institutionName"
+                        className="block text-md md:text-md font-medium text-primary"
+                      >
+                        Institution Name
+                      </label>
+                      <input
+                        {...register("institutionName", { required: true })}
+                        type="text"
+                        id="institutionName"
+                        className="border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-3"
+                        placeholder={ personDetails?.institution_name ||  "Enter your thughts" } 
+                      />
+                      {errors.institutionName && (
+                        <span className="text-red-500">
+                          This field is required
+                        </span>
+                      )}
+                    </div>
+                  </div>
+           
+              </div>
+            </div>
+            </form>
 
             <div>
               <div className="flex gap-5 justify-center items-center mt-3">
