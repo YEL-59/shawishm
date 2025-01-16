@@ -24,6 +24,7 @@ const Navbar = () => {
   const location = useLocation();
   const isDashboard = location.pathname === '/';
   const isSetting = location.pathname === '/settings';
+  const isProfile = location.pathname === '/profile';
   const { user } = useUser();
 
 
@@ -47,7 +48,7 @@ const Navbar = () => {
     <header className="bg-white shadow p-4">
       <div className="flex justify-between items-center">
         {/* Search Bars */}
-        {!isDashboard && !isSetting && (<div className="flex gap-5">
+        {!isDashboard && !isSetting && !isProfile && (<div className="flex gap-5">
           {[1, 2].map((_, index) => (
             <div key={index} className="flex items-center border rounded-lg border-gray-300 bg-white pr-7 overflow-hidden transition-all duration-300 ease-in-out">
               <input
@@ -89,7 +90,7 @@ const Navbar = () => {
             </svg>
           </button>
 
-          {!isDashboard && !isSetting && (<> {/* Dropdown 1 */}
+          {!isDashboard && !isSetting && !isProfile && (<> {/* Dropdown 1 */}
             <div className="relative">
               <button
                 onClick={toggleDropdown1}

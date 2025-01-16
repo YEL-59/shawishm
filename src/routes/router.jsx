@@ -23,12 +23,13 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element:   <Home />,
+    
+        element:   <Patient />,
       },
       {
-        path: "patients",
+        path:"dashboard",
         element: (
-         <PrivateRoute> <Patient /></PrivateRoute>
+         <PrivateRoute> < Home /></PrivateRoute>
         // <Patient />
         ),
       },
