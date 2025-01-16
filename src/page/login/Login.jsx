@@ -75,7 +75,7 @@ const Login = () => {
         }
       } else {
         // Handle other errors
-        toast.error("An unexpected error occurred. Please try again later.");
+        toast.error("Username and Password are invalid. Please try again later.");
       }
     } finally {
       // Stop loading spinner

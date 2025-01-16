@@ -172,7 +172,7 @@ const Profile = () => {
           className="w-32 h-32 rounded-full object-cover border-2"
         />
         <h1 className="text-lg font-bold mb-2">
-          <span className="text-sm font-bold">User Name :</span>
+          <span className="text-sm font-bold">User Name : </span>
           {profile.username || "Guest"}
         </h1>
         <input

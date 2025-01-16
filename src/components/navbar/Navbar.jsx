@@ -22,7 +22,7 @@ const Navbar = () => {
   const { dropdownData, setDropdownData } = useDropdown();
   const { isVisible, toggleVisibility } = useVisibility();
   const location = useLocation();
-  const isDashboard = location.pathname === '/';
+  const isDashboard = location.pathname === '/dashboard';
   const isSetting = location.pathname === '/settings';
   const isProfile = location.pathname === '/profile';
   const { user } = useUser();
