@@ -52,7 +52,7 @@ const Editstudy = () => {
           <div className="col-span-3 ">
             <div className="bg-[#FFFFFF] p-4 rounded shadow-md">
               <div className="mb-4 text-start">
-                <img src={person} alt="" />
+                {/* <img src={person} alt="" /> */}
                 <h1 className="text-primary font-bold text-2xl mt-2">
                   {personDetails?.pat_inc_id_det?.Pat_Name || "Unknown Patient"}
                 </h1>

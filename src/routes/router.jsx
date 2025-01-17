@@ -49,7 +49,7 @@ const router = createBrowserRouter([
         element: <Editstudy />,
       },
       {
-        path: "/assignstudy",
+        path: "/assignstudy/:id",
         element: <AssignStudy />,
       },
       {

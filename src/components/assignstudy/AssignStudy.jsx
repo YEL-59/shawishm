@@ -3,15 +3,35 @@
 
 
 
-import person from "../../assets/person.png"
-import PlusIcon from '../../assets/icons/PlusIcon'
-import { useState } from "react";
+
+import { useEffect, useState } from "react";
 import ModalContainer from "../modalContainer/ModalContainer";
+import axiosInstance from "../../utils/axiosInstance";
+import { useParams } from "react-router-dom";
 
 
 const AssignStudy = () => {
 
     const [activeModal, setActiveModal] = useState(null);
+    const [studyData, setStudyData] = useState([]);
+
+    const { id } = useParams();
+    const personDetails = studyData?.find((item) => item?.study_uid === id);
+    console.log(personDetails);
+  
+    useEffect(() => {
+      axiosInstance
+        .get("studies/")
+        .then((response) => {
+          if (response.data.success) {
+            setStudyData(response.data.data);
+          }
+        })
+        .catch((error) => {
+          console.error("Error fetching data:", error);
+        });
+    }, []);
+  
 
     const handleOpenModal = (modalName) => {
         setActiveModal(modalName);
@@ -29,10 +49,10 @@ const AssignStudy = () => {
 
                         <div className='bg-[#FFFFFF] p-4 rounded shadow-md'>
                             <div className='mb-4 text-start'>
-                                <img src={person} alt="" />
-                                <h1 className='text-primary font-bold text-2xl mt-2'>Tanzir Rahman</h1>
+                                {/* <img src={person} alt="" /> */}
+                                <h1 className='text-primary font-bold text-2xl mt-2'> {personDetails?.pat_inc_id_det?.Pat_Name || "Unknown Patient"}</h1>
                             </div>
-                            <div className=''>
+                            <div className='flex flex-col gap-3'>
                                 <div className='flex justify-between'>
                                     <div><span className='text-gray-400 font-semibold '>Patient ID: :</span></div>
                                     <div><span>131</span></div>
@@ -43,7 +63,8 @@ const AssignStudy = () => {
                                 </div>
                                 <div className='flex justify-between'>
                                     <div><span className='text-gray-400 font-semibold '>Gender :</span></div>
-                                    <div><span>Male</span></div>
+                                    <div><span> {personDetails?.pat_inc_id_det?.Pat_Sex ||
+                        "Unknown Patient"}</span></div>
                                 </div>
                                 <div className='flex justify-between'>
                                     <div><span className='text-gray-400 font-semibold'>Age :</span></div>

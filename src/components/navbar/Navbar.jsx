@@ -49,7 +49,7 @@ const Navbar = () => {
       <div className="flex justify-between items-center">
         {/* Search Bars */}
         {!isDashboard && !isSetting && !isProfile && (<div className="flex gap-5">
-          {[1, 2].map((_, index) => (
+          {[1].map((_, index) => (
             <div key={index} className="flex items-center border rounded-lg border-gray-300 bg-white pr-7 overflow-hidden transition-all duration-300 ease-in-out">
               <input
                 type="text"

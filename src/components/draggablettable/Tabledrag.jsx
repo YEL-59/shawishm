@@ -96,9 +96,9 @@ const DragAndDropTable = () => {
     useSensor(KeyboardSensor)
   );
 
-  console.log(data);
+ 
 
-  const [filteredData, setFilteredData] = useState([]);
+ 
 
   const [isExpanded, setIsExpanded] = useState(false);
   useEffect(() => {
@@ -109,7 +109,7 @@ const DragAndDropTable = () => {
 
         if (response.data.success) {
           setData(response.data.data);
-          setFilteredData(response.data.data);
+        
           setTotalItems(response.data.data.length);
         } else {
           setError("Failed to load data");
@@ -187,9 +187,9 @@ const DragAndDropTable = () => {
 
   const [activeModal, setActiveModal] = useState(null);
 
-  const handleOpenModal = (modalName) => {
-    setActiveModal(modalName);
-  };
+  // const handleOpenModal = (modalName) => {
+  //   setActiveModal(modalName);
+  // };
 
   const handleCloseModal = () => {
     setActiveModal(null);
@@ -259,18 +259,18 @@ const DragAndDropTable = () => {
                               </li>
                               <li className="cursor-pointer hover:bg-gray-100 p-2 rounded-md">
                                 <Link
-                                  to={`/delete/${rowIndex}`}
-                                  className="text-blue-600 hover:underline"
+                                  to={`/delete/${row?.study_uid}`}
+                                  className="text-blue-600 hover:underline "
                                 >
                                   Delete
                                 </Link>
                               </li>
                               <li className="cursor-pointer hover:bg-gray-100 p-2 rounded-md">
                                 <a
-                                  href={`/details/${rowIndex}`}
+                                  href={`/assignstudy/${row?.study_uid}`}
                                   className="text-blue-600 hover:underline"
                                 >
-                                  View Details
+                                 assign study
                                 </a>
                               </li>
                             </ul>
