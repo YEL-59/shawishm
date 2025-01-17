@@ -36,7 +36,7 @@ const initialColumns = [
   "Image",
   "Gender",
   "Series",
-  "RefPhysician",
+  "Ref Physician",
   "Institution Name",
   "Radiologist Group",
   "Procedure",
@@ -60,7 +60,7 @@ const SortableColumn = ({ id }) => {
     transform: CSS.Transform.toString(transform),
     transition,
     cursor: "grab",
-    "font-weight": "500",
+    "font-weight": "700",
   };
 
   return (
@@ -355,7 +355,7 @@ const DragAndDropTable = () => {
                           ? row.radiology_group.Rg_Name
                           : "N/A"}
                       </span>
-                    ) : column === "RefPhysician" ? (
+                    ) : column === "Ref Physician" ? (
                       <span>
                         {row.ref_inc ? row.ref_inc.Ref_Phy_Name : "N/A"}
                       </span>

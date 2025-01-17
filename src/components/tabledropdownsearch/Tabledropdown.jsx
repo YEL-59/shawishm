@@ -1,68 +1,108 @@
 import { useState } from "react";
 import { useDropdown } from "../../contexts/DropdownContext";
+import {
+  Checkbox,
+  ListItemText,
+  MenuItem,
+  Select,
+  OutlinedInput,
+  InputLabel,
+  FormControl,
+  Button,
+} from "@mui/material";
+
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+      width: 200,
+    },
+  },
+};
 
 const Tabledropdown = () => {
-  const { dropdownData, dropdownOptions, updateDropdown, resetDropdowns } =
-    useDropdown();
-  const [openDropdown, setOpenDropdown] = useState(null);
+  const { dropdownOptions, updateDropdown, resetDropdowns } = useDropdown();
+  const [selectedOptions, setSelectedOptions] = useState({});
 
-  const toggleDropdown = (key) => {
-    setOpenDropdown((prev) => (prev === key ? null : key));
+  const handleMultiSelectChange = (key, event) => {
+    const { value } = event.target;
+
+    // Handle "All" selection
+    if (value.includes("All")) {
+      const allSelected =
+        selectedOptions[key]?.length === dropdownOptions[key]?.length - 1; // Adjust to exclude "All"
+      const newValue = allSelected
+        ? [] // If all are selected, deselect all
+        : [...dropdownOptions[key].slice(1)]; // Exclude "All" from selection
+      setSelectedOptions((prev) => ({
+        ...prev,
+        [key]: newValue,
+      }));
+      updateDropdown(key, newValue);
+    } else {
+      // Handle individual selection
+      setSelectedOptions((prev) => ({
+        ...prev,
+        [key]: value,
+      }));
+      updateDropdown(key, value);
+    }
   };
 
-  const handleSelect = (key, value) => {
-    updateDropdown(key, value);
-    setOpenDropdown(null);
-  };
+  const isAllSelected = (key) =>
+    selectedOptions[key]?.length === dropdownOptions[key]?.length - 1; // Adjust to exclude "All"
 
   return (
-    <div className="mt-4 p-4 bg-white border rounded shadow-lg">
-      <div className="flex justify-center items-center gap-6">
+    <div className="mt-4 p-6 bg-white border rounded-lg shadow-lg">
+      <div className="flex gap-6">
+        {/* Render all dropdowns */}
         {Object.keys(dropdownOptions).map((key) => (
-          <div className="relative" key={key}>
-            <button
-              onClick={() => toggleDropdown(key)}
-              className="bg-white border px-3 py-2 rounded-md text-sm w-32 text-left flex items-center justify-between"
-              aria-label={`Select ${key}`}
+          <FormControl key={key} sx={{ width: 300 }}>
+            <InputLabel id={`multi-select-label-${key}`} className="text-sm">
+              Select {key}
+            </InputLabel>
+            <Select
+              labelId={`multi-select-label-${key}`}
+              id={`multi-select-${key}`}
+              multiple
+              value={selectedOptions[key] || []}
+              onChange={(event) => handleMultiSelectChange(key, event)}
+              input={<OutlinedInput label={key} />}
+              renderValue={(selected) => selected.join(", ")}
+              MenuProps={MenuProps}
+              className="text-sm"
             >
-              {dropdownData[key] || "All"}
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="12"
-                height="12"
-                fill="none"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  d="M7 10l5 5 5-5"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </button>
-            {openDropdown === key && (
-              <ul className="absolute bg-white border rounded-md shadow-md mt-1 w-32 z-10">
-                {dropdownOptions[key].map((option) => (
-                  <li
-                    key={option}
-                    className="px-3 py-2 hover:bg-gray-100 cursor-pointer"
-                    onClick={() => handleSelect(key, option)}
-                  >
-                    {option}
-                  </li>
-                ))}
-              </ul>
-            )}
-          </div>
+              {/* "All" Option */}
+              <MenuItem value="All">
+                <Checkbox checked={isAllSelected(key)} />
+                <ListItemText primary="All" />
+              </MenuItem>
+              {/* Individual Options */}
+              {dropdownOptions[key]?.slice(1).map((option) => (
+                <MenuItem key={option} value={option}>
+                  <Checkbox
+                    checked={selectedOptions[key]?.includes(option) || isAllSelected(key)}
+                  />
+                  <ListItemText primary={option} />
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
         ))}
-        <button
-          onClick={resetDropdowns}
-          className="px-4 py-2 rounded bg-[#00CCFF] text-white"
+        {/* Reset Button */}
+        <Button
+          onClick={() => {
+            resetDropdowns();
+            setSelectedOptions({});
+          }}
+          variant="contained"
+          color="primary"
+          sx={{ width: 300 }}
         >
           Reset
-        </button>
+        </Button>
       </div>
     </div>
   );

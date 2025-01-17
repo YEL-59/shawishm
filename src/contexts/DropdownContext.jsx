@@ -1,4 +1,4 @@
-import  { createContext, useState, useContext, useEffect } from "react";
+import { createContext, useState, useContext, useEffect } from "react";
 import axiosInstance from "../utils/axiosInstance";
 
 const DropdownContext = createContext();
@@ -9,19 +9,15 @@ export const DropdownProvider = ({ children }) => {
     image: "All",
     location: "All",
     reportStatus: "All",
-  
-    startDate: null, 
-    endDate: null, 
+    startDate: null,
+    endDate: null,
   });
 
- 
-
   const [dropdownOptions, setDropdownOptions] = useState({
-    modality: ["All"],
-    image: ["All"],
-    location: ["All"],
-    reportStatus: ["All"],
-   
+    modality: [],
+    image: [],
+    location: [],
+    reportStatus: [],
   });
 
   const fetchDropdownOptions = async () => {
@@ -42,18 +38,17 @@ export const DropdownProvider = ({ children }) => {
         const reportStatuses = Array.from(
           new Set(data.map((item) => item.status_reported).filter(Boolean))
         );
-        const imageses = Array.from(
-          new Set(data.map((item) => item.images).filter(Boolean))
-        );
+        // const imageses = Array.from(
+        //   new Set(data.map((item) => item.images).filter(Boolean))
+        // );
 
-        // Update dropdown options
-        setDropdownOptions((prev) => ({
-          ...prev,
+        // Update dropdown options with "All" added after fetching
+        setDropdownOptions({
           modality: ["All", ...modalities],
           location: ["All", ...locations],
           reportStatus: ["All", ...reportStatuses],
-          image: ["All", ...imageses],
-        }));
+          image: ["All" ,"With Image","Without Images", ],
+        });
       } else {
         console.error("Unexpected response format:", response);
       }
@@ -72,6 +67,7 @@ export const DropdownProvider = ({ children }) => {
       [key]: value,
     }));
   };
+
   const updateDateRange = (startDate, endDate) => {
     setDropdownData((prev) => ({
       ...prev,
@@ -79,13 +75,13 @@ export const DropdownProvider = ({ children }) => {
       endDate,
     }));
   };
+
   const resetDropdowns = () => {
     setDropdownData({
-      modality: "",
-      image: "",
-      location: "",
-      reportStatus: "",
-      filterDate: "",
+      modality: "All",
+      image: "All",
+      location: "All",
+      reportStatus: "All",
       startDate: null,
       endDate: null,
     });
@@ -93,7 +89,13 @@ export const DropdownProvider = ({ children }) => {
 
   return (
     <DropdownContext.Provider
-      value={{ dropdownData, dropdownOptions, updateDropdown, resetDropdowns,updateDateRange }}
+      value={{
+        dropdownData,
+        dropdownOptions,
+        updateDropdown,
+        resetDropdowns,
+        updateDateRange,
+      }}
     >
       {children}
     </DropdownContext.Provider>
