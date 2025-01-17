@@ -15,13 +15,14 @@ import {
 import { CSS } from "@dnd-kit/utilities";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { IoEyeOutline } from "react-icons/io5";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { usePagination } from "../../contexts/PaginationContext";
 import Pagination from "../paginationcontrol/PaginationControls";
 import ModalContainer from "../modalContainer/ModalContainer";
 import { useDropdown } from "../../contexts/DropdownContext";
 import axiosInstance from "../../utils/axiosInstance";
-
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 const initialColumns = [
   "Action",
   "#",
@@ -78,23 +79,20 @@ const SortableColumn = ({ id }) => {
 
 const DragAndDropTable = () => {
   const [columns, setColumns] = useState(initialColumns);
-  const [data, setData] = useState([]); // To store the API data
-  const [loading, setLoading] = useState(true); // To handle loading state
-  const [error, setError] = useState(null); // To handle any errors
+  const [data, setData] = useState([]); 
+  const [loading, setLoading] = useState(true); 
+  const [error, setError] = useState(null); 
 
-  const modalRef = useRef(null); // Reference for modal
-  const [actionDropdownOpen, setActionDropdownOpen] = useState(null); // For Action column dropdown
-  const [commentsDropdownOpen, setCommentsDropdownOpen] = useState(null); // For Other Comments column dropdown
-  const actionDropdownRef = useRef(null); // Ref for Action dropdown
-  const commentsDropdownRef = useRef(null); // Ref for Other Comments dropdown
+
+  const [actionDropdownOpen, setActionDropdownOpen] = useState(null); 
+  const [commentsDropdownOpen, setCommentsDropdownOpen] = useState(null); 
+  const actionDropdownRef = useRef(null); 
+  const commentsDropdownRef = useRef(null); 
   const { currentPage, itemsPerPage, setTotalItems } = usePagination();
 
-  const { dropdownData } = useDropdown(); // Access dropdown data
+  const { dropdownData } = useDropdown();
 
-  const sensors = useSensors(
-    useSensor(PointerSensor),
-    useSensor(KeyboardSensor)
-  );
+  const sensors = useSensors(useSensor(PointerSensor), useSensor(KeyboardSensor));
 
  
 
@@ -185,18 +183,37 @@ const DragAndDropTable = () => {
     }
   };
 
-  const [activeModal, setActiveModal] = useState(null);
+  const [activeModal, setActiveModal] = useState(null); 
 
-  // const handleOpenModal = (modalName) => {
-  //   setActiveModal(modalName);
-  // };
+  const handleOpenModal = (modalName) => {
+    setActiveModal(modalName);
+  };
 
   const handleCloseModal = () => {
     setActiveModal(null);
   };
 
+  const handleDelete = async (study_ID) => {
+    try {
+      const response = await axiosInstance.delete(`/studies/${study_ID}/`);
+      if (response.data.success) {
+        setData((prevData) => prevData.filter((row) => row.study_ID !== study_ID));
+        toast.success(response.data.message || "Study deleted successfully");
+        setActiveModal("modal4");
+      } else {
+        toast.error("Failed to delete the study");
+      }
+    } catch (error) {
+      toast.error("Failed to delete the study");
+      setActiveModal(null);
+    }
+  };
+
+
+
+
   if (loading) {
-    return <div>Loading...</div>;
+    return <div className="">Loading... please signin...</div>;
   }
 
   if (error) {
@@ -210,6 +227,18 @@ const DragAndDropTable = () => {
       onDragEnd={handleDragEnd}
     >
       <div className="overflow-x-auto">
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+      />
         <table border="1" className="w-full text-center ">
           <thead>
             <SortableContext
@@ -259,8 +288,9 @@ const DragAndDropTable = () => {
                               </li>
                               <li className="cursor-pointer hover:bg-gray-100 p-2 rounded-md">
                                 <Link
-                                  to={`/delete/${row?.study_uid}`}
+                                 
                                   className="text-blue-600 hover:underline "
+                                  onClick={() => handleDelete(row.study_ID)}
                                 >
                                   Delete
                                 </Link>
@@ -446,12 +476,13 @@ const DragAndDropTable = () => {
           <Pagination totalItems={filteredDataList.length} />
         </div>
       </div>
-      {activeModal && (
-        <ModalContainer
-          modalRef={modalRef}
-          handleCloseModal={handleCloseModal}
-        />
-      )}
+    
+      <ModalContainer
+        activeModal={activeModal}
+        handleCloseModal={handleCloseModal}
+        handleOpenModal={handleOpenModal}
+      />
+    
     </DndContext>
   );
 };

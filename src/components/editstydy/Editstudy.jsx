@@ -1,4 +1,4 @@
-import person from "../../assets/person.png";
+
 import { useEffect, useState } from "react";
 import ModalContainer from "../modalContainer/ModalContainer";
 import { Controller, useForm } from "react-hook-form";
@@ -33,7 +33,14 @@ const Editstudy = () => {
   const handleCloseModal = () => {
     setActiveModal(null);
   };
-
+  const members =
+    personDetails?.radiology_group?.Rg_Members?.split(",").map((member) =>
+      member.trim()
+    ) || [];
+    const refmembers =
+    personDetails?.ref_inc?.Ref_Phy_Name?.split(",").map((member) =>
+      member.trim()
+    ) || [];
   const {
     control,
     register,
@@ -126,15 +133,15 @@ const Editstudy = () => {
             </div>
           </div>
           <div className="col-span-9 ">
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <div className="bg-[#FFFFFF] p-10 rounded shadow-md">
-              <div>
+            <form onSubmit={handleSubmit(onSubmit)}>
+              <div className="bg-[#FFFFFF] p-10 rounded shadow-md">
                 <div>
-                  <h1 className="text-primary font-bold text-2xl">
-                    Patient Information
-                  </h1>
-                </div>
-              
+                  <div>
+                    <h1 className="text-primary font-bold text-2xl">
+                      Patient Information
+                    </h1>
+                  </div>
+
                   <div className="grid gap-6 mb-6 md:grid-cols-2">
                     {/* Patient Name */}
                     <div>
@@ -305,20 +312,17 @@ const Editstudy = () => {
                       )}
                     </div>
                   </div>
-         
-              </div>
-            </div>
-
-
-            
-            <div className="bg-[#FFFFFF] p-10 rounded shadow-md mt-5">
-              <div>
-                <div>
-                  <h1 className="text-primary font-bold text-2xl">
-                    Study Information
-                  </h1>
                 </div>
-                
+              </div>
+
+              <div className="bg-[#FFFFFF] p-10 rounded shadow-md mt-5">
+                <div>
+                  <div>
+                    <h1 className="text-primary font-bold text-2xl">
+                      Study Information
+                    </h1>
+                  </div>
+
                   <div className="grid gap-6 mb-6 md:grid-cols-2">
                     <div className="relative">
                       <label
@@ -333,9 +337,8 @@ const Editstudy = () => {
                         id="procedureName"
                         className="border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-3"
                         placeholder={
-                          personDetails?.procedure_name||
-                          "Enter name"
-                        } 
+                          personDetails?.procedure_name || "Enter name"
+                        }
                       />
                       {errors.procedureName && (
                         <span className="text-red-500">
@@ -355,7 +358,7 @@ const Editstudy = () => {
                         type="text"
                         id="studyID"
                         className="border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-3"
-                        placeholder={ personDetails?.study_ID ||  "Enter Id" } 
+                        placeholder={personDetails?.study_ID || "Enter Id"}
                       />
                       {errors.studyID && (
                         <span className="text-red-500">
@@ -375,7 +378,10 @@ const Editstudy = () => {
                         id="studyDescription"
                         rows="3"
                         className="block p-2.5 w-full text-sm text-gray-900 bg-[#e7e3e3] rounded border border-gray-300 focus:ring-blue-500 focus:border-blue-500"
-                        placeholder={ personDetails?.study_description ||  "Enter your thughts" } 
+                        placeholder={
+                          personDetails?.study_description ||
+                          "Enter your thughts"
+                        }
                       ></textarea>
                       {errors.studyDescription && (
                         <span className="text-red-500">
@@ -421,14 +427,17 @@ const Editstudy = () => {
                             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-3"
                           >
                             <option value="">Select Physician</option>
-                            <option value="Dr. Smith">Dr. Smith</option>
-                            <option value="Dr. Johnson">Dr. Johnson</option>
+                            {refmembers.map((member, index) => (
+                              <option key={index} value={member}>
+                                {member}
+                              </option>
+                            ))}
                           </select>
                         )}
                       />
-                      {errors.refPhysician && (
+                      {errors. personDetails?.ref_inc?.Ref_Phy_Name && (
                         <p className="text-red-500 text-sm">
-                          {errors.refPhysician.message}
+                          {errors. personDetails?.ref_inc?.Ref_Phy_Name.message}
                         </p>
                       )}
                     </div>
@@ -444,7 +453,10 @@ const Editstudy = () => {
                         type="text"
                         id="radiologist"
                         className="border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-3"
-                        placeholder={ personDetails?.radiologist_name ||  "Enter your thughts" } 
+                        placeholder={
+                          personDetails?.radiologist_name ||
+                          "Enter your thughts"
+                        }
                       />
                       {errors.radiologist && (
                         <span className="text-red-500">
@@ -454,29 +466,32 @@ const Editstudy = () => {
                     </div>
                     <div>
                       <label
-                        htmlFor="radiologistGroup"
+                        htmlFor="radiologistgroup"
                         className="block text-md font-medium text-primary"
                       >
                         Radiologist Group
                       </label>
                       <Controller
-                        name="radiologistGroup"
+                        name="radiologistgroup"
                         control={control}
-                        rules={{ required: "Referring physician is required" }}
+                        rules={{ required: "Referring radiologistgroup is required" }}
                         render={({ field }) => (
                           <select
                             {...field}
                             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-3"
                           >
                             <option value="">Select Physician</option>
-                            <option value="Dr. Smith">Dr. Smith</option>
-                            <option value="Dr. Johnson">Dr. Johnson</option>
+                            {members.map((member, index) => (
+                              <option key={index} value={member}>
+                                {member}
+                              </option>
+                            ))}
                           </select>
                         )}
                       />
-                      {errors.radiologistGroup && (
+                      {errors.refPhysician && (
                         <p className="text-red-500 text-sm">
-                          {errors.radiologistGroup.message}
+                          {errors.refPhysician.message}
                         </p>
                       )}
                     </div>
@@ -512,7 +527,10 @@ const Editstudy = () => {
                         type="text"
                         id="institutionName"
                         className="border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-3"
-                        placeholder={ personDetails?.institution_name ||  "Enter your thughts" } 
+                        placeholder={
+                          personDetails?.institution_name ||
+                          "Enter your thughts"
+                        }
                       />
                       {errors.institutionName && (
                         <span className="text-red-500">
@@ -521,9 +539,8 @@ const Editstudy = () => {
                       )}
                     </div>
                   </div>
-           
+                </div>
               </div>
-            </div>
             </form>
 
             <div>

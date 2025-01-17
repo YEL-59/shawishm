@@ -5,7 +5,7 @@ import { VisibilityProvider } from "../contexts/VisibilityContext";
 import { AuthProvider } from "../contexts/AuthProvider";
 import "../App.css";
 import { PaginationProvider } from "../contexts/PaginationContext";
-import { ModalProvider } from "../contexts/ModalContext";
+
 import { DropdownProvider } from "../contexts/DropdownContext";
 import { UserProvider } from "../contexts/UserProvider";
 import { PatientChartProvider } from "../contexts/PatientChartContext";
@@ -16,7 +16,7 @@ const Layout = () => {
       <UserProvider>
       <VisibilityProvider>
         <PaginationProvider>
-          <ModalProvider>
+      
             <DropdownProvider>
            <PatientChartProvider>
             <div className="flex h-screen overflow-hidden">
@@ -30,7 +30,7 @@ const Layout = () => {
             </div>
             </PatientChartProvider>
             </DropdownProvider>
-          </ModalProvider>
+     
         </PaginationProvider>
       </VisibilityProvider>
       </UserProvider>

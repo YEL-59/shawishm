@@ -1,8 +1,8 @@
 
 
 import Tabledrag from "../../components/draggablettable/Tabledrag"
-import { ModalProvider } from '../../contexts/ModalContext'
-import Modal from '../../components/modal/Modal'
+
+
 import { useVisibility } from '../../contexts/VisibilityContext'
 import Tabledropdown from '../../components/tabledropdownsearch/Tabledropdown'
 
@@ -18,10 +18,10 @@ const Patient = () => {
 
 
 
-                <ModalProvider>
+            
                     <Tabledrag />
-                    <Modal />
-                </ModalProvider>
+                    
+           
 
 
             </div>

@@ -1,4 +1,4 @@
-import React from "react";
+
 import RightIcon from "../../assets/icons/RightIcon";
 import CrossIcon from "../../assets/icons/CrossIcon";
 import Deleteicon from "../../assets/icons/Deleteicon";
@@ -127,7 +127,7 @@ const ModalContainer = ({ activeModal, handleCloseModal, handleOpenModal, }) => 
                                     onClick={() => handleOpenModal("modal4")}
                                     className="bg-[#17AF17] text-white px-4 py-1 rounded font-medium hover:bg-green-600 transition"
                                 >
-                                    Save
+                                    Delete
                                 </button>
                             </div>
                         </div>
