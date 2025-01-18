@@ -6,6 +6,7 @@ import Logout from "../../assets/icons/Logout";
 import LogoIcon from "../../assets/icons/LogoIcon";
 import PatientIcon from "../../assets/icons/PatientIcon";
 import { clearTokens } from "../../utils/cookieHelper";
+import axiosInstance from "../../utils/axiosInstance";
 
 
 const Sidebar = () => {
@@ -22,9 +23,22 @@ const Sidebar = () => {
         setIsOpen(!isOpen);
     };
 
-    const handleLogout = () => {
+
+    const handleLogout = async () => {
+        // try {
+        //     const response = await axiosInstance.get("users/logout/");
+        //     if (response.data.success) {
+        //         clearTokens(navigate); 
+                
+        //     } else {
+        //         console.error("Logout failed:", response.data.message);
+        //     }
+        // } catch (error) {
+        //     console.error("Error during logout:", error);
+        // }
         clearTokens(navigate);
     };
+    
 
     const menuItems = [
         { name: "Dashboard", icon: DashboardIcon, path: "/dashboard" },

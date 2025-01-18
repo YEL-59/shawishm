@@ -10,7 +10,7 @@ const Editstudy = () => {
   const [studyData, setStudyData] = useState([]);
 
   const { id } = useParams();
-  const personDetails = studyData?.find((item) => item?.study_uid === id);
+  const personDetails = studyData?.find( (item) => item?.study_Inc_ID === Number(id) );
   console.log(personDetails);
 
   useEffect(() => {

@@ -1,17 +1,6 @@
 import  { useState, useEffect, useRef } from "react";
-import {
-  DndContext,
-  useSensor,
-  useSensors,
-  PointerSensor,
-  KeyboardSensor,
-  closestCenter,
-} from "@dnd-kit/core";
-import {
-  SortableContext,
-  useSortable,
-  verticalListSortingStrategy,
-} from "@dnd-kit/sortable";
+import { DndContext, useSensor, useSensors,PointerSensor, KeyboardSensor,closestCenter} from "@dnd-kit/core";
+import {SortableContext,useSortable, verticalListSortingStrategy,} from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { IoEyeOutline } from "react-icons/io5";
@@ -23,55 +12,17 @@ import { useDropdown } from "../../contexts/DropdownContext";
 import axiosInstance from "../../utils/axiosInstance";
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-const initialColumns = [
-  "Action",
-  "#",
-  "Name",
-  "Study Date",
-  "Patient ID",
-  "Report Status",
-  "Modality",
-  "report verifier",
-  "Viewed",
-  "Branch",
-  "Image",
-  "Gender",
-  "Series",
-  "Ref Physician",
-  "Institution Name",
-  "Radiologist Group",
-  "Procedure",
-  "Other Comments",
-  "Proc Start",
-  "radiologist Name",
-  "Study Bodyparts",
-  "Report Url",
-  "Branch Name",
-  "Machine Name",
-  "Procedure Name",
-  "Study Directory",
-  "Study Description",
+const initialColumns = ["Action","#","Name","Study Date", "Patient ID","Report Status","Modality","report verifier", "Viewed",  "Branch", "Image", "Gender", "Series", "Ref Physician", "Institution Name", "Radiologist Group", "Procedure", "Other Comments", "Proc Start","radiologist Name","Study Bodyparts","Report Url","Branch Name", "Machine Name", "Procedure Name", "Study Directory","Study Description",
 ];
 
 const SortableColumn = ({ id }) => {
-  const { attributes, listeners, setNodeRef, transform, transition } =
-    useSortable({ id });
+  const { attributes, listeners, setNodeRef, transform, transition } =useSortable({ id });
 
-  const style = {
-    transform: CSS.Transform.toString(transform),
-    transition,
-    cursor: "grab",
-    "font-weight": "700",
-  };
+  const style = { transform: CSS.Transform.toString(transform),transition, cursor: "grab", "font-weight": "700", };
 
   return (
     <th
-      className="p-5 text-md font-semibold"
-      ref={setNodeRef}
-      style={style}
-      {...attributes}
-      {...listeners}
-    >
+      className="p-5 text-md font-semibold" ref={setNodeRef} style={style} {...attributes} {...listeners} >
       {id}
     </th>
   );
@@ -82,22 +33,13 @@ const DragAndDropTable = () => {
   const [data, setData] = useState([]); 
   const [loading, setLoading] = useState(true); 
   const [error, setError] = useState(null); 
-
-
   const [actionDropdownOpen, setActionDropdownOpen] = useState(null); 
   const [commentsDropdownOpen, setCommentsDropdownOpen] = useState(null); 
   const actionDropdownRef = useRef(null); 
   const commentsDropdownRef = useRef(null); 
   const { currentPage, itemsPerPage, setTotalItems } = usePagination();
-
   const { dropdownData } = useDropdown();
-
   const sensors = useSensors(useSensor(PointerSensor), useSensor(KeyboardSensor));
-
- 
-
- 
-
   const [isExpanded, setIsExpanded] = useState(false);
   useEffect(() => {
     const fetchData = async () => {
@@ -193,13 +135,13 @@ const DragAndDropTable = () => {
     setActiveModal(null);
   };
 
-  const handleDelete = async (study_ID) => {
+  const handleDelete = async (study_Inc_ID) => {
     try {
-      const response = await axiosInstance.delete(`/studies/${study_ID}/`);
+      const response = await axiosInstance.delete(`/studies/${study_Inc_ID}/`);
       if (response.data.success) {
-        setData((prevData) => prevData.filter((row) => row.study_ID !== study_ID));
-        toast.success(response.data.message || "Study deleted successfully");
-        setActiveModal("modal4");
+        setData((prevData) => prevData.filter((row) => row.study_Inc_ID !== study_Inc_ID));
+       // toast.success(response.data.message || "Study deleted successfully");
+        setActiveModal("modal3");
       } else {
         toast.error("Failed to delete the study");
       }
@@ -280,7 +222,7 @@ const DragAndDropTable = () => {
                             <ul className="space-y-2">
                               <li className="cursor-pointer hover:bg-gray-100 p-2 rounded-md">
                                 <Link
-                                  to={`/editstudy/${row?.study_uid}`}
+                                  to={`/editstudy/${row?.study_Inc_ID}`}
                                   className="text-blue-600 hover:underline"
                                 >
                                   Edit
@@ -290,18 +232,26 @@ const DragAndDropTable = () => {
                                 <Link
                                  
                                   className="text-blue-600 hover:underline "
-                                  onClick={() => handleDelete(row.study_ID)}
+                                  onClick={() => handleDelete(row.study_Inc_ID)}
                                 >
                                   Delete
                                 </Link>
                               </li>
                               <li className="cursor-pointer hover:bg-gray-100 p-2 rounded-md">
-                                <a
-                                  href={`/assignstudy/${row?.study_uid}`}
+                                <Link
+                                  to={`/${row?.study_Inc_ID}/assignstudy`}
                                   className="text-blue-600 hover:underline"
                                 >
                                  assign study
-                                </a>
+                                </Link>
+                              </li>
+                              <li className="cursor-pointer hover:bg-gray-100 p-2 rounded-md">
+                                <Link
+                                  to={`/${row?.study_Inc_ID}/mergepatient`}
+                                  className="text-blue-600 hover:underline"
+                                >
+                                 merge patient
+                                </Link>
                               </li>
                             </ul>
                           </div>
